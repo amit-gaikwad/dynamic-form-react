@@ -1,0 +1,25 @@
+{
+  "files.eol": "\n",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.endOfLine": "lf",
+  "editor.formatOnSave": true,
+  "eslint.alwaysShowStatus": true,
+  "eslint.enable": true,
+  "editor.cursorSmoothCaretAnimation": true,
+  "editor.cursorBlinking": "phase",
+  "debug.node.autoAttach": "off",
+  "editor.rulers": [80, 120],
+  // "eslint.options": {
+  //   "configFile": "eslintrc.js"
+  // },
+  "[markdown]": {
+    "editor.formatOnSave": false
+  },
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "merge-conflict.autoNavigateNextConflict.enabled": true,
+  "merge-conflict.diffViewPosition": "Beside",
+  "workbench.colorCustomizations": {
+    "editorWarning.border": "#f19040",
+    "editorError.border": "#FF0000"
+  }
+}
