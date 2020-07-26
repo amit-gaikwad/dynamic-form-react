@@ -12,15 +12,19 @@
     "prettier": "2.0.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-router-dom": "5.2.0",
     "react-scripts": "3.4.1"
   },
-  "husky": { "hooks": {
-     "pre-commit": "lint-staged" } },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
-   "src/**/*.{js,jsx}": [
-     "prettier --write"
-   ]
- },
+    "src/**/*.{js,jsx}": [
+      "prettier --write"
+    ]
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

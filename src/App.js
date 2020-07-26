@@ -1,13 +1,11 @@
 import React from "react";
 import { Button } from "antd";
 import "./App.css";
+import { AppRoutes } from "./AppRoutes";
 
 function App() {
   return (
-    <div className="App">
-      This is MentorLink
-      <Button type="primary">This is Antd</Button>
-    </div>
+   <AppRoutes></AppRoutes>
   );
 }
 
