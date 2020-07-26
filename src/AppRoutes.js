@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import React from "react";
-import { PersonalDetails } from "./PersonalDetails/PersonalDetails";
-import { EducationalDetails } from "./EducationalDetails/EducationalDetails";
+import { PersonalDetails } from "./Components/PersonalDetails/PersonalDetails";
+import { EducationalDetails } from "./Components/EducationalDetails/EducationalDetails";
 
 export const AppRoutes = ()=>{
   return(
