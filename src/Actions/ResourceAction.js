@@ -2,7 +2,10 @@ import {
   SAMPLE_TEST,
   FETCH_RESOURCES_BY_NAMESPACE_SUCCESS,
   FETCH_RESOURCES_BY_NAMESPACE_ERROR,
-  FETCH_RESOURCES_BY_NAMESPACE_LOADING
+  FETCH_RESOURCES_BY_NAMESPACE_LOADING,
+  CREATE_RESOURCE_SUCCESS,
+  CREATE_RESOURCE_ERROR,
+  CREATE_RESOURCE_LOADING
 } from './types';
 import Axios from 'axios';
 import { getHeaders } from '../Utils/common-methods';
@@ -34,10 +37,8 @@ export function fetchResourcesByNamespaceError(error) {
 }
 
 export const fetchResources = () => {
-  debugger;
   return (dispatch) => {
     dispatch(fetchResourcesByNamespaceLoading());
-    debugger;
     Axios.get(`http://localhost:8105/mentor/resources/template/5f1f0c2b91f3775dd4c991a5`)
       .then((res) => {
         if (res.error) {
@@ -48,6 +49,49 @@ export const fetchResources = () => {
       })
       .catch((error) => {
         dispatch(fetchResourcesByNamespaceError(error));
+      });
+  };
+};
+
+export function createUserResourceLoading() {
+  return {
+    type: CREATE_RESOURCE_LOADING
+  };
+}
+
+export function createUserResourceSuccess(value) {
+  return {
+    type: CREATE_RESOURCE_SUCCESS,
+    payload: value
+  };
+}
+export function createUserResourceError(error) {
+  return {
+    type: CREATE_RESOURCE_ERROR,
+    error
+  };
+}
+
+export const createResource = (resource) => {
+  return (dispatch) => {
+    dispatch(createUserResourceLoading());
+    Axios.post(`http://localhost:8105/mentor/resources/addAttribute`, resource, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-site'
+      }
+    })
+      .then((res) => {
+        if (res.error) {
+          throw res.error;
+        }
+        dispatch(createUserResourceSuccess(res.data));
+        return res;
+      })
+      .catch((error) => {
+        dispatch(createUserResourceError(error));
       });
   };
 };

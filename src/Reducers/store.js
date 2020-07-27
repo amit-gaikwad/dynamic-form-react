@@ -19,6 +19,6 @@ const composeEnhancers =
   (typeof window === 'object' && isNonProd && window[reduxDevTool]) || compose;
 
 console.log('middlewares', middlewares);
-//const enhancer = composeEnhancers(applyMiddleware(...middlewares));
+const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 
-export const store = createStore(rootReducer, applyMiddleware(...middlewares));
+export const store = createStore(rootReducer, enhancer); // capplyMiddleware(...middlewares));

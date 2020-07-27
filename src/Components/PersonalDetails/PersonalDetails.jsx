@@ -4,7 +4,7 @@ import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import { getRenderableComponentByType } from '../../Utils/getRenderableComponent';
 import { connect } from 'react-redux';
-import { fetchResources } from '../../Actions/SampleAction';
+import { fetchResources } from '../../Actions/ResourceAction';
 import { DynamicFormContainer } from '../../Utils/getDynamicForm';
 import { getFieldsFromAttributeModels } from '../../Utils/common-methods';
 

@@ -31,7 +31,9 @@ export const DynamicFormContainer = (props) => {
       className='dynamic-form'
       style={{ margin: '10px' }}
       initialValues={{ remember: true }}
-      onFinish={props.onHandleSubmit}>
+      onFinish={(event) => {
+        props.onHandleSubmit(event, props.template);
+      }}>
       {props.fields.map((field) => getRenderableComponentByType({ ...field }))}
       <Button type='primary' htmlType='submit' size='large' disabled={false}>
         Save
