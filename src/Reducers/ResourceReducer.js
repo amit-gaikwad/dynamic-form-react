@@ -7,15 +7,15 @@ import {
 const initialState = {
   loading: false,
   error: null,
-  data: []
+  templateResources: []
 };
 
-export const resource = (state = initialState, action) => {
+export const resources = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_RESOURCES_BY_NAMESPACE_SUCCESS:
       return {
         ...initialState,
-        data: action.payload
+        templateResources: action.payload
       };
 
     case FETCH_RESOURCES_BY_NAMESPACE_LOADING:
