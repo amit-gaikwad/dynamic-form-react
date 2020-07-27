@@ -1,10 +1,14 @@
 import React from "react";
+import { Provider } from "react-redux";
 import "./App.css";
 import { AppRoutes } from "./AppRoutes";
+import { store } from "./Reducers/store";
 
 function App() {
   return (
-   <AppRoutes></AppRoutes>
+    <Provider store={store}>
+      <AppRoutes></AppRoutes>
+    </Provider>
   );
 }
 
