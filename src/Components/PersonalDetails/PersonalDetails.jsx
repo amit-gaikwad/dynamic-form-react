@@ -5,6 +5,8 @@ import isEmpty from 'lodash/isEmpty';
 import { getRenderableComponentByType } from '../../Utils/getRenderableComponent';
 import { connect } from 'react-redux';
 import { fetchResources } from '../../Actions/SampleAction';
+import { DynamicFormContainer } from '../../Utils/getDynamicForm';
+import { getFieldsFromAttributeModels } from '../../Utils/common-methods';
 
 const data = {
   attributes: [
@@ -73,6 +75,10 @@ const data = {
         {
           keyName: 'type',
           keyValue: 'checkbox'
+        },
+        {
+          keyName: 'options',
+          keyValue: ['Pune', 'Mumbai']
         }
       ]
     },
@@ -97,6 +103,10 @@ const data = {
         {
           keyName: 'type',
           keyValue: 'radio'
+        },
+        {
+          keyName: 'options',
+          keyValue: ['Male', 'Female']
         }
       ]
     },
@@ -121,6 +131,10 @@ const data = {
         {
           keyName: 'type',
           keyValue: 'list'
+        },
+        {
+          keyName: 'options',
+          keyValue: ['Maharashtra', 'Karnataka']
         }
       ]
     },
@@ -178,34 +192,15 @@ const data = {
   resourceName: 'Personal Details'
 };
 const PersonalDetails = (props) => {
+  const onHandleSubmit = (event) => {
+    console.log('event', event);
+  };
   const renderComponents = (details) => {
     return (
-      <Row>
-        {!isEmpty(details.attributes) &&
-          details.attributes.map((item) => {
-            if (
-              get(item, 'attribute.keyName') &&
-              get(item, 'attribute.keyName') !== 'template' &&
-              get(item, 'attribute.keyName') !== 'userId'
-            ) {
-              const metaData = get(item, 'metaData', []);
-              console.log('metaData', metaData);
-              const typeObj = metaData.find((i) => i.keyName === 'type') || {};
-              return (
-                <React.Fragment key={get(item, 'attribute.keyName')}>
-                  <Col span={4}>{get(item, 'attribute.keyName')}</Col>
-                  <Col span={12}>
-                    {getRenderableComponentByType({
-                      type: typeObj.keyValue,
-                      value: get(item, 'attribute.keyValue'),
-                      options: ['Pune', 'Mumbai']
-                    })}
-                  </Col>
-                  <Divider />
-                </React.Fragment>
-              );
-            }
-          })}
+      <Row style={{ border: '1px solid', margin: '10px' }}>
+        <DynamicFormContainer
+          fields={getFieldsFromAttributeModels(data.attributes)}
+          onHandleSubmit={onHandleSubmit}></DynamicFormContainer>
       </Row>
     );
   };
