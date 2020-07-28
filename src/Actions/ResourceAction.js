@@ -5,7 +5,10 @@ import {
   FETCH_RESOURCES_BY_NAMESPACE_LOADING,
   CREATE_RESOURCE_SUCCESS,
   CREATE_RESOURCE_ERROR,
-  CREATE_RESOURCE_LOADING
+  CREATE_RESOURCE_LOADING,
+  FETCH_RESOURCES_BY_USER_ID_LOADING,
+  FETCH_RESOURCES_BY_USER_ID_SUCCESS,
+  FETCH_RESOURCES_BY_USER_ID_ERROR
 } from './types';
 import Axios from 'axios';
 import { getHeaders } from '../Utils/common-methods';
@@ -49,6 +52,42 @@ export const fetchResources = () => {
       })
       .catch((error) => {
         dispatch(fetchResourcesByNamespaceError(error));
+      });
+  };
+};
+
+export function fetchResourcesByUserIdLoading() {
+  return {
+    type: FETCH_RESOURCES_BY_USER_ID_LOADING
+  };
+}
+
+export function fetchResourcesByUserIdSuccess(value) {
+  return {
+    type: FETCH_RESOURCES_BY_USER_ID_SUCCESS,
+    payload: value
+  };
+}
+export function fetchResourcesByUserIdError(error) {
+  return {
+    type: FETCH_RESOURCES_BY_USER_ID_ERROR,
+    error
+  };
+}
+
+export const fetchResourcesByUserId = (userId) => {
+  return (dispatch) => {
+    dispatch(fetchResourcesByUserIdLoading());
+    Axios.get(`http://localhost:8105/mentor/resources/user/5f1f0c2b91f3775dd4c991a5/` + userId)
+      .then((res) => {
+        if (res.error) {
+          throw res.error;
+        }
+        dispatch(fetchResourcesByUserIdSuccess(res.data));
+        return res;
+      })
+      .catch((error) => {
+        dispatch(fetchResourcesByUserIdError(error));
       });
   };
 };

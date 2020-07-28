@@ -25,6 +25,8 @@ import { Button } from 'antd';
  */
 
 export const DynamicFormContainer = (props) => {
+  console.log('userResource', props.template, props.fields);
+
   return (
     <Form
       layout={'horizontal'}
@@ -34,7 +36,11 @@ export const DynamicFormContainer = (props) => {
       onFinish={(event) => {
         props.onHandleSubmit(event, props.template);
       }}>
-      {props.fields.map((field) => getRenderableComponentByType({ ...field }))}
+      {props.fields.map((field) => (
+        <React.Fragment key={field.label}>
+          {getRenderableComponentByType({ ...field })}
+        </React.Fragment>
+      ))}
       <Button type='primary' htmlType='submit' size='large' disabled={false}>
         Save
       </Button>

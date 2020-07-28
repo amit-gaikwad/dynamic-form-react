@@ -4,7 +4,11 @@ import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import { getRenderableComponentByType } from '../../Utils/getRenderableComponent';
 import { connect } from 'react-redux';
-import { fetchResources, createResource } from '../../Actions/ResourceAction';
+import {
+  fetchResources,
+  createResource,
+  fetchResourcesByUserId
+} from '../../Actions/ResourceAction';
 import { DynamicFormContainer } from '../../Utils/getDynamicForm';
 import { getFieldsFromAttributeModels } from '../../Utils/common-methods';
 import { Loader } from '../Loader/Loader';
@@ -13,6 +17,7 @@ import { omit } from 'lodash';
 const UserDetails = (props) => {
   useEffect(() => {
     props.fetchResourcesByNamesapce();
+    props.fetchResourcesByUserId(props.match.params.id);
   }, []);
 
   const onHandleSubmit = (event, templateResource) => {
@@ -36,12 +41,19 @@ const UserDetails = (props) => {
     return (
       <div>
         {(props.templateResources || []).map((template) => {
+          let attributes = template.attributes;
+          const userResource = (props.resourcesByUserId || []).find(
+            (r) => r.resourceName === template.resourceName
+          );
+          if (userResource) {
+            attributes = userResource.attributes;
+          }
           return (
-            <Row style={{ border: '1px solid', margin: '10px' }}>
+            <Row style={{ border: '1px solid', margin: '10px' }} key={template.resourceId}>
               <Col>{template.resourceName}</Col>
               <DynamicFormContainer
-                fields={getFieldsFromAttributeModels(template.attributes)}
-                template={template}
+                fields={getFieldsFromAttributeModels(attributes)}
+                template={userResource || template}
                 onHandleSubmit={onHandleSubmit}></DynamicFormContainer>
             </Row>
           );
@@ -50,20 +62,31 @@ const UserDetails = (props) => {
     );
   };
 
-  return <div>{props.loading || props.createReourceLoading ? <Loader /> : renderComponents()}</div>;
+  return (
+    <div>
+      {props.loading || props.createReourceLoading || props.resourcesByUserIdLoading ? (
+        <Loader />
+      ) : (
+        renderComponents()
+      )}
+    </div>
+  );
 };
 
 const mapStateToProps = (state) => {
   return {
     templateResources: state.resources.templateResources || [],
     loading: state.resources.loading,
-    createReourceLoading: state.resources.createReourceLoading
+    createReourceLoading: state.resources.createReourceLoading,
+    resourcesByUserId: state.resources.resourcesByUserId || [],
+    resourcesByUserIdLoading: state.resources.resourcesByUserIdLoading
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   fetchResourcesByNamesapce: () => dispatch(fetchResources()),
-  createResource: (resource) => dispatch(createResource(resource))
+  createResource: (resource) => dispatch(createResource(resource)),
+  fetchResourcesByUserId: (userId) => dispatch(fetchResourcesByUserId(userId))
 });
 
 export const UserDetailsContainer = connect(mapStateToProps, mapDispatchToProps)(UserDetails);

@@ -47,7 +47,7 @@ export const getRenderableComponentByType = ({
       });
     }
   };
-
+  console.log('value', value);
   switch (type) {
     case COMPONENT_TYPES.TEXT:
       return (
@@ -60,8 +60,9 @@ export const getRenderableComponentByType = ({
               message: 'Not a valid'
             },
             { required: mandatory, message: 'Please enter text!' }
-          ]}>
-          <Input placeholder='--' type='text' value={value} />
+          ]}
+          initialValue={value}>
+          <Input placeholder='' type='text' value={value} />
         </Form.Item>
       );
     case COMPONENT_TYPES.RADIO:
@@ -69,7 +70,8 @@ export const getRenderableComponentByType = ({
         <Form.Item
           label={label}
           name={label}
-          rules={[{ required: mandatory, message: 'Please select' }]}>
+          rules={[{ required: mandatory, message: 'Please select' }]}
+          initialValue={value}>
           <Radio.Group options={options || []} value={value} buttonStyle='solid' />
         </Form.Item>
       );
@@ -79,7 +81,8 @@ export const getRenderableComponentByType = ({
         <Form.Item
           label={label}
           name={label}
-          rules={[{ required: mandatory, message: 'Please select' }]}>
+          rules={[{ required: mandatory, message: 'Please select' }]}
+          initialValue={value}>
           <Select placeholder={'Select a ' + label} size='large'>
             {(options || []).map((val, i) => (
               <Option key={i} value={val}>
@@ -100,7 +103,8 @@ export const getRenderableComponentByType = ({
         <Form.Item
           name={label}
           label={label}
-          rules={[{ required: mandatory, message: 'Please select' }]}>
+          rules={[{ required: mandatory, message: 'Please select' }]}
+          initialValue={value}>
           <Checkbox.Group options={options} defaultValue={value} />
         </Form.Item>
       );
@@ -110,7 +114,8 @@ export const getRenderableComponentByType = ({
         <Form.Item
           name={label}
           label={label}
-          rules={[{ required: mandatory, message: 'Please select date' }]}>
+          rules={[{ required: mandatory, message: 'Please select date' }]}
+          initialValue={moment(value)}>
           <DatePicker defaultValue={moment('2015/01/01', 'YYYY/MM/DD')} />
         </Form.Item>
       );
@@ -120,7 +125,8 @@ export const getRenderableComponentByType = ({
         <Form.Item
           name={label}
           label={label}
-          rules={[{ required: false, message: 'Please select photo' }]}>
+          rules={[{ required: false, message: 'Please select photo' }]}
+          initialValue={value}>
           <Upload
             name='avatar'
             listType='picture-card'
