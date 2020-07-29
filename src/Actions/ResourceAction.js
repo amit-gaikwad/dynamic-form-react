@@ -6,6 +6,9 @@ import {
   CREATE_RESOURCE_SUCCESS,
   CREATE_RESOURCE_ERROR,
   CREATE_RESOURCE_LOADING,
+  UPDATE_RESOURCE_BY_USER_ID_SUCCESS,
+  UPDATE_RESOURCE_BY_USER_ID_ERROR,
+  UPDATE_RESOURCE_BY_USER_ID_LOADING,
   FETCH_RESOURCES_BY_USER_ID_LOADING,
   FETCH_RESOURCES_BY_USER_ID_SUCCESS,
   FETCH_RESOURCES_BY_USER_ID_ERROR
@@ -131,6 +134,50 @@ export const createResource = (resource) => {
       })
       .catch((error) => {
         dispatch(createUserResourceError(error));
+      });
+  };
+};
+
+export function updateResourceByUserIdLoading() {
+  return {
+    type: UPDATE_RESOURCE_BY_USER_ID_LOADING
+  };
+}
+
+export function updateResourceByUserIdSuccess(value) {
+  return {
+    type: UPDATE_RESOURCE_BY_USER_ID_SUCCESS,
+    payload: value
+  };
+}
+export function updateResourceByUserIdError(error) {
+  return {
+    type: UPDATE_RESOURCE_BY_USER_ID_ERROR,
+    error
+  };
+}
+
+export const updateResourceByUserId = (resource) => {
+  return (dispatch) => {
+    dispatch(updateResourceByUserIdLoading());
+    Axios.post(`http://localhost:8105/mentor/resources/operationsOnResourceAttribute`, resource, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-site'
+      }
+    })
+      .then((res) => {
+        if (res.error) {
+          throw res.error;
+        }
+        dispatch(fetchResources());
+        dispatch(updateResourceByUserIdSuccess(res.data));
+        return res;
+      })
+      .catch((error) => {
+        dispatch(updateResourceByUserIdError(error));
       });
   };
 };

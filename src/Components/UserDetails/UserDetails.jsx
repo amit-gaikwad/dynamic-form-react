@@ -7,7 +7,8 @@ import { connect } from 'react-redux';
 import {
   fetchResources,
   createResource,
-  fetchResourcesByUserId
+  fetchResourcesByUserId,
+  updateResourceByUserId
 } from '../../Actions/ResourceAction';
 import { DynamicFormContainer } from '../../Utils/getDynamicForm';
 import { getFieldsFromAttributeModels } from '../../Utils/common-methods';
@@ -25,6 +26,9 @@ const UserDetails = (props) => {
     newResource.attributes = newResource.attributes.filter(
       (attr) => attr.attribute.keyName !== 'template' && attr.attribute.keyName !== 'currentIndex'
     );
+    const userResource = (props.resourcesByUserId || []).find(
+      (r) => r.resourceName === templateResource.resourceName
+    );
     for (const item of newResource.attributes) {
       if (item.attribute.keyName === 'userId') {
         item.attribute.keyValue = props.match.params.id;
@@ -33,8 +37,18 @@ const UserDetails = (props) => {
       }
     }
     console.log('event', event, newResource, props);
-
-    props.createResource(newResource);
+    if (userResource) {
+      newResource.attributes.unshift({
+        attribute: {
+          keyName: 'actionsAllowed',
+          keyValue: 'update'
+        }
+      });
+      newResource.resourceId = userResource.resourceId;
+      props.updateResourceByUserId(newResource);
+    } else {
+      props.createResource(newResource);
+    }
   };
 
   const renderComponents = () => {
@@ -86,7 +100,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   fetchResourcesByNamesapce: () => dispatch(fetchResources()),
   createResource: (resource) => dispatch(createResource(resource)),
-  fetchResourcesByUserId: (userId) => dispatch(fetchResourcesByUserId(userId))
+  fetchResourcesByUserId: (userId) => dispatch(fetchResourcesByUserId(userId)),
+  updateResourceByUserId: (resource) => dispatch(updateResourceByUserId(resource))
 });
 
 export const UserDetailsContainer = connect(mapStateToProps, mapDispatchToProps)(UserDetails);
