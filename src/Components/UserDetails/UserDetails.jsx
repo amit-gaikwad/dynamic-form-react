@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Divider, Button } from 'antd';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
@@ -14,8 +14,12 @@ import { DynamicFormContainer } from '../../Utils/getDynamicForm';
 import { getFieldsFromAttributeModels } from '../../Utils/common-methods';
 import { Loader } from '../Loader/Loader';
 import { omit } from 'lodash';
+import { CollapsedDetails } from './CollapsedDetails';
+import Modal from 'antd/lib/modal/Modal';
 
 const UserDetails = (props) => {
+  const [currentResourceAttribute, setcurrentResourceAttribute] = useState({});
+  const [visibleModal, setvisibleModal] = useState(false);
   useEffect(() => {
     props.fetchResourcesByNamesapce();
     props.fetchResourcesByUserId(props.match.params.id);
@@ -50,6 +54,10 @@ const UserDetails = (props) => {
       props.createResource(newResource);
     }
   };
+  const onEditClick = (resource) => {
+    setvisibleModal(true);
+    setcurrentResourceAttribute(resource);
+  };
 
   const renderComponents = () => {
     return (
@@ -65,13 +73,22 @@ const UserDetails = (props) => {
           const currentIndexAttr =
             attributes.find((a) => a.attribute.keyName == 'currentIndex') || {};
           return (
-            <Row style={{ border: '1px solid', margin: '10px' }} key={template.resourceId}>
-              <Col>{template.resourceName}</Col>
-              <DynamicFormContainer
+            <Row style={{ margin: '10px' }} key={template.resourceId}>
+              <Col span={24} style={{ fontWeight: 1000 }}>
+                {template.resourceName}
+              </Col>
+              <CollapsedDetails
                 fields={getFieldsFromAttributeModels(attributes)}
                 template={userResource || template}
                 currentIndex={currentIndexAttr.keyValue || 0}
-                onHandleSubmit={onHandleSubmit}></DynamicFormContainer>
+                onEditClick={onEditClick}
+              />
+              <Divider />
+              {/* <DynamicFormContainer
+                fields={getFieldsFromAttributeModels(attributes)}
+                template={userResource || template}
+                currentIndex={currentIndexAttr.keyValue || 0}
+                onHandleSubmit={onHandleSubmit}></DynamicFormContainer> */}
             </Row>
           );
         })}
@@ -86,6 +103,17 @@ const UserDetails = (props) => {
       ) : (
         renderComponents()
       )}
+      <Modal
+        title={currentResourceAttribute.resourceName}
+        visible={visibleModal}
+        onOk={() => setvisibleModal(false)}
+        onCancel={() => setvisibleModal(false)}>
+        <DynamicFormContainer
+          fields={getFieldsFromAttributeModels(currentResourceAttribute.attributes)}
+          template={currentResourceAttribute}
+          currentIndex={currentResourceAttribute.keyValue || 0}
+          onHandleSubmit={onHandleSubmit}></DynamicFormContainer>
+      </Modal>
     </div>
   );
 };
