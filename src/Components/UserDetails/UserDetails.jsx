@@ -55,8 +55,18 @@ const UserDetails = (props) => {
     }
   };
   const onEditClick = (resource) => {
+    debugger;
     setvisibleModal(true);
     setcurrentResourceAttribute(resource);
+  };
+
+  const addNewResourceClick = (resource) => {
+    debugger;
+    const templateResource = (props.templateResources || []).find(
+      (r) => r.resourceName === resource.resourceName
+    );
+    setvisibleModal(true);
+    setcurrentResourceAttribute({ ...templateResource });
   };
 
   const renderComponents = () => {
@@ -74,21 +84,14 @@ const UserDetails = (props) => {
             attributes.find((a) => a.attribute.keyName == 'currentIndex') || {};
           return (
             <Row style={{ margin: '10px' }} key={template.resourceId}>
-              <Col span={24} style={{ fontWeight: 1000 }}>
-                {template.resourceName}
-              </Col>
               <CollapsedDetails
+                addNewResourceClick={addNewResourceClick}
                 fields={getFieldsFromAttributeModels(attributes)}
                 template={userResource || template}
                 currentIndex={currentIndexAttr.keyValue || 0}
                 onEditClick={onEditClick}
               />
               <Divider />
-              {/* <DynamicFormContainer
-                fields={getFieldsFromAttributeModels(attributes)}
-                template={userResource || template}
-                currentIndex={currentIndexAttr.keyValue || 0}
-                onHandleSubmit={onHandleSubmit}></DynamicFormContainer> */}
             </Row>
           );
         })}
@@ -106,6 +109,7 @@ const UserDetails = (props) => {
       <Modal
         title={currentResourceAttribute.resourceName}
         visible={visibleModal}
+        footer={null}
         onOk={() => setvisibleModal(false)}
         onCancel={() => setvisibleModal(false)}>
         <DynamicFormContainer

@@ -20,6 +20,9 @@ export const getRenderableComponentByType = ({
     type = 'text';
     isTrueSet = true;
   }
+  if ('Instances Allowed' == label) {
+    return;
+  }
   const { Option } = Select;
   // const [loading, setloading] = useState(false);
   // const [imageUrl, setimageUrl] = useState(false);
