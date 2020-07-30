@@ -34,7 +34,7 @@ export const DynamicFormContainer = (props) => {
       style={{ margin: '10px' }}
       initialValues={{ remember: true }}
       onFinish={(event) => {
-        props.onHandleSubmit(event, props.template);
+        props.onHandleSubmit(event, props.template, props.currentIndex);
       }}>
       {props.fields.map((field) => (
         <React.Fragment key={field.label}>

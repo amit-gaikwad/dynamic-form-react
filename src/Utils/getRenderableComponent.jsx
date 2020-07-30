@@ -12,8 +12,14 @@ export const getRenderableComponentByType = ({
   mandatory,
   maxLength,
   minLength,
-  pattern
+  pattern,
+  hidden
 }) => {
+  var isTrueSet = hidden === 'true';
+  if (label === 'currentIndex') {
+    type = 'text';
+    isTrueSet = true;
+  }
   const { Option } = Select;
   // const [loading, setloading] = useState(false);
   // const [imageUrl, setimageUrl] = useState(false);
@@ -59,9 +65,10 @@ export const getRenderableComponentByType = ({
               pattern: pattern,
               message: 'Not a valid'
             },
-            { required: mandatory, message: 'Please enter text!' }
+            { required: mandatory === 'true', message: 'Please enter text!' }
           ]}
-          initialValue={value}>
+          initialValue={value}
+          hidden={isTrueSet}>
           <Input placeholder='' type='text' value={value} />
         </Form.Item>
       );
@@ -70,7 +77,7 @@ export const getRenderableComponentByType = ({
         <Form.Item
           label={label}
           name={label}
-          rules={[{ required: mandatory, message: 'Please select' }]}
+          rules={[{ required: mandatory === 'true', message: 'Please select' }]}
           initialValue={value}>
           <Radio.Group options={options || []} value={value} buttonStyle='solid' />
         </Form.Item>
@@ -81,7 +88,8 @@ export const getRenderableComponentByType = ({
         <Form.Item
           label={label}
           name={label}
-          rules={[{ required: mandatory, message: 'Please select' }]}
+          hidden={isTrueSet}
+          rules={[{ required: mandatory === 'true', message: 'Please select' }]}
           initialValue={value}>
           <Select placeholder={'Select a ' + label} size='large'>
             {(options || []).map((val, i) => (
@@ -103,7 +111,8 @@ export const getRenderableComponentByType = ({
         <Form.Item
           name={label}
           label={label}
-          rules={[{ required: mandatory, message: 'Please select' }]}
+          hidden={isTrueSet}
+          rules={[{ required: mandatory === 'true', message: 'Please select' }]}
           initialValue={value}>
           <Checkbox.Group options={options} defaultValue={value} />
         </Form.Item>
@@ -114,7 +123,8 @@ export const getRenderableComponentByType = ({
         <Form.Item
           name={label}
           label={label}
-          rules={[{ required: mandatory, message: 'Please select date' }]}
+          hidden={isTrueSet}
+          rules={[{ required: mandatory === 'true', message: 'Please select date' }]}
           initialValue={moment(value)}>
           <DatePicker defaultValue={moment('2015/01/01', 'YYYY/MM/DD')} />
         </Form.Item>
@@ -125,6 +135,7 @@ export const getRenderableComponentByType = ({
         <Form.Item
           name={label}
           label={label}
+          hidden={isTrueSet}
           rules={[{ required: false, message: 'Please select photo' }]}
           initialValue={value}>
           <Upload

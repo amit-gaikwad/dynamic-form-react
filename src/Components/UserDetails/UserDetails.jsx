@@ -21,11 +21,12 @@ const UserDetails = (props) => {
     props.fetchResourcesByUserId(props.match.params.id);
   }, []);
 
-  const onHandleSubmit = (event, templateResource) => {
+  const onHandleSubmit = (event, templateResource, currentIndex) => {
     const newResource = omit(templateResource, ['resourceId']);
     newResource.attributes = newResource.attributes.filter(
-      (attr) => attr.attribute.keyName !== 'template' && attr.attribute.keyName !== 'currentIndex'
+      (attr) => attr.attribute.keyName !== 'template'
     );
+    console.log('templateResource', templateResource);
     const userResource = (props.resourcesByUserId || []).find(
       (r) => r.resourceName === templateResource.resourceName
     );
@@ -36,7 +37,6 @@ const UserDetails = (props) => {
         item.attribute.keyValue = event[item.attribute.keyName];
       }
     }
-    console.log('event', event, newResource, props);
     if (userResource) {
       newResource.attributes.unshift({
         attribute: {
@@ -62,12 +62,15 @@ const UserDetails = (props) => {
           if (userResource) {
             attributes = userResource.attributes;
           }
+          const currentIndexAttr =
+            attributes.find((a) => a.attribute.keyName == 'currentIndex') || {};
           return (
             <Row style={{ border: '1px solid', margin: '10px' }} key={template.resourceId}>
               <Col>{template.resourceName}</Col>
               <DynamicFormContainer
                 fields={getFieldsFromAttributeModels(attributes)}
                 template={userResource || template}
+                currentIndex={currentIndexAttr.keyValue || 0}
                 onHandleSubmit={onHandleSubmit}></DynamicFormContainer>
             </Row>
           );
