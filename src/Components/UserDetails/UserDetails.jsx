@@ -37,7 +37,13 @@ const UserDetails = (props) => {
     const userResource = (props.resourcesByUserId || []).find(
       (r) => r.resourceName === templateResource.resourceName
     );
-
+    for (const item of newResource.attributes) {
+      if (item.attribute.keyName === 'userId' && istemplateResource) {
+        item.attribute.keyValue = props.match.params.id;
+      } else {
+        item.attribute.keyValue = event[item.attribute.keyName];
+      }
+    }
     if (userResource && !istemplateResource) {
       newResource.attributes.unshift({
         attribute: {
@@ -49,16 +55,11 @@ const UserDetails = (props) => {
         (attr) => !['template', 'userId', 'currentIndex'].includes(attr.attribute.keyName)
       );
       newResource.resourceId = userResource.resourceId;
-      props.updateResourceByUserId(newResource);
+      props
+        .updateResourceByUserId(newResource, props.match.params.id)
+        .then(() => setvisibleModal(false));
     } else {
-      for (const item of newResource.attributes) {
-        if (item.attribute.keyName === 'userId') {
-          item.attribute.keyValue = props.match.params.id;
-        } else {
-          item.attribute.keyValue = event[item.attribute.keyName];
-        }
-      }
-      props.createResource(newResource);
+      props.createResource(newResource, props.match.params.id).then(() => setvisibleModal(false));
     }
   };
   const onEditClick = (resource) => {
@@ -230,9 +231,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   fetchResourcesByNamesapce: () => dispatch(fetchResources()),
-  createResource: (resource) => dispatch(createResource(resource)),
+  createResource: (resource, userId) => dispatch(createResource(resource, userId)),
   fetchResourcesByUserId: (userId) => dispatch(fetchResourcesByUserId(userId)),
-  updateResourceByUserId: (resource) => dispatch(updateResourceByUserId(resource))
+  updateResourceByUserId: (resource, userId) => dispatch(updateResourceByUserId(resource, userId))
 });
 
 export const UserDetailsContainer = connect(mapStateToProps, mapDispatchToProps)(UserDetails);

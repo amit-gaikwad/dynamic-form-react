@@ -114,10 +114,10 @@ export function createUserResourceError(error) {
   };
 }
 
-export const createResource = (resource) => {
+export const createResource = (resource, userId) => {
   return (dispatch) => {
     dispatch(createUserResourceLoading());
-    Axios.post(`http://localhost:8105/mentor/resources/addAttribute`, resource, {
+    return Axios.post(`http://localhost:8105/mentor/resources/addAttribute`, resource, {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Sec-Fetch-Dest': 'empty',
@@ -129,6 +129,8 @@ export const createResource = (resource) => {
         if (res.error) {
           throw res.error;
         }
+
+        dispatch(fetchResourcesByUserId(userId));
         dispatch(createUserResourceSuccess(res.data));
         return res;
       })
@@ -157,22 +159,27 @@ export function updateResourceByUserIdError(error) {
   };
 }
 
-export const updateResourceByUserId = (resource) => {
+export const updateResourceByUserId = (resource, userId) => {
+  debugger;
   return (dispatch) => {
     dispatch(updateResourceByUserIdLoading());
-    Axios.post(`http://localhost:8105/mentor/resources/operationsOnResourceAttribute`, resource, {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Sec-Fetch-Dest': 'empty',
-        'Sec-Fetch-Mode': 'cors',
-        'Sec-Fetch-Site': 'same-site'
+    return Axios.post(
+      `http://localhost:8105/mentor/resources/operationsOnResourceAttribute`,
+      resource,
+      {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Sec-Fetch-Dest': 'empty',
+          'Sec-Fetch-Mode': 'cors',
+          'Sec-Fetch-Site': 'same-site'
+        }
       }
-    })
+    )
       .then((res) => {
         if (res.error) {
           throw res.error;
         }
-        dispatch(fetchResources());
+        dispatch(fetchResourcesByUserId(userId));
         dispatch(updateResourceByUserIdSuccess(res.data));
         return res;
       })
