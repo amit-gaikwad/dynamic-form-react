@@ -37,13 +37,7 @@ const UserDetails = (props) => {
     const userResource = (props.resourcesByUserId || []).find(
       (r) => r.resourceName === templateResource.resourceName
     );
-    for (const item of newResource.attributes) {
-      if (item.attribute.keyName === 'userId') {
-        item.attribute.keyValue = props.match.params.id;
-      } else {
-        item.attribute.keyValue = event[item.attribute.keyName];
-      }
-    }
+
     if (userResource && !istemplateResource) {
       newResource.attributes.unshift({
         attribute: {
@@ -51,9 +45,19 @@ const UserDetails = (props) => {
           keyValue: 'update'
         }
       });
+      newResource.attributes = newResource.attributes.filter(
+        (attr) => !['template', 'userId', 'currentIndex'].includes(attr.attribute.keyName)
+      );
       newResource.resourceId = userResource.resourceId;
       props.updateResourceByUserId(newResource);
     } else {
+      for (const item of newResource.attributes) {
+        if (item.attribute.keyName === 'userId') {
+          item.attribute.keyValue = props.match.params.id;
+        } else {
+          item.attribute.keyValue = event[item.attribute.keyName];
+        }
+      }
       props.createResource(newResource);
     }
   };
@@ -84,14 +88,15 @@ const UserDetails = (props) => {
       <div>
         {(props.templateResources || []).map((template) => {
           let attributes = template.attributes;
+          const userResources = (props.resourcesByUserId || []).filter(
+            (r) => r.resourceName === template.resourceName
+          );
           const userResource = (props.resourcesByUserId || []).find(
             (r) => r.resourceName === template.resourceName
           );
           if (userResource) {
             attributes = userResource.attributes;
           }
-          const currentIndexAttr =
-            attributes.find((a) => a.attribute.keyName == 'currentIndex') || {};
           const fields = getFieldsFromAttributeModels(attributes);
           const isItTemplate = fields.find((f) => f.label === 'template');
           const isItHavingMultiResource = fields.find((f) => f.label === 'Instances Allowed');
@@ -141,10 +146,10 @@ const UserDetails = (props) => {
                     </Button>
                   </Col>
                 </Row>
-                {!isItTemplate && (
+                {userResources.map((ur) => (
                   <Row style={{ width: '100%', marginTop: '15px' }} className='multiResources'>
                     <Col span={6}>
-                      {fields.map((field) => {
+                      {getFieldsFromAttributeModels(ur.attributes).map((field) => {
                         if (!['template', 'userId', 'currentIndex'].includes(field.label)) {
                           return (
                             <Col key={field.label} span={24}>
@@ -157,7 +162,7 @@ const UserDetails = (props) => {
                     <Col span={2} className='editButton'>
                       <Button
                         onClick={() => {
-                          onEditClick(currentResource);
+                          onEditClick(ur);
                         }}>
                         <svg
                           xmlns='http://www.w3.org/2000/svg'
@@ -172,8 +177,9 @@ const UserDetails = (props) => {
                       </Button>
                     </Col>
                   </Row>
-                )}
+                ))}
               </Row>
+              <Divider />
 
               {/* <CollapsedDetails
                 addNewResourceClick={addNewResourceClick}
@@ -182,7 +188,6 @@ const UserDetails = (props) => {
                 currentIndex={currentIndexAttr.keyValue || 0}
                 onEditClick={onEditClick}
               /> */}
-              <Divider />
             </Row>
           );
         })}
