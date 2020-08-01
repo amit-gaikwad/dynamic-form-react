@@ -70,7 +70,7 @@ export const getRenderableComponentByType = ({
             },
             { required: mandatory === 'true', message: 'Please enter text!' }
           ]}
-          initialValue={value}
+          initialValue={value.toString()}
           hidden={isTrueSet}>
           <Input placeholder='' type='text' value={value} />
         </Form.Item>

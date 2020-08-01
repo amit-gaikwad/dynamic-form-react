@@ -26,11 +26,14 @@ const UserDetails = (props) => {
   }, []);
 
   const onHandleSubmit = (event, templateResource, currentIndex) => {
+    debugger;
     const newResource = omit(templateResource, ['resourceId']);
+    const istemplateResource = newResource.attributes.find(
+      (attr) => attr.attribute.keyName !== 'template'
+    );
     newResource.attributes = newResource.attributes.filter(
       (attr) => attr.attribute.keyName !== 'template'
     );
-    console.log('templateResource', templateResource);
     const userResource = (props.resourcesByUserId || []).find(
       (r) => r.resourceName === templateResource.resourceName
     );
@@ -41,7 +44,7 @@ const UserDetails = (props) => {
         item.attribute.keyValue = event[item.attribute.keyName];
       }
     }
-    if (userResource) {
+    if (userResource && !istemplateResource) {
       newResource.attributes.unshift({
         attribute: {
           keyName: 'actionsAllowed',
@@ -55,16 +58,23 @@ const UserDetails = (props) => {
     }
   };
   const onEditClick = (resource) => {
-    debugger;
     setvisibleModal(true);
     setcurrentResourceAttribute(resource);
   };
 
   const addNewResourceClick = (resource) => {
-    debugger;
     const templateResource = (props.templateResources || []).find(
       (r) => r.resourceName === resource.resourceName
     );
+    const numberOfPresentResources = props.resourcesByUserId.filter(
+      (r) => r.resourceName === resource.resourceName
+    );
+    templateResource.attributes.forEach((element) => {
+      if (element.attribute.keyName === 'currentIndex') {
+        element.attribute.keyValue = numberOfPresentResources.length;
+      }
+    });
+    console.log('templateResource', templateResource);
     setvisibleModal(true);
     setcurrentResourceAttribute({ ...templateResource });
   };
