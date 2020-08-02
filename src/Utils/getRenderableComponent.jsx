@@ -17,7 +17,6 @@ export const getRenderableComponentByType = ({
 }) => {
   var isTrueSet = hidden === 'true';
   if (label === 'currentIndex') {
-    debugger;
     type = 'text';
     isTrueSet = true;
   }

@@ -34,9 +34,10 @@ const UserDetails = (props) => {
     newResource.attributes = newResource.attributes.filter(
       (attr) => attr.attribute.keyName !== 'template'
     );
-    const userResource = (props.resourcesByUserId || []).find(
+    const userResource1 = (props.resourcesByUserId || []).find(
       (r) => r.resourceName === templateResource.resourceName
     );
+    const userResource = cloneDeep(userResource1);
     for (const item of newResource.attributes) {
       if (item.attribute.keyName === 'userId' && istemplateResource) {
         item.attribute.keyValue = props.match.params.id;
@@ -56,24 +57,35 @@ const UserDetails = (props) => {
         .updateResourceByUserId(newResource, props.match.params.id)
         .then(() => setvisibleModal(false));
     } else if (templateResource.mode === 'edit') {
+      var filteredAttr = userResource.attributes.filter((a) => {
+        var isSimilarindex = (a.metaData || []).filter(
+          (m) => m.keyName === 'index' && m.keyValue == 1
+        );
+        return isSimilarindex.length > 0;
+      });
+      var ats = [];
+      filteredAttr.forEach((item, index) => {
+        var newValueAttr =
+          newResource.attributes.find((a) => a.attribute.keyName === item.attribute.keyName) || {};
+        if (!isEmpty(newValueAttr) && item.attribute.keyValue !== newValueAttr.attribute.keyValue) {
+          ats.push(newValueAttr);
+        }
+      });
+      newResource.attributes = ats;
       newResource.attributes.unshift({
         attribute: {
           keyName: 'actionsAllowed',
           keyValue: 'update'
         }
       });
-      newResource.attributes = newResource.attributes.filter(
-        (attr) =>
-          !['template', 'userId', 'currentIndex', 'Instances Allowed'].includes(
-            attr.attribute.keyName
-          )
-      );
       newResource.resourceId = userResource.resourceId;
       props
-        .updateResourceByUserId(newResource, props.match.params.id)
+        .updateResourceByUserId(omit(newResource, ['mode']), props.match.params.id)
         .then(() => setvisibleModal(false));
     } else {
-      props.createResource(newResource, props.match.params.id).then(() => setvisibleModal(false));
+      props
+        .createResource(omit(newResource, ['mode']), props.match.params.id)
+        .then(() => setvisibleModal(false));
     }
   };
   const onEditClick = (resource) => {
@@ -83,7 +95,6 @@ const UserDetails = (props) => {
   };
 
   const addNewResourceClick = (resource) => {
-    debugger;
     const templateResource = (props.templateResources || []).find(
       (r) => r.resourceName === resource.resourceName
     );
@@ -119,37 +130,6 @@ const UserDetails = (props) => {
   };
 
   const addNewFreshResourceClick = (template) => {
-    debugger;
-    // const templateResource = (props.templateResources || []).find(
-    //   (r) => r.resourceName === resource.resourceName
-    // );
-
-    // const currentIndexAtrr =
-    //   resource.attributes.find((a) => a.attribute.keyName === 'currentIndex') || {};
-    // const currentIndex = currentIndexAtrr.attribute.keyValue;
-
-    // let filteredAttrs = resource.attributes.filter((x) => {
-    //   if (x.attribute.keyName === 'Instances Allowed') {
-    //     return false;
-    //   }
-    //   var m = (x.metaData || []).find((l) => l.keyName == 'index') || {};
-    //   const isSatisfy = m.keyValue && m.keyValue.toString() == currentIndex;
-    //   x.attribute.keyValue = '';
-    //   if (m.keyValue && m.keyValue.toString() == currentIndex) {
-    //     x.metaData = (x.metaData || []).filter((o) => o.keyName !== 'index');
-    //     return true;
-    //   }
-    //   return false;
-    // });
-    // const newResource = cloneDeep(resource);
-    // newResource.attributes = filteredAttrs;
-    // newResource.attributes.push({
-    //   attribute: {
-    //     keyName: 'currentIndex',
-    //     keyValue: '0'
-    //   }
-    // });
-    // console.log('templateResource', newResource);
     setvisibleModal(true);
     setcurrentResourceAttribute({ ...template });
   };
@@ -158,12 +138,10 @@ const UserDetails = (props) => {
       <div>
         {(props.templateResources || []).map((template) => {
           let attributes = template.attributes;
-          // const userResources = (props.resourcesByUserId || []).filter(
-          //   (r) => r.resourceName === template.resourceName
-          // );
-          const userResource = (props.resourcesByUserId || []).find(
+          const userResource1 = (props.resourcesByUserId || []).find(
             (r) => r.resourceName === template.resourceName
           );
+          const userResource = cloneDeep(userResource1);
           if (userResource) {
             attributes = userResource.attributes;
           }

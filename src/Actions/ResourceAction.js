@@ -160,7 +160,6 @@ export function updateResourceByUserIdError(error) {
 }
 
 export const updateResourceByUserId = (resource, userId) => {
-  debugger;
   return (dispatch) => {
     dispatch(updateResourceByUserIdLoading());
     return Axios.post(
