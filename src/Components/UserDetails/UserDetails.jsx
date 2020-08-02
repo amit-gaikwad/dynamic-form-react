@@ -13,7 +13,7 @@ import {
 import { DynamicFormContainer } from '../../Utils/getDynamicForm';
 import { getFieldsFromAttributeModels } from '../../Utils/common-methods';
 import { Loader } from '../Loader/Loader';
-import { omit } from 'lodash';
+import { omit, cloneDeep } from 'lodash';
 import { CollapsedDetails } from './CollapsedDetails';
 import Modal from 'antd/lib/modal/Modal';
 
@@ -44,7 +44,18 @@ const UserDetails = (props) => {
         item.attribute.keyValue = event[item.attribute.keyName];
       }
     }
-    if (userResource && !istemplateResource) {
+    if (templateResource.mode === 'add') {
+      newResource.attributes.unshift({
+        attribute: {
+          keyName: 'actionsAllowed',
+          keyValue: 'add'
+        }
+      });
+      newResource.resourceId = userResource.resourceId;
+      props
+        .updateResourceByUserId(newResource, props.match.params.id)
+        .then(() => setvisibleModal(false));
+    } else if (templateResource.mode === 'edit') {
       newResource.attributes.unshift({
         attribute: {
           keyName: 'actionsAllowed',
@@ -52,7 +63,10 @@ const UserDetails = (props) => {
         }
       });
       newResource.attributes = newResource.attributes.filter(
-        (attr) => !['template', 'userId', 'currentIndex'].includes(attr.attribute.keyName)
+        (attr) =>
+          !['template', 'userId', 'currentIndex', 'Instances Allowed'].includes(
+            attr.attribute.keyName
+          )
       );
       newResource.resourceId = userResource.resourceId;
       props
@@ -64,34 +78,89 @@ const UserDetails = (props) => {
   };
   const onEditClick = (resource) => {
     setvisibleModal(true);
+    resource.mode = 'edit';
     setcurrentResourceAttribute(resource);
   };
 
   const addNewResourceClick = (resource) => {
+    debugger;
     const templateResource = (props.templateResources || []).find(
       (r) => r.resourceName === resource.resourceName
     );
-    const numberOfPresentResources = props.resourcesByUserId.filter(
-      (r) => r.resourceName === resource.resourceName
-    );
-    templateResource.attributes.forEach((element) => {
-      if (element.attribute.keyName === 'currentIndex') {
-        element.attribute.keyValue = numberOfPresentResources.length;
+
+    const currentIndexAtrr =
+      resource.attributes.find((a) => a.attribute.keyName === 'currentIndex') || {};
+    const currentIndex = currentIndexAtrr.attribute.keyValue;
+
+    let filteredAttrs = resource.attributes.filter((x) => {
+      if (x.attribute.keyName === 'Instances Allowed') {
+        return false;
+      }
+      var m = (x.metaData || []).find((l) => l.keyName == 'index') || {};
+      const isSatisfy = m.keyValue && m.keyValue.toString() == currentIndex;
+      x.attribute.keyValue = '';
+      if (m.keyValue && m.keyValue.toString() == currentIndex) {
+        x.metaData = (x.metaData || []).filter((o) => o.keyName !== 'index');
+        return true;
+      }
+      return false;
+    });
+    const newResource = cloneDeep(resource);
+    newResource.attributes = filteredAttrs;
+    newResource.attributes.push({
+      attribute: {
+        keyName: 'currentIndex',
+        keyValue: currentIndex
       }
     });
-    console.log('templateResource', templateResource);
+    console.log('templateResource', newResource);
     setvisibleModal(true);
-    setcurrentResourceAttribute({ ...templateResource });
+    setcurrentResourceAttribute({ ...newResource, mode: 'add' });
   };
 
+  const addNewFreshResourceClick = (template) => {
+    debugger;
+    // const templateResource = (props.templateResources || []).find(
+    //   (r) => r.resourceName === resource.resourceName
+    // );
+
+    // const currentIndexAtrr =
+    //   resource.attributes.find((a) => a.attribute.keyName === 'currentIndex') || {};
+    // const currentIndex = currentIndexAtrr.attribute.keyValue;
+
+    // let filteredAttrs = resource.attributes.filter((x) => {
+    //   if (x.attribute.keyName === 'Instances Allowed') {
+    //     return false;
+    //   }
+    //   var m = (x.metaData || []).find((l) => l.keyName == 'index') || {};
+    //   const isSatisfy = m.keyValue && m.keyValue.toString() == currentIndex;
+    //   x.attribute.keyValue = '';
+    //   if (m.keyValue && m.keyValue.toString() == currentIndex) {
+    //     x.metaData = (x.metaData || []).filter((o) => o.keyName !== 'index');
+    //     return true;
+    //   }
+    //   return false;
+    // });
+    // const newResource = cloneDeep(resource);
+    // newResource.attributes = filteredAttrs;
+    // newResource.attributes.push({
+    //   attribute: {
+    //     keyName: 'currentIndex',
+    //     keyValue: '0'
+    //   }
+    // });
+    // console.log('templateResource', newResource);
+    setvisibleModal(true);
+    setcurrentResourceAttribute({ ...template });
+  };
   const renderComponents = () => {
     return (
       <div>
         {(props.templateResources || []).map((template) => {
           let attributes = template.attributes;
-          const userResources = (props.resourcesByUserId || []).filter(
-            (r) => r.resourceName === template.resourceName
-          );
+          // const userResources = (props.resourcesByUserId || []).filter(
+          //   (r) => r.resourceName === template.resourceName
+          // );
           const userResource = (props.resourcesByUserId || []).find(
             (r) => r.resourceName === template.resourceName
           );
@@ -102,6 +171,17 @@ const UserDetails = (props) => {
           const isItTemplate = fields.find((f) => f.label === 'template');
           const isItHavingMultiResource = fields.find((f) => f.label === 'Instances Allowed');
           const currentResource = userResource || template;
+
+          var p = attributes.find((w) => w.attribute.keyName === 'currentIndex');
+          var userResources = [];
+          for (let i = 1; i <= Number(p.attribute.keyValue); i++) {
+            let a = attributes.filter((x) => {
+              var m = (x.metaData || []).find((m) => m.keyName == 'index') || {};
+              return m.keyValue && m.keyValue.toString() == i;
+            });
+            userResources.push(a);
+          }
+          console.log('userResources', userResources);
           return (
             <Row style={{ margin: '10px' }} key={template.resourceId}>
               <Row style={{ width: '100%' }}>
@@ -115,10 +195,9 @@ const UserDetails = (props) => {
                         if (!isItTemplate && isItHavingMultiResource) {
                           addNewResourceClick(currentResource);
                         } else {
-                          onEditClick(currentResource);
+                          addNewFreshResourceClick(currentResource);
                         }
                       }}>
-                      {/* {isItTemplate ? '+' : 'Edit'} */}
                       {!isItTemplate ? (
                         isItHavingMultiResource && (
                           <svg
@@ -147,11 +226,15 @@ const UserDetails = (props) => {
                     </Button>
                   </Col>
                 </Row>
-                {userResources.map((ur) => (
+                {userResources.map((attrs) => (
                   <Row style={{ width: '100%', marginTop: '15px' }} className='multiResources'>
                     <Col span={6}>
-                      {getFieldsFromAttributeModels(ur.attributes).map((field) => {
-                        if (!['template', 'userId', 'currentIndex'].includes(field.label)) {
+                      {getFieldsFromAttributeModels(attrs).map((field) => {
+                        if (
+                          !['template', 'userId', 'currentIndex', 'Instances Allowed'].includes(
+                            field.label
+                          )
+                        ) {
                           return (
                             <Col key={field.label} span={24}>
                               {field.label} : {field.value}
@@ -163,7 +246,7 @@ const UserDetails = (props) => {
                     <Col span={2} className='editButton'>
                       <Button
                         onClick={() => {
-                          onEditClick(ur);
+                          onEditClick(currentResource);
                         }}>
                         <svg
                           xmlns='http://www.w3.org/2000/svg'
@@ -203,18 +286,20 @@ const UserDetails = (props) => {
       ) : (
         renderComponents()
       )}
-      <Modal
-        title={currentResourceAttribute.resourceName}
-        visible={visibleModal}
-        footer={null}
-        onOk={() => setvisibleModal(false)}
-        onCancel={() => setvisibleModal(false)}>
-        <DynamicFormContainer
-          fields={getFieldsFromAttributeModels(currentResourceAttribute.attributes)}
-          template={currentResourceAttribute}
-          currentIndex={currentResourceAttribute.keyValue || 0}
-          onHandleSubmit={onHandleSubmit}></DynamicFormContainer>
-      </Modal>
+      {visibleModal && (
+        <Modal
+          title={currentResourceAttribute.resourceName}
+          visible={visibleModal}
+          footer={null}
+          onOk={() => setvisibleModal(false)}
+          onCancel={() => setvisibleModal(false)}>
+          <DynamicFormContainer
+            fields={getFieldsFromAttributeModels(currentResourceAttribute.attributes)}
+            template={currentResourceAttribute}
+            currentIndex={currentResourceAttribute.keyValue || 0}
+            onHandleSubmit={onHandleSubmit}></DynamicFormContainer>
+        </Modal>
+      )}
     </div>
   );
 };

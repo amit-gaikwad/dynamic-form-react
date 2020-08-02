@@ -17,6 +17,7 @@ export const getRenderableComponentByType = ({
 }) => {
   var isTrueSet = hidden === 'true';
   if (label === 'currentIndex') {
+    debugger;
     type = 'text';
     isTrueSet = true;
   }
@@ -68,7 +69,7 @@ export const getRenderableComponentByType = ({
               pattern: pattern,
               message: 'Not a valid'
             },
-            { required: mandatory === 'true', message: 'Please enter text!' }
+            { required: mandatory === 'true' && label !== 'userId', message: 'Please enter text!' }
           ]}
           initialValue={value.toString()}
           hidden={isTrueSet}>
