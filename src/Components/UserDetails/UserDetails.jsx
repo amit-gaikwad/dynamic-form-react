@@ -63,15 +63,22 @@ const UserDetails = (props) => {
         );
         return isSimilarindex.length > 0;
       });
-      var ats = [];
-      filteredAttr.forEach((item, index) => {
-        var newValueAttr =
-          newResource.attributes.find((a) => a.attribute.keyName === item.attribute.keyName) || {};
-        if (!isEmpty(newValueAttr) && item.attribute.keyValue !== newValueAttr.attribute.keyValue) {
-          ats.push(newValueAttr);
-        }
-      });
-      newResource.attributes = ats;
+      // var ats = [];
+      // filteredAttr.forEach((item, index) => {
+      //   var newValueAttr =
+      //     newResource.attributes.find((a) => a.attribute.keyName === item.attribute.keyName) || {};
+      //   if (!isEmpty(newValueAttr) && item.attribute.keyValue !== newValueAttr.attribute.keyValue) {
+      //     ats.push(newValueAttr);
+      //   }
+      // });
+
+      newResource.attributes = newResource.attributes.filter(
+        (attr) =>
+          !['template', 'userId', 'currentIndex', 'Instances Allowed'].includes(
+            attr.attribute.keyName
+          )
+      );
+      // newResource.attributes = ats;
       newResource.attributes.unshift({
         attribute: {
           keyName: 'actionsAllowed',
@@ -91,6 +98,14 @@ const UserDetails = (props) => {
   const onEditClick = (resource) => {
     setvisibleModal(true);
     resource.mode = 'edit';
+    setcurrentResourceAttribute(resource);
+  };
+
+  const editMultiResourceClick = (resource1, attributes, index) => {
+    setvisibleModal(true);
+    const resource = cloneDeep(resource1);
+    resource.mode = 'edit';
+    resource.attributes = cloneDeep(attributes);
     setcurrentResourceAttribute(resource);
   };
 
@@ -204,7 +219,7 @@ const UserDetails = (props) => {
                     </Button>
                   </Col>
                 </Row>
-                {userResources.map((attrs) => (
+                {userResources.map((attrs, index) => (
                   <Row style={{ width: '100%', marginTop: '15px' }} className='multiResources'>
                     <Col span={6}>
                       {getFieldsFromAttributeModels(attrs).map((field) => {
@@ -224,7 +239,11 @@ const UserDetails = (props) => {
                     <Col span={2} className='editButton'>
                       <Button
                         onClick={() => {
-                          onEditClick(currentResource);
+                          if (isItHavingMultiResource) {
+                            editMultiResourceClick(currentResource, attrs, index + 1);
+                          } else {
+                            onEditClick(currentResource);
+                          }
                         }}>
                         <svg
                           xmlns='http://www.w3.org/2000/svg'
