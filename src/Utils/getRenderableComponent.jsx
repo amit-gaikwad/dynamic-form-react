@@ -128,8 +128,8 @@ export const getRenderableComponentByType = ({
           label={label}
           hidden={isTrueSet}
           rules={[{ required: mandatory === 'true', message: 'Please select date' }]}
-          initialValue={moment(value)}>
-          <DatePicker defaultValue={moment('2015/01/01', 'YYYY/MM/DD')} />
+          initialValue={value ? moment(value) : moment(new Date())}>
+          <DatePicker defaultValue={value ? moment(value) : moment(new Date())} />
         </Form.Item>
       );
 

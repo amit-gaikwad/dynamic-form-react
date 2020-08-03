@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col, Divider, Button } from 'antd';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
+import moment from 'moment';
 import { getRenderableComponentByType } from '../../Utils/getRenderableComponent';
 import { connect } from 'react-redux';
 import {
@@ -210,8 +211,8 @@ const UserDetails = (props) => {
                           viewBox='0 0 24 24'
                           data-supported-dps='24x24'
                           fill='currentColor'
-                          width='24'
-                          height='24'
+                          width='16'
+                          height='16'
                           focusable='false'>
                           <path d='M21 13h-8v8h-2v-8H3v-2h8V3h2v8h8v2z'></path>
                         </svg>
@@ -230,7 +231,10 @@ const UserDetails = (props) => {
                         ) {
                           return (
                             <Col key={field.label} span={24}>
-                              {field.label} : {field.value}
+                              {field.label} :
+                              {field.type === 'date'
+                                ? moment(field.value).format('DD/MM/YYYY')
+                                : field.value}
                             </Col>
                           );
                         }
@@ -250,8 +254,8 @@ const UserDetails = (props) => {
                           viewBox='0 0 24 24'
                           data-supported-dps='24x24'
                           fill='currentColor'
-                          width='24'
-                          height='24'
+                          width='16'
+                          height='16'
                           focusable='false'>
                           <path d='M21.71 5L19 2.29a1 1 0 00-.71-.29 1 1 0 00-.7.29L4 15.85 2 22l6.15-2L21.71 6.45a1 1 0 00.29-.74 1 1 0 00-.29-.71zM6.87 18.64l-1.5-1.5L15.92 6.57l1.5 1.5zM18.09 7.41l-1.5-1.5 1.67-1.67 1.5 1.5z'></path>
                         </svg>
