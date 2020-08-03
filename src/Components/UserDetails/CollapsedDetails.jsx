@@ -4,7 +4,9 @@ import { Row, Col, Button } from 'antd';
 
 export const CollapsedDetails = (props) => {
   const isItTemplate = props.fields.find((f) => f.label === 'template');
-  const isItHavingMultiResource = props.fields.find((f) => f.label === 'Instances Allowed');
+  const isItHavingMultiResource = props.fields.find(
+    (f) => f.label.toLowerCase() === 'Instances Allowed'.toLowerCase()
+  );
   return (
     <Row style={{ width: '100%' }}>
       <Row style={{ width: '100%' }}>

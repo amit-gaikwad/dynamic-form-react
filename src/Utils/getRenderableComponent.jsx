@@ -20,7 +20,7 @@ export const getRenderableComponentByType = ({
     type = 'text';
     isTrueSet = true;
   }
-  if ('Instances Allowed' == label) {
+  if ('Instances Allowed'.toLowerCase() == label.toLowerCase()) {
     return;
   }
   const { Option } = Select;

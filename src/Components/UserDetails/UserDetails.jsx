@@ -163,7 +163,9 @@ const UserDetails = (props) => {
           }
           const fields = getFieldsFromAttributeModels(attributes);
           const isItTemplate = fields.find((f) => f.label === 'template');
-          const isItHavingMultiResource = fields.find((f) => f.label === 'Instances Allowed');
+          const isItHavingMultiResource = fields.find(
+            (f) => f.label.toLowerCase() === 'Instances Allowed'.toLowerCase()
+          );
           const currentResource = userResource || template;
 
           var p = attributes.find((w) => w.attribute.keyName === 'currentIndex');
@@ -175,7 +177,6 @@ const UserDetails = (props) => {
             });
             userResources.push(a);
           }
-          console.log('userResources', userResources);
           return (
             <Row style={{ margin: '10px' }} key={template.resourceId}>
               <Row style={{ width: '100%' }}>
@@ -225,9 +226,12 @@ const UserDetails = (props) => {
                     <Col span={6}>
                       {getFieldsFromAttributeModels(attrs).map((field) => {
                         if (
-                          !['template', 'userId', 'currentIndex', 'Instances Allowed'].includes(
-                            field.label
-                          )
+                          ![
+                            'template'.toLowerCase(),
+                            'userId'.toLowerCase(),
+                            'currentIndex'.toLowerCase(),
+                            'Instances Allowed'.toLowerCase()
+                          ].includes(field.label.toLowerCase())
                         ) {
                           return (
                             <Col key={field.label} span={24}>
