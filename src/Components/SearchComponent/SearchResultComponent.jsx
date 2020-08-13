@@ -1,6 +1,10 @@
 import React from 'react';
-import { Row, Col, Card } from 'antd';
+import { Row, Col, Card, Button, Avatar } from 'antd';
 import Meta from 'antd/lib/card/Meta';
+import {
+  getFieldsFromAttributeModels,
+  getFieldsValueFromAtributes
+} from '../../Utils/common-methods';
 
 const data = [
   {
@@ -356,23 +360,39 @@ const data = [
 export const SearchResultComponent = (props) => {
   console.log('props', props);
   return (
-    <Row width={'100%'} className='search-result-component'>
-      {(props.users || []).map((p, i) => (
-        <Col span={6} key={i}>
-          <Card
-            hoverable
-            style={{ width: '80%' }}
-            cover={
-              <img
-                style={{ width: '30px', height: '30px' }}
-                alt='example'
-                src='https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'
+    <Row width={'100%'} className='search-result-component' gutter={[16, 16]}>
+      {(props.users || []).map((p, i) => {
+        console.log('user', getFieldsValueFromAtributes(p.attributes));
+        const user = getFieldsValueFromAtributes(p.attributes);
+        return (
+          <Col span={11} key={i} offset={1}>
+            <Card
+              style={{ width: '90%' }}
+              actions={[
+                <Button
+                  onClick={() => {
+                    props.onDecline(p);
+                  }}>
+                  Decline
+                </Button>,
+                <Button
+                  onClick={() => {
+                    props.onAccept(p);
+                  }}>
+                  Accept
+                </Button>
+              ]}>
+              <Meta
+                avatar={
+                  <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
+                }
+                title={`${user['First Name']} ${user['Last Name']}`}
+                //description='This is the description'
               />
-            }>
-            <Meta title='Europe Street beat' description='www.instagram.com' />
-          </Card>
-        </Col>
-      ))}
+            </Card>
+          </Col>
+        );
+      })}
     </Row>
   );
 };

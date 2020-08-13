@@ -24,3 +24,17 @@ export const getFieldsFromAttributeModels = (attributeArr = []) => {
   });
   return fields;
 };
+
+export const getFieldsValueFromAtributes = (attributeArr = []) => {
+  var fields = {};
+  attributeArr.forEach((element) => {
+    // const field = {};
+    const label = get(element, 'attribute.keyName');
+    const value = get(element, 'attribute.keyValue');
+    // (element.metaData || []).forEach((meta) => {
+    //   field[meta.keyName] = meta.keyValue;
+    // });
+    fields[label] = value;
+  });
+  return fields;
+};

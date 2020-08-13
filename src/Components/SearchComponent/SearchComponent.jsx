@@ -17,7 +17,7 @@ const optionsData = [
 ];
 export const SearchComponent = (props) => {
   const [showSearchResult, setshowSearchResult] = useState(false);
-  const [selectedCategory, setselectedCategory] = useState();
+  const [selectedCategory, setselectedCategory] = useState('Profile Summary');
   const [searchString, setsearchString] = useState('');
   const dropRef = React.createRef();
   const inputRef = useRef(null);
@@ -56,12 +56,11 @@ export const SearchComponent = (props) => {
 
   return (
     <Row ref={inputRef} style={{ width: '100%' }}>
-      <Col span={10}>
+      <Col span={10} offset={1}>
         <Select
           style={{ width: '100%' }}
           placeholder='Please select'
-          //defaultValue={['a10', 'c12']}
-
+          defaultValue={selectedCategory}
           onChange={handleChange}>
           {optionsData.map((op, i) => (
             <Option key={i.toString(36) + i} value={op}>
@@ -70,12 +69,23 @@ export const SearchComponent = (props) => {
           ))}
         </Select>
       </Col>
-      <Col span={12} offset={2}>
+      <Col span={12} offset={1}>
         <Input placeholder='search' onChange={onSearchTextChange}></Input>
       </Col>
       {showSearchResult && (
-        <Col span={24} style={{ width: '400px', height: '500px', background: 'red' }}>
-          <SearchResultComponent users={props.users || []}></SearchResultComponent>
+        <Col span={24} style={{ width: '400px', height: '500px', background: 'lightgray' }}>
+          {isEmpty(props.users) ? (
+            <div>No records Found...</div>
+          ) : (
+            <SearchResultComponent
+              users={props.users || []}
+              onDecline={(p) => {
+                console.log('declined', p);
+              }}
+              onAccept={(p) => {
+                console.log('accepted', p);
+              }}></SearchResultComponent>
+          )}
         </Col>
       )}
     </Row>
