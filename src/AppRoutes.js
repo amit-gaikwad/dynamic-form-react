@@ -3,8 +3,9 @@ import React from 'react';
 import { PersonalDetailsContainer } from './Components/PersonalDetails/PersonalDetails';
 import { EducationalDetails } from './Components/EducationalDetails/EducationalDetails';
 import { UserDetailsContainer } from './Components/UserDetails/UserDetails';
-import { Layout, Menu, Breadcrumb, Input } from 'antd';
+import { Layout, Menu, Breadcrumb, Input, Row, Col } from 'antd';
 import { history } from './Utils/history';
+import { SearchComponent, SearchContainer } from './Components/SearchComponent/SearchComponent';
 const { Header, Content, Footer, Sider } = Layout;
 
 export const AppRoutes = (props) => {
@@ -20,32 +21,39 @@ export const AppRoutes = (props) => {
             width: '100%',
             zIndex: 1
           }}>
-          <div className='logo' />
-          <Menu
-            style={{ backgroundColor: '#283e4a', color: '#b4bfc7' }}
-            mode='horizontal'
-            defaultSelectedKeys={['1']}>
-            <Menu.Item>
-              <Input placeholder='search' />
-            </Menu.Item>
-            <Menu.Item key='1'>
-              <Link style={{ color: '#b4bfc7' }} to='/'>
-                Home
-              </Link>
-            </Menu.Item>
-            <Menu.Item key='2'>
-              <Link style={{ color: '#b4bfc7' }} to='/'>
-                My Network
-              </Link>
-            </Menu.Item>
-            <Menu.Item key='3'>
-              <Link
-                style={{ color: '#b4bfc7' }}
-                to={'/user/amit' + (Math.floor(Math.random() * 100) % 3)}>
-                My Profile
-              </Link>
-            </Menu.Item>
-          </Menu>
+          <Row>
+            <Col span={2}>
+              <div className='logo' />
+            </Col>
+            <Col span={10}>
+              <SearchContainer></SearchContainer>
+            </Col>
+            <Col span={12}>
+              <Menu
+                style={{ backgroundColor: '#283e4a', color: '#b4bfc7' }}
+                mode='horizontal'
+                defaultSelectedKeys={['1']}>
+                <Menu.Item></Menu.Item>
+                <Menu.Item key='1'>
+                  <Link style={{ color: '#b4bfc7' }} to='/'>
+                    Home
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key='2'>
+                  <Link style={{ color: '#b4bfc7' }} to='/'>
+                    My Network
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key='3'>
+                  <Link
+                    style={{ color: '#b4bfc7' }}
+                    to={'/user/amit' + (Math.floor(Math.random() * 100) % 3)}>
+                    My Profile
+                  </Link>
+                </Menu.Item>
+              </Menu>
+            </Col>
+          </Row>
         </Header>
         <Layout style={{ marginTop: 64 }}>
           <Sider width={'15%'} style={{ background: '#f0f2f5' }}></Sider>
