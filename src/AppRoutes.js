@@ -26,7 +26,7 @@ export const AppRoutes = (props) => {
               <div className='logo' />
             </Col>
             <Col span={10}>
-              <SearchContainer></SearchContainer>
+              <SearchContainer {...props}></SearchContainer>
             </Col>
             <Col span={12}>
               <Menu

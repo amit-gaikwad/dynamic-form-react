@@ -4,8 +4,13 @@ import { SearchResultComponent } from './SearchResultComponent';
 import { Option } from 'antd/lib/mentions';
 import { isEmpty } from 'lodash';
 import { connect } from 'react-redux';
-import { fetchUsersBySearchString } from '../../Actions/UserAction';
+import {
+  fetchUsersBySearchString,
+  sendConnectionRequest,
+  getsentConnectionRequest
+} from '../../Actions/UserAction';
 
+const currentuserId = 'amol1';
 const optionsData = [
   'Profile Summary',
   'Personal Details',
@@ -48,6 +53,9 @@ export const SearchComponent = (props) => {
   };
 
   useEffect(() => {
+    props.getsentConnectionRequest({
+      userId: currentuserId
+    });
     document.addEventListener('mousedown', handleShowResultPopUp, false);
     return () => {
       document.removeEventListener('mousedown', handleShowResultPopUp, false);
@@ -78,11 +86,17 @@ export const SearchComponent = (props) => {
             <div>No records Found...</div>
           ) : (
             <SearchResultComponent
+              sendConnectedUser={props.sendConnectedUser}
               users={props.users || []}
               onDecline={(p) => {
                 console.log('declined', p);
               }}
-              onAccept={(p) => {
+              onAccept={(p, user) => {
+                props.sendConnectionRequest({
+                  userIdFrom: currentuserId,
+                  userIdTo: user.userId,
+                  notificationAbout: 'Connection'
+                });
                 console.log('accepted', p);
               }}></SearchResultComponent>
           )}
@@ -94,12 +108,15 @@ export const SearchComponent = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    users: state.search.usersBySearchString
+    users: state.search.usersBySearchString,
+    sendConnectedUser: state.userReducer.sendConnectedUser
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchUsersBySearchString: (obj) => dispatch(fetchUsersBySearchString(obj))
+  fetchUsersBySearchString: (obj) => dispatch(fetchUsersBySearchString(obj)),
+  sendConnectionRequest: (obj) => dispatch(sendConnectionRequest(obj)),
+  getsentConnectionRequest: (obj) => dispatch(getsentConnectionRequest(obj))
 });
 
 export const SearchContainer = connect(mapStateToProps, mapDispatchToProps)(SearchComponent);

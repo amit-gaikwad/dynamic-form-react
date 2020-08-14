@@ -5,6 +5,7 @@ import {
   getFieldsFromAttributeModels,
   getFieldsValueFromAtributes
 } from '../../Utils/common-methods';
+import { get } from 'lodash';
 
 const data = [
   {
@@ -359,6 +360,12 @@ const data = [
 
 export const SearchResultComponent = (props) => {
   console.log('props', props);
+  const sendConnectedUser = props.sendConnectedUser.attributes || [];
+  debugger;
+  const connectedUserIdsAttribute =
+    sendConnectedUser.find((attr) => attr.attribute.keyName === 'Connection') || {};
+  const connectedUserIds = get(connectedUserIdsAttribute, 'attribute.keyValue', '').split(',');
+  console.log('connectedUserIds', sendConnectedUser, connectedUserIdsAttribute.keyValue);
   return (
     <Row width={'100%'} className='search-result-component' gutter={[16, 16]}>
       {(props.users || []).map((p, i) => {
@@ -368,20 +375,31 @@ export const SearchResultComponent = (props) => {
           <Col span={11} key={i} offset={1}>
             <Card
               style={{ width: '90%' }}
-              actions={[
-                <Button
-                  onClick={() => {
-                    props.onDecline(p);
-                  }}>
-                  Decline
-                </Button>,
-                <Button
-                  onClick={() => {
-                    props.onAccept(p);
-                  }}>
-                  Accept
-                </Button>
-              ]}>
+              actions={
+                connectedUserIds.includes(user.userId)
+                  ? [
+                      <div
+                        onClick={() => {
+                          props.onDecline(p);
+                        }}>
+                        Already sent Request
+                      </div>
+                    ]
+                  : [
+                      <Button
+                        onClick={() => {
+                          props.onDecline(p);
+                        }}>
+                        Decline
+                      </Button>,
+                      <Button
+                        onClick={() => {
+                          props.onAccept(p, user);
+                        }}>
+                        Accept
+                      </Button>
+                    ]
+              }>
               <Meta
                 avatar={
                   <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />

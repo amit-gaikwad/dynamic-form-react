@@ -3,12 +3,14 @@ import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import { resources } from './ResourceReducer';
 import { search } from './SearchReducer';
+import { userReducer } from './UserReducer';
 
 const reduxDevTool = '__REDUX_DEVTOOLS_EXTENSION_COMPOSE__';
 
 const rootReducer = combineReducers({
   resources,
-  search
+  search,
+  userReducer
 });
 
 const isNonProd = process.env.NODE_ENV !== 'production';
