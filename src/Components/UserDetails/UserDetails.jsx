@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Divider, Button } from 'antd';
+import { Row, Col, Divider, Button, Card } from 'antd';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import moment from 'moment';
@@ -151,7 +151,7 @@ const UserDetails = (props) => {
   };
   const renderComponents = () => {
     return (
-      <div>
+      <Row style={{ margin: '10px' }} gutter={[26, 26]}>
         {(props.templateResources || []).map((template) => {
           let attributes = template.attributes;
           const userResource1 = (props.resourcesByUserId || []).find(
@@ -178,49 +178,50 @@ const UserDetails = (props) => {
             userResources.push(a);
           }
           return (
-            <Row style={{ margin: '10px' }} key={template.resourceId}>
-              <Row style={{ width: '100%' }}>
-                <Row style={{ width: '100%' }}>
-                  <Col span={22} style={{ fontWeight: 1000 }}>
-                    {currentResource.resourceName}
-                  </Col>
-                  <Col span={2}>
-                    <Button
-                      onClick={() => {
-                        if (!isItTemplate && isItHavingMultiResource) {
-                          addNewResourceClick(currentResource);
-                        } else {
-                          addNewFreshResourceClick(currentResource);
-                        }
-                      }}>
-                      {!isItTemplate ? (
-                        isItHavingMultiResource && (
-                          <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            viewBox='0 0 24 24'
-                            data-supported-dps='24x24'
-                            fill='currentColor'
-                            width='24'
-                            height='24'
-                            focusable='false'>
-                            <path d='M21 13h-8v8h-2v-8H3v-2h8V3h2v8h8v2z'></path>
-                          </svg>
-                        )
-                      ) : (
+            <Col span={24} key={template.resourceId}>
+              <Card
+                style={{
+                  borderRadius: '2px',
+                  boxShadow: '2px 2px 2px 2px rgba(208, 216, 243, 0.6)'
+                }}
+                title={currentResource.resourceName}
+                extra={
+                  <Button
+                    onClick={() => {
+                      if (!isItTemplate && isItHavingMultiResource) {
+                        addNewResourceClick(currentResource);
+                      } else {
+                        addNewFreshResourceClick(currentResource);
+                      }
+                    }}>
+                    {!isItTemplate ? (
+                      isItHavingMultiResource && (
                         <svg
                           xmlns='http://www.w3.org/2000/svg'
                           viewBox='0 0 24 24'
                           data-supported-dps='24x24'
                           fill='currentColor'
-                          width='16'
-                          height='16'
+                          width='24'
+                          height='24'
                           focusable='false'>
                           <path d='M21 13h-8v8h-2v-8H3v-2h8V3h2v8h8v2z'></path>
                         </svg>
-                      )}
-                    </Button>
-                  </Col>
-                </Row>
+                      )
+                    ) : (
+                      <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        viewBox='0 0 24 24'
+                        data-supported-dps='24x24'
+                        fill='currentColor'
+                        width='16'
+                        height='16'
+                        focusable='false'>
+                        <path d='M21 13h-8v8h-2v-8H3v-2h8V3h2v8h8v2z'></path>
+                      </svg>
+                    )}
+                  </Button>
+                }
+                hoverable={true}>
                 {userResources.map((attrs, index) => (
                   <Row style={{ width: '100%', marginTop: '15px' }} className='multiResources'>
                     <Col span={6}>
@@ -267,20 +268,11 @@ const UserDetails = (props) => {
                     </Col>
                   </Row>
                 ))}
-              </Row>
-              <Divider />
-
-              {/* <CollapsedDetails
-                addNewResourceClick={addNewResourceClick}
-                fields={getFieldsFromAttributeModels(attributes)}
-                template={userResource || template}
-                currentIndex={currentIndexAttr.keyValue || 0}
-                onEditClick={onEditClick}
-              /> */}
-            </Row>
+              </Card>
+            </Col>
           );
         })}
-      </div>
+      </Row>
     );
   };
 
