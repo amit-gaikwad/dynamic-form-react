@@ -1,62 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { Layout } from 'antd';
-import { useSelector } from 'react-redux';
-// import { useTranslation } from 'react-i18next';
 
-import { ErrorBoundary } from '../common/ErrorBoundary';
-import { HeaderContainerComponent } from '../header/container';
-import { isHeaderCollapsed } from '../../selectors/headerSelectors';
-import { isManager } from '../../selectors/userProfileSelector';
+import { HeaderComponent } from '../Header/Header';
 
-import { iff } from '../../utils/iff';
-import { MainSider } from './mainSider/mainSider';
-
-/****** Drawer Icons *********/
-
-// import cropsMenu from '../../public/crops.svg';
-
-const { Content } = Layout;
-
-const StyledLayout = styled(Layout)`
-  height: 100%;
-  min-height: 100%;
-`;
-
-const StyledContent = styled(Content)`
-  background-color: #e5e5e5;
-  overflow-y: hidden;
-  overflow-x: hidden;
-  padding: 0px;
-`;
-
+const { Header, Content, Footer, Sider } = Layout;
 export const PageLayout = (props) => {
-  // const { t } = useTranslation();
-  const isCollapsed = useSelector(isHeaderCollapsed);
-  const isRoleManager = useSelector(isManager);
+  console.log('new Props in page layout', props);
   return (
-    <StyledLayout>
-      <MainSider isRoleManager={isRoleManager} />
-      <Layout>
-        <ErrorBoundary fromHeader={true}>
-          <HeaderContainerComponent
-            isCollapsed={isCollapsed}
-            header={props.header}
-            currentPage={props.currentPage}
-          />
-        </ErrorBoundary>
-
-        <StyledContent>
-          <ErrorBoundary fromHeader={false}>{iff(!!props.content, props.content)}</ErrorBoundary>
-        </StyledContent>
+    <Layout className='layout'>
+      <HeaderComponent {...props}></HeaderComponent>
+      <Layout style={{ marginTop: 64 }}>
+        <Sider width={'15%'} style={{ background: '#f0f2f5' }}></Sider>
+        <Content>
+          <div className='site-layout-content'>{props.content}</div>
+        </Content>
+        <Sider width={'15%'} style={{ background: '#f0f2f5' }}></Sider>
       </Layout>
-    </StyledLayout>
+      <Footer style={{ textAlign: 'center' }}>Mentor Link App ©2020</Footer>
+    </Layout>
   );
 };
 
 PageLayout.propTypes = {
   header: PropTypes.node,
-  content: PropTypes.node.isRequired,
-  currentPage: PropTypes.string
+  content: PropTypes.node.isRequired
 };

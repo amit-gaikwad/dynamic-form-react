@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { fetchResources } from '../../Actions/ResourceAction';
 import { DynamicFormContainer } from '../../Utils/getDynamicForm';
 import { getFieldsFromAttributeModels } from '../../Utils/common-methods';
+import { PageLayout } from '../Layout/PageLayout';
 
 const data = {
   attributes: [
@@ -205,22 +206,25 @@ const PersonalDetails = (props) => {
     );
   };
 
-  return (
-    <div>
-      <Row>
-        This is Personal Details
-        <Col>
-          <Button
-            onClick={() => {
-              props.fetchResourcesByNamesapce();
-            }}>
-            Fetch Resources
-          </Button>
-        </Col>
-      </Row>
-      {renderComponents(data)}
-    </div>
-  );
+  return PageLayout({
+    content: (
+      <div>
+        <Row>
+          This is Personal Details
+          <Col>
+            <Button
+              onClick={() => {
+                props.fetchResourcesByNamesapce();
+              }}>
+              Fetch Resources
+            </Button>
+          </Col>
+        </Row>
+        {renderComponents(data)}
+      </div>
+    ),
+    props: props
+  });
 };
 
 const mapStateToProps = (state) => {

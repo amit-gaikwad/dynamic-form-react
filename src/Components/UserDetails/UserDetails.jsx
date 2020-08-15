@@ -17,6 +17,7 @@ import { Loader } from '../Loader/Loader';
 import { omit, cloneDeep } from 'lodash';
 import { CollapsedDetails } from './CollapsedDetails';
 import Modal from 'antd/lib/modal/Modal';
+import { PageLayout } from '../Layout/PageLayout';
 
 const UserDetails = (props) => {
   const [currentResourceAttribute, setcurrentResourceAttribute] = useState({});
@@ -27,7 +28,6 @@ const UserDetails = (props) => {
   }, []);
 
   const onHandleSubmit = (event, templateResource, currentIndex) => {
-    debugger;
     const newResource = omit(templateResource, ['resourceId']);
     const istemplateResource = newResource.attributes.find(
       (attr) => attr.attribute.keyName == 'template'
@@ -285,27 +285,31 @@ const UserDetails = (props) => {
   };
 
   return (
-    <div>
-      {props.loading || props.createReourceLoading || props.resourcesByUserIdLoading ? (
-        <Loader />
-      ) : (
-        renderComponents()
-      )}
-      {visibleModal && (
-        <Modal
-          title={currentResourceAttribute.resourceName}
-          visible={visibleModal}
-          footer={null}
-          onOk={() => setvisibleModal(false)}
-          onCancel={() => setvisibleModal(false)}>
-          <DynamicFormContainer
-            fields={getFieldsFromAttributeModels(currentResourceAttribute.attributes)}
-            template={currentResourceAttribute}
-            currentIndex={currentResourceAttribute.keyValue || 0}
-            onHandleSubmit={onHandleSubmit}></DynamicFormContainer>
-        </Modal>
-      )}
-    </div>
+    <PageLayout
+      {...props}
+      content={
+        <div>
+          {props.loading || props.createReourceLoading || props.resourcesByUserIdLoading ? (
+            <Loader />
+          ) : (
+            renderComponents()
+          )}
+          {visibleModal && (
+            <Modal
+              title={currentResourceAttribute.resourceName}
+              visible={visibleModal}
+              footer={null}
+              onOk={() => setvisibleModal(false)}
+              onCancel={() => setvisibleModal(false)}>
+              <DynamicFormContainer
+                fields={getFieldsFromAttributeModels(currentResourceAttribute.attributes)}
+                template={currentResourceAttribute}
+                currentIndex={currentResourceAttribute.keyValue || 0}
+                onHandleSubmit={onHandleSubmit}></DynamicFormContainer>
+            </Modal>
+          )}
+        </div>
+      }></PageLayout>
   );
 };
 

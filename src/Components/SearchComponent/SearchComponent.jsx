@@ -10,7 +10,6 @@ import {
   getsentConnectionRequest
 } from '../../Actions/UserAction';
 
-const currentuserId = 'amol1';
 const optionsData = [
   'Profile Summary',
   'Personal Details',
@@ -21,6 +20,7 @@ const optionsData = [
   'Professional Details'
 ];
 export const SearchComponent = (props) => {
+  console.log('new Props', props);
   const [showSearchResult, setshowSearchResult] = useState(false);
   const [selectedCategory, setselectedCategory] = useState('Profile Summary');
   const [searchString, setsearchString] = useState('');
@@ -54,7 +54,7 @@ export const SearchComponent = (props) => {
 
   useEffect(() => {
     props.getsentConnectionRequest({
-      userId: currentuserId
+      userId: props.userId
     });
     document.addEventListener('mousedown', handleShowResultPopUp, false);
     return () => {
@@ -93,7 +93,7 @@ export const SearchComponent = (props) => {
               }}
               onAccept={(p, user) => {
                 props.sendConnectionRequest({
-                  userIdFrom: currentuserId,
+                  userIdFrom: props.userId,
                   userIdTo: user.userId,
                   notificationAbout: 'Connection'
                 });

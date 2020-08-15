@@ -361,7 +361,6 @@ const data = [
 export const SearchResultComponent = (props) => {
   console.log('props', props);
   const sendConnectedUser = props.sendConnectedUser.attributes || [];
-  debugger;
   const connectedUserIdsAttribute =
     sendConnectedUser.find((attr) => attr.attribute.keyName === 'Connection') || {};
   const connectedUserIds = get(connectedUserIdsAttribute, 'attribute.keyValue', '').split(',');
