@@ -5,6 +5,7 @@ import isEmpty from 'lodash/isEmpty';
 import moment from 'moment';
 import { getRenderableComponentByType } from '../../Utils/getRenderableComponent';
 import { connect } from 'react-redux';
+import { PlusCircleOutlined, EditOutlined } from '@ant-design/icons';
 import {
   fetchResources,
   createResource,
@@ -184,42 +185,37 @@ const UserDetails = (props) => {
                   borderRadius: '2px',
                   boxShadow: '2px 2px 2px 2px rgba(208, 216, 243, 0.6)'
                 }}
-                title={currentResource.resourceName}
+                title={
+                  <span style={{ fontWeight: 'bold', fontSize: '20px' }}>
+                    {currentResource.resourceName}
+                  </span>
+                }
                 extra={
-                  <Button
-                    onClick={() => {
-                      if (!isItTemplate && isItHavingMultiResource) {
-                        addNewResourceClick(currentResource);
-                      } else {
-                        addNewFreshResourceClick(currentResource);
-                      }
-                    }}>
-                    {!isItTemplate ? (
-                      isItHavingMultiResource && (
-                        <svg
-                          xmlns='http://www.w3.org/2000/svg'
-                          viewBox='0 0 24 24'
-                          data-supported-dps='24x24'
-                          fill='currentColor'
-                          width='24'
-                          height='24'
-                          focusable='false'>
-                          <path d='M21 13h-8v8h-2v-8H3v-2h8V3h2v8h8v2z'></path>
-                        </svg>
-                      )
-                    ) : (
-                      <svg
-                        xmlns='http://www.w3.org/2000/svg'
-                        viewBox='0 0 24 24'
-                        data-supported-dps='24x24'
-                        fill='currentColor'
-                        width='16'
-                        height='16'
-                        focusable='false'>
-                        <path d='M21 13h-8v8h-2v-8H3v-2h8V3h2v8h8v2z'></path>
-                      </svg>
-                    )}
-                  </Button>
+                  !isItTemplate ? (
+                    isItHavingMultiResource && (
+                      <PlusCircleOutlined
+                        style={{ fontSize: '30px' }}
+                        onClick={() => {
+                          if (!isItTemplate && isItHavingMultiResource) {
+                            addNewResourceClick(currentResource);
+                          } else {
+                            addNewFreshResourceClick(currentResource);
+                          }
+                        }}
+                      />
+                    )
+                  ) : (
+                    <PlusCircleOutlined
+                      style={{ fontSize: '30px' }}
+                      onClick={() => {
+                        if (!isItTemplate && isItHavingMultiResource) {
+                          addNewResourceClick(currentResource);
+                        } else {
+                          addNewFreshResourceClick(currentResource);
+                        }
+                      }}
+                    />
+                  )
                 }
                 hoverable={true}>
                 {userResources.map((attrs, index) => (
@@ -246,25 +242,15 @@ const UserDetails = (props) => {
                       })}
                     </Col>
                     <Col span={2} className='editButton'>
-                      <Button
+                      <EditOutlined
                         onClick={() => {
                           if (isItHavingMultiResource) {
                             editMultiResourceClick(currentResource, attrs, index + 1);
                           } else {
                             onEditClick(currentResource);
                           }
-                        }}>
-                        <svg
-                          xmlns='http://www.w3.org/2000/svg'
-                          viewBox='0 0 24 24'
-                          data-supported-dps='24x24'
-                          fill='currentColor'
-                          width='16'
-                          height='16'
-                          focusable='false'>
-                          <path d='M21.71 5L19 2.29a1 1 0 00-.71-.29 1 1 0 00-.7.29L4 15.85 2 22l6.15-2L21.71 6.45a1 1 0 00.29-.74 1 1 0 00-.29-.71zM6.87 18.64l-1.5-1.5L15.92 6.57l1.5 1.5zM18.09 7.41l-1.5-1.5 1.67-1.67 1.5 1.5z'></path>
-                        </svg>
-                      </Button>
+                        }}
+                      />
                     </Col>
                   </Row>
                 ))}
