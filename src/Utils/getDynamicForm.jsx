@@ -25,8 +25,6 @@ import { Button } from 'antd';
  */
 
 export const DynamicFormContainer = (props) => {
-  console.log('userResource', props.template, props.fields);
-
   return (
     <Form
       layout={'horizontal'}

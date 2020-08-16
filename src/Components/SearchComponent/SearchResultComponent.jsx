@@ -385,17 +385,18 @@ export const SearchResultComponent = (props) => {
                       </div>
                     ]
                   : [
-                      <Button
-                        onClick={() => {
-                          props.onDecline(p);
-                        }}>
-                        Decline
-                      </Button>,
+                      // <Button
+                      //   onClick={() => {
+                      //     props.onDecline(p);
+                      //   }}>
+                      //   Decline
+                      // </Button>
+                      // ,
                       <Button
                         onClick={() => {
                           props.onAccept(p, user);
                         }}>
-                        Accept
+                        Connect
                       </Button>
                     ]
               }>

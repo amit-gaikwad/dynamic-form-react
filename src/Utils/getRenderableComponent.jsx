@@ -56,7 +56,6 @@ export const getRenderableComponentByType = ({
       });
     }
   };
-  console.log('value', value);
   switch (type) {
     case COMPONENT_TYPES.TEXT:
       return (

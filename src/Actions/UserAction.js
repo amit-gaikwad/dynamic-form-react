@@ -74,7 +74,7 @@ export const sendConnectionRequest = ({
   return (dispatch) => {
     dispatch(sendConnectionRequestLoading());
     Axios.post(
-      `http://localhost:8107/mentor/notifications/userNotifications/${namesapceId}/${userIdFrom}/${userIdTo}/${notificationAbout}`
+      `http://localhost:8106/mentor/notifications/userNotifications/${namesapceId}/${userIdFrom}/${userIdTo}/${notificationAbout}`
     )
       .then((res) => {
         if (res.error) {
@@ -89,12 +89,10 @@ export const sendConnectionRequest = ({
   };
 };
 
-//GET /mentor/notifications/initiated/{namesapceId}/{userId}
-
 export const getsentConnectionRequest = ({ namesapceId = '5f1f0c2b91f3775dd4c991a5', userId }) => {
   return (dispatch) => {
     dispatch(sendConnectionRequestLoading());
-    Axios.get(`http://localhost:8107/mentor/notifications/initiated/${namesapceId}/${userId}`)
+    Axios.get(`http://localhost:8106/mentor/notifications/initiated/${namesapceId}/${userId}`)
       .then((res) => {
         if (res.error) {
           throw res.error;
@@ -107,7 +105,3 @@ export const getsentConnectionRequest = ({ namesapceId = '5f1f0c2b91f3775dd4c991
       });
   };
 };
-
-//POST /mentor/notifications/userNotifications/{namesapceId}/{userIdFrom}/{userIdTo}/{notificationAbout}
-
-//http://localhost:8107/mentor/notifications/userNotifications/5f1f0c2b91f3775dd4c991a5/amol/amit2/Connection

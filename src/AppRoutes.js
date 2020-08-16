@@ -4,14 +4,15 @@ import { PersonalDetailsContainer } from './Components/PersonalDetails/PersonalD
 import { EducationalDetails } from './Components/EducationalDetails/EducationalDetails';
 import { UserDetailsContainer } from './Components/UserDetails/UserDetails';
 import { history } from './Utils/history';
+import { NotificationsContainer } from './Components/Notifications/Notifications';
 
 export const AppRoutes = (props) => {
-  console.log('props', props);
   return (
     <Router history={history}>
       <Route exact path='/' component={PersonalDetailsContainer} />
-      <Route path='/personal-details' component={PersonalDetailsContainer} />
-      <Route path='/user/:id' component={UserDetailsContainer} />
+      <Route exact path='/personal-details' component={PersonalDetailsContainer} />
+      <Route exact path='/user/:id/notifications' component={NotificationsContainer} />
+      <Route exact path='/user/:id' component={UserDetailsContainer} />
     </Router>
   );
 };

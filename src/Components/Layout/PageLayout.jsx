@@ -6,7 +6,6 @@ import { HeaderComponent } from '../Header/Header';
 
 const { Header, Content, Footer, Sider } = Layout;
 export const PageLayout = (props) => {
-  console.log('new Props in page layout', props);
   return (
     <Layout className='layout'>
       <HeaderComponent {...props}></HeaderComponent>

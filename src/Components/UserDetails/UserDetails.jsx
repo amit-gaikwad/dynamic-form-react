@@ -141,7 +141,6 @@ const UserDetails = (props) => {
         keyValue: currentIndex
       }
     });
-    console.log('templateResource', newResource);
     setvisibleModal(true);
     setcurrentResourceAttribute({ ...newResource, mode: 'add' });
   };

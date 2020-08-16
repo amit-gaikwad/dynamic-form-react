@@ -35,14 +35,17 @@ export const HeaderComponent = (props) => {
               </Link>
             </Menu.Item>
             <Menu.Item key='2'>
-              <Link style={{ color: '#b4bfc7' }} to='/'>
+              <Link style={{ color: '#b4bfc7' }} to={`/user/${userId || 'amit'}/connections`}>
                 My Network
               </Link>
             </Menu.Item>
             <Menu.Item key='3'>
-              <Link
-                style={{ color: '#b4bfc7' }}
-                to={'/user/amit' + (Math.floor(Math.random() * 100) % 3)}>
+              <Link style={{ color: '#b4bfc7' }} to={`/user/${userId || 'amit'}/notifications`}>
+                Notifications
+              </Link>
+            </Menu.Item>
+            <Menu.Item key='4'>
+              <Link style={{ color: '#b4bfc7' }} to={`/user/${userId || 'amit'}`}>
                 My Profile
               </Link>
             </Menu.Item>

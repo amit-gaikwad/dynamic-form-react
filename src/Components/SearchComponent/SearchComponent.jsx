@@ -20,7 +20,6 @@ const optionsData = [
   'Professional Details'
 ];
 export const SearchComponent = (props) => {
-  console.log('new Props', props);
   const [showSearchResult, setshowSearchResult] = useState(false);
   const [selectedCategory, setselectedCategory] = useState('Profile Summary');
   const [searchString, setsearchString] = useState('');
@@ -88,16 +87,13 @@ export const SearchComponent = (props) => {
             <SearchResultComponent
               sendConnectedUser={props.sendConnectedUser}
               users={props.users || []}
-              onDecline={(p) => {
-                console.log('declined', p);
-              }}
+              onDecline={(p) => {}}
               onAccept={(p, user) => {
                 props.sendConnectionRequest({
                   userIdFrom: props.userId,
                   userIdTo: user.userId,
                   notificationAbout: 'Connection'
                 });
-                console.log('accepted', p);
               }}></SearchResultComponent>
           )}
         </Col>
