@@ -59,3 +59,21 @@
 .multiResources:hover .editButton{
   display: block;
 }
+
+
+#search-result::-webkit-scrollbar {
+  width: 6px;
+  height: 8px;
+  border-radius: 3px;
+}
+#search-result::-webkit-scrollbar-thumb {
+  border-radius: 4.5px;
+  height: 78px;
+  background-color: #425a707d;
+}
+#search-result::-webkit-scrollbar-track {
+  width: 6px;
+  opacity: 0.3;
+  border-radius: 4.5px;
+  background-color: #0000001c;
+}

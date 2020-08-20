@@ -5,14 +5,15 @@ import { resources } from './ResourceReducer';
 import { search } from './SearchReducer';
 import { userReducer } from './UserReducer';
 import { notificationsReducer } from './NotificationsReducer';
-
+import { connectionReducer } from './ConnectionsReducer';
 const reduxDevTool = '__REDUX_DEVTOOLS_EXTENSION_COMPOSE__';
 
 const rootReducer = combineReducers({
   resources,
   search,
   userReducer,
-  notificationsReducer
+  notificationsReducer,
+  connectionReducer
 });
 
 const isNonProd = process.env.NODE_ENV !== 'production';

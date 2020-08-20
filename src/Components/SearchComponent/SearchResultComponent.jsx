@@ -366,8 +366,12 @@ export const SearchResultComponent = (props) => {
   const connectedUserIds = get(connectedUserIdsAttribute, 'attribute.keyValue', '').split(',');
   console.log('connectedUserIds', sendConnectedUser, connectedUserIdsAttribute.keyValue);
   return (
-    <Row width={'100%'} className='search-result-component' gutter={[16, 16]}>
-      {(props.users || []).map((p, i) => {
+    <Row
+      style={{ height: '100%', overflowY: 'auto', marginTop: '3px' }}
+      id='search-result'
+      className='search-result-component'
+      gutter={[16, 16]}>
+      {props.users.map((p, i) => {
         console.log('user', getFieldsValueFromAtributes(p.attributes));
         const user = getFieldsValueFromAtributes(p.attributes);
         return (

@@ -401,17 +401,19 @@ const data = [
     ]
   }
 ];
+
+//http://localhost:8106/mentor/notifications/connection/requests/5f1f0c2b91f3775dd4c991a5/suraj
 export const fetchNotificationsByUserId = (userId) => {
   return (dispatch) => {
     dispatch(fetchNotificationsByUserIdLoading());
     Axios.get(
-      `http://localhost:8106/mentor/notifications/requests/userProfiles/5f1f0c2b91f3775dd4c991a5/${userId}`
+      `http://localhost:8106/mentor/notifications/connection/requests/5f1f0c2b91f3775dd4c991a5/${userId}`
     )
       .then((res) => {
         if (res.error) {
           throw res.error;
         }
-        dispatch(fetchNotificationsByUserIdSuccess(data)); //res.data));
+        dispatch(fetchNotificationsByUserIdSuccess(res.data)); //res.data));
         return res;
       })
       .catch((error) => {

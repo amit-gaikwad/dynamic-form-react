@@ -8,6 +8,7 @@ const { Header, Content, Footer, Sider } = Layout;
 
 export const HeaderComponent = (props) => {
   const userId = get(props, 'match.params.id', '');
+  localStorage.setItem('userID', userId);
   return (
     <Header
       style={{
@@ -25,27 +26,24 @@ export const HeaderComponent = (props) => {
           <SearchContainer {...props} userId={userId}></SearchContainer>
         </Col>
         <Col span={12}>
-          <Menu
-            style={{ backgroundColor: '#283e4a', color: '#b4bfc7' }}
-            mode='horizontal'
-            defaultSelectedKeys={['1']}>
+          <Menu style={{ backgroundColor: '#283e4a', color: '#b4bfc7' }} mode='horizontal'>
             <Menu.Item key='1'>
               <Link style={{ color: '#b4bfc7' }} to='/'>
                 Home
               </Link>
             </Menu.Item>
             <Menu.Item key='2'>
-              <Link style={{ color: '#b4bfc7' }} to={`/user/${userId || 'amit'}/connections`}>
+              <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}/connections`}>
                 My Network
               </Link>
             </Menu.Item>
             <Menu.Item key='3'>
-              <Link style={{ color: '#b4bfc7' }} to={`/user/${userId || 'amit'}/notifications`}>
+              <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}/notifications`}>
                 Notifications
               </Link>
             </Menu.Item>
             <Menu.Item key='4'>
-              <Link style={{ color: '#b4bfc7' }} to={`/user/${userId || 'amit'}`}>
+              <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}`}>
                 My Profile
               </Link>
             </Menu.Item>
