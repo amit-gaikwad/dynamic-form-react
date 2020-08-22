@@ -2,20 +2,16 @@ import React, { useState } from 'react';
 import { COMPONENT_TYPES } from '../Constants/ComponentTypes';
 import { Input, Radio, Checkbox, DatePicker, Upload, Form, Select, message, Button } from 'antd';
 import moment from 'moment';
+import { get } from 'lodash';
 
 // type:"upload",value:"",mandatory:true,maxLength:"",minLength:"",pattern:"",options:"", label:""
-export const getRenderableComponentByType = ({
-  type,
-  value,
-  options,
-  label,
-  mandatory,
-  maxLength,
-  minLength,
-  pattern,
-  hidden
-}) => {
+export const RenderableComponentByType = ({ field, setFieldsValue, form }) => {
+  console.log('field', field);
+  let { type, value, options, label, mandatory, maxLength, minLength, pattern, hidden } = field;
   var isTrueSet = hidden === 'true';
+  const [loading, setloading] = useState(false);
+  const [imageUrl, setImageUrl] = useState(value);
+
   if (label === 'currentIndex') {
     type = 'text';
     isTrueSet = true;
@@ -24,7 +20,6 @@ export const getRenderableComponentByType = ({
     return;
   }
   const { Option } = Select;
-  // const [loading, setloading] = useState(false);
   // const [imageUrl, setimageUrl] = useState(false);
 
   function beforeUpload(file) {
@@ -38,24 +33,28 @@ export const getRenderableComponentByType = ({
     }
     return isJpgOrPng && isLt2M;
   }
-  function getBase64(img, callback) {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-  }
-  const handleChange = (info) => {
-    if (info.file.status === 'uploading') {
-      //setloading(true);
-      return;
-    }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, (imageUrl) => {
-        // setimageUrl(imageUrl);
-        // setloading(false);
-      });
+
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+  const handleChange = async (info) => {
+    if (get(info, 'file.originFileObj', null)) {
+      setloading(true);
+      if (!info.file.url) {
+        info.file.preview = await getBase64(info.file.originFileObj);
+      }
+      console.log('info.file.preview', info.file.preview, label, form.getFieldsValue());
+      setFieldsValue({ [label]: info.file.preview });
+      setImageUrl(info.file.preview);
+      setloading(false);
     }
   };
+
   switch (type) {
     case COMPONENT_TYPES.TEXT:
       return (
@@ -138,23 +137,23 @@ export const getRenderableComponentByType = ({
           name={label}
           label={label}
           hidden={isTrueSet}
-          rules={[{ required: false, message: 'Please select photo' }]}
-          initialValue={value}>
+          rules={[{ required: false, message: 'Please select image' }]}>
           <Upload
             name='avatar'
             listType='picture-card'
             className='avatar-uploader'
             showUploadList={false}
-            //            action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
             beforeUpload={beforeUpload}
             onChange={handleChange}>
-            {value ? (
-              <img src={value} alt='avatar' style={{ width: '100%' }} />
+            {imageUrl ? (
+              <img src={imageUrl} alt='avatar' style={{ width: '100%' }} />
             ) : (
               <Button>Upload</Button>
             )}
           </Upload>
         </Form.Item>
       );
+    default:
+      return <div></div>;
   }
 };

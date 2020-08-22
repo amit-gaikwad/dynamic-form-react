@@ -2,7 +2,6 @@ import React from 'react';
 import { Row, Col, Divider, Button } from 'antd';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
-import { getRenderableComponentByType } from '../../Utils/getRenderableComponent';
 import { connect } from 'react-redux';
 import { fetchResources } from '../../Actions/ResourceAction';
 import { DynamicFormContainer } from '../../Utils/getDynamicForm';

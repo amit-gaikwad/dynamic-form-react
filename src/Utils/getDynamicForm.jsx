@@ -1,7 +1,6 @@
 import React from 'react';
-import Form from 'antd/lib/form/Form';
-import { getRenderableComponentByType } from './getRenderableComponent';
-import { Button } from 'antd';
+import { RenderableComponentByType } from './getRenderableComponent';
+import { Button, Form } from 'antd';
 
 /**
  * [
@@ -25,18 +24,30 @@ import { Button } from 'antd';
  */
 
 export const DynamicFormContainer = (props) => {
+  const [form] = Form.useForm();
+  React.useEffect(() => {
+    form.setFieldsValue({
+      username: 'Bamboo'
+    });
+  }, []);
   return (
     <Form
       layout={'horizontal'}
+      labelCol={{ span: 7 }}
       className='dynamic-form'
       style={{ margin: '10px' }}
       initialValues={{ remember: true }}
       onFinish={(event) => {
-        props.onHandleSubmit(event, props.template, props.currentIndex);
-      }}>
+        props.onHandleSubmit(event, props.template, props.currentIndex, form);
+      }}
+      form={form}>
       {props.fields.map((field) => (
         <React.Fragment key={field.label}>
-          {getRenderableComponentByType({ ...field })}
+          <RenderableComponentByType
+            field={{ ...field }}
+            setFieldsValue={form.setFieldsValue}
+            form={form}
+          />
         </React.Fragment>
       ))}
       <Button type='primary' htmlType='submit' size='large' disabled={false}>

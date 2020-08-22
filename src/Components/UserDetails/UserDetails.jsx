@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Divider, Button, Card } from 'antd';
+import { Row, Col, Divider, Button, Card, Avatar } from 'antd';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import moment from 'moment';
-import { getRenderableComponentByType } from '../../Utils/getRenderableComponent';
 import { connect } from 'react-redux';
 import { PlusCircleOutlined, EditOutlined } from '@ant-design/icons';
 import {
@@ -28,7 +27,9 @@ const UserDetails = (props) => {
     props.fetchResourcesByUserId(props.match.params.id);
   }, []);
 
-  const onHandleSubmit = (event, templateResource, currentIndex) => {
+  const onHandleSubmit = (event, templateResource, currentIndex, form) => {
+    const values = form.getFieldsValue();
+    console.log('dorm.getFieldsValue()', form.getFieldsValue());
     const newResource = omit(templateResource, ['resourceId']);
     const istemplateResource = newResource.attributes.find(
       (attr) => attr.attribute.keyName == 'template'
@@ -44,7 +45,7 @@ const UserDetails = (props) => {
       if (item.attribute.keyName === 'userId' && istemplateResource) {
         item.attribute.keyValue = props.match.params.id;
       } else {
-        item.attribute.keyValue = event[item.attribute.keyName];
+        item.attribute.keyValue = values[item.attribute.keyName];
       }
     }
     if (templateResource.mode === 'add') {
@@ -153,6 +154,9 @@ const UserDetails = (props) => {
     return (
       <Row style={{ margin: '10px' }} gutter={[26, 26]}>
         {(props.templateResources || []).map((template) => {
+          if (template.resourceName === 'Tags') {
+            return;
+          }
           let attributes = template.attributes;
           const userResource1 = (props.resourcesByUserId || []).find(
             (r) => r.resourceName === template.resourceName
@@ -189,6 +193,7 @@ const UserDetails = (props) => {
                     {currentResource.resourceName}
                   </span>
                 }
+                className='profileSection'
                 extra={
                   !isItTemplate ? (
                     isItHavingMultiResource && (
@@ -232,9 +237,17 @@ const UserDetails = (props) => {
                           return (
                             <Col key={field.label} span={24}>
                               {field.label} :
-                              {field.type === 'date'
-                                ? moment(field.value).format('DD/MM/YYYY')
-                                : field.value}
+                              {field.type === 'date' ? (
+                                moment(field.value).format('DD/MM/YYYY')
+                              ) : field.type === 'fileUpload' ? (
+                                <Avatar
+                                  src={field.value}
+                                  size={40}
+                                  style={{ marginLeft: '10px' }}
+                                />
+                              ) : (
+                                field.value
+                              )}
                             </Col>
                           );
                         }
