@@ -53,7 +53,6 @@ export const DynamicFormContainer = (props) => {
         </React.Fragment>
       ))}
       <Divider></Divider>
-
       <Row>
         <Col span={3} offset={15}>
           <Button

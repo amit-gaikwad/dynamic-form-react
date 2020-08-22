@@ -18,6 +18,7 @@ const Notifications = (props) => {
 
   useEffect(() => {
     const userId = get(props, 'match.params.id', '');
+    console.log('props', props);
 
     props.fetchNotificationsByUserId(userId);
   }, []);
@@ -87,7 +88,7 @@ const Notifications = (props) => {
               <Panel header='Event Invitations' key='2'>
                 <List
                   itemLayout='horizontal'
-                  dataSource={connectionRequests}
+                  dataSource={[]}
                   renderItem={(item) => (
                     <List.Item
                       actions={[
@@ -122,7 +123,7 @@ const Notifications = (props) => {
               <Panel header='Feedback Invitations' key='3'>
                 <List
                   itemLayout='horizontal'
-                  dataSource={connectionRequests}
+                  dataSource={[]}
                   renderItem={(item) => (
                     <List.Item
                       actions={[

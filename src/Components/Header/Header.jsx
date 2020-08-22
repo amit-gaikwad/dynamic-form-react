@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import { Layout, Menu, Breadcrumb, Input, Row, Col } from 'antd';
+import { Layout, Menu, Breadcrumb, Input, Row, Col, Badge } from 'antd';
 import { SearchContainer } from '../SearchComponent/SearchComponent';
 import { get } from 'lodash';
 
@@ -38,9 +38,16 @@ export const HeaderComponent = (props) => {
               </Link>
             </Menu.Item>
             <Menu.Item key='3'>
-              <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}/notifications`}>
-                Notifications
-              </Link>
+              {props.notificationsByUserId.length && (
+                <Badge
+                  count={props.notificationsByUserId.length}
+                  overflowCount={5}
+                  offset={[10, 0]}>
+                  <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}/notifications`}>
+                    Notifications
+                  </Link>
+                </Badge>
+              )}
             </Menu.Item>
             <Menu.Item key='4'>
               <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}`}>

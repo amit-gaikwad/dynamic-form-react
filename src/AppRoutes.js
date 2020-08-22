@@ -14,7 +14,8 @@ export const AppRoutes = (props) => {
       <Route exact path='/personal-details' component={PersonalDetailsContainer} />
       <Route exact path='/user/:id/connections' component={NetworkContainer} />
       <Route exact path='/user/:id/notifications' component={NotificationsContainer} />
-      <Route exact path='/user/:id' component={UserDetailsContainer} />
+      <Route exact path='/user/:id/:toUserId' component={UserDetailsContainer} />
+      <Route exact path='/user/fromUserId/:fromUserId/:id' component={UserDetailsContainer} />
     </Router>
   );
 };

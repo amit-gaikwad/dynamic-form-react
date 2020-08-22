@@ -303,6 +303,7 @@ const UserDetails = (props) => {
             <Modal
               title={currentResourceAttribute.resourceName}
               visible={visibleModal}
+              width={550}
               footer={null}
               onOk={() => setvisibleModal(false)}
               onCancel={() => setvisibleModal(false)}>
