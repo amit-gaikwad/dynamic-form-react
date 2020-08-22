@@ -12,12 +12,16 @@ import {
   updateResourceByUserId
 } from '../../Actions/ResourceAction';
 import { DynamicFormContainer } from '../../Utils/getDynamicForm';
-import { getFieldsFromAttributeModels } from '../../Utils/common-methods';
+import {
+  getFieldsFromAttributeModels,
+  getFieldsValueFromAtributes
+} from '../../Utils/common-methods';
 import { Loader } from '../Loader/Loader';
 import { omit, cloneDeep } from 'lodash';
 import { CollapsedDetails } from './CollapsedDetails';
 import Modal from 'antd/lib/modal/Modal';
 import { PageLayout } from '../Layout/PageLayout';
+import PersonalDetailsWithCover from '../PersonalDetails/PersonalDetailsWithCover';
 
 const UserDetails = (props) => {
   const [currentResourceAttribute, setcurrentResourceAttribute] = useState({});
@@ -113,6 +117,7 @@ const UserDetails = (props) => {
   };
 
   const addNewResourceClick = (resource) => {
+    debugger;
     const templateResource = (props.templateResources || []).find(
       (r) => r.resourceName === resource.resourceName
     );
@@ -180,6 +185,21 @@ const UserDetails = (props) => {
               return m.keyValue && m.keyValue.toString() == i;
             });
             userResources.push(a);
+          }
+          const fieldsValue = getFieldsValueFromAtributes(currentResource.attributes);
+          if (template.resourceName === 'Personal Details') {
+            return (
+              <PersonalDetailsWithCover
+                isItTemplate={isItTemplate}
+                name={`${fieldsValue['First Name']} ${fieldsValue['Last Name']}`}
+                profileImageUrl={fieldsValue['Photo']}
+                onEditClick={(currentResource) => onEditClick(currentResource)}
+                addNewFreshResourceClick={(currentResource) =>
+                  addNewFreshResourceClick(currentResource)
+                }
+                currentResource={currentResource}
+                resourceName={currentResource.resourceName}></PersonalDetailsWithCover>
+            );
           }
           return (
             <Col span={24} key={template.resourceId}>

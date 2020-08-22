@@ -81,3 +81,7 @@
 .profileSection  .ant-card-head{
   background :#f3f6f8 !important;
 }
+
+.personalDetailsCover .ant-card-body{
+  padding: 8px;
+}
