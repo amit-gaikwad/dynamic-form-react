@@ -6,7 +6,6 @@ import { get } from 'lodash';
 
 // type:"upload",value:"",mandatory:true,maxLength:"",minLength:"",pattern:"",options:"", label:""
 export const RenderableComponentByType = ({ field, setFieldsValue, form }) => {
-  console.log('field', field);
   let { type, value, options, label, mandatory, maxLength, minLength, pattern, hidden } = field;
   var isTrueSet = hidden === 'true';
   const [loading, setloading] = useState(false);
@@ -17,7 +16,7 @@ export const RenderableComponentByType = ({ field, setFieldsValue, form }) => {
     isTrueSet = true;
   }
   if ('Instances Allowed'.toLowerCase() == label.toLowerCase()) {
-    return;
+    return <div></div>;
   }
   const { Option } = Select;
   // const [imageUrl, setimageUrl] = useState(false);

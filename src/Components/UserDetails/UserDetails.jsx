@@ -224,7 +224,16 @@ const UserDetails = (props) => {
                 hoverable={true}>
                 {userResources.map((attrs, index) => (
                   <Row style={{ width: '100%', marginTop: '15px' }} className='multiResources'>
-                    <Col span={6}>
+                    <Col
+                      span={20}
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => {
+                        if (isItHavingMultiResource) {
+                          editMultiResourceClick(currentResource, attrs, index + 1);
+                        } else {
+                          onEditClick(currentResource);
+                        }
+                      }}>
                       {getFieldsFromAttributeModels(attrs).map((field) => {
                         if (
                           ![
@@ -232,22 +241,27 @@ const UserDetails = (props) => {
                             'userId'.toLowerCase(),
                             'currentIndex'.toLowerCase(),
                             'Instances Allowed'.toLowerCase()
-                          ].includes(field.label.toLowerCase())
+                          ].includes(field.label.toLowerCase()) &&
+                          !isEmpty(field.value)
                         ) {
                           return (
                             <Col key={field.label} span={24}>
-                              {field.label} :
-                              {field.type === 'date' ? (
-                                moment(field.value).format('DD/MM/YYYY')
-                              ) : field.type === 'fileUpload' ? (
-                                <Avatar
-                                  src={field.value}
-                                  size={40}
-                                  style={{ marginLeft: '10px' }}
-                                />
-                              ) : (
-                                field.value
-                              )}
+                              <Row gutter={[5, 5]}>
+                                <Col span={4}> {`${field.label}  :`} </Col>
+                                <Col span={18}>
+                                  {field.type === 'date' ? (
+                                    moment(field.value).format('DD/MM/YYYY')
+                                  ) : field.type === 'fileUpload' ? (
+                                    <Avatar
+                                      src={field.value}
+                                      size={40}
+                                      style={{ marginLeft: '10px' }}
+                                    />
+                                  ) : (
+                                    field.value
+                                  )}
+                                </Col>
+                              </Row>
                             </Col>
                           );
                         }
@@ -264,6 +278,7 @@ const UserDetails = (props) => {
                         }}
                       />
                     </Col>
+                    {isItHavingMultiResource && <Divider></Divider>}
                   </Row>
                 ))}
               </Card>
