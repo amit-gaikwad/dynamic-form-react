@@ -7,7 +7,10 @@ import {
   CREATE_RESOURCE_ERROR,
   FETCH_RESOURCES_BY_USER_ID_LOADING,
   FETCH_RESOURCES_BY_USER_ID_SUCCESS,
-  FETCH_RESOURCES_BY_USER_ID_ERROR
+  FETCH_RESOURCES_BY_USER_ID_ERROR,
+  FETCH_PERSONAL_DETAILS_BY_USER_ID_LOADING,
+  FETCH_PERSONAL_DETAILS_BY_USER_ID_SUCCESS,
+  FETCH_PERSONAL_DETAILS_BY_USER_ID_ERROR
 } from '../Actions/types';
 
 const initialState = {
@@ -19,7 +22,10 @@ const initialState = {
   createReourceError: null,
   resourcesByUserId: [],
   resourcesByUserIdLoading: false,
-  resourcesByUserIdError: null
+  resourcesByUserIdError: null,
+  personalDetailsByUserId: [],
+  personalDetailsByUserIdLoading: false,
+  personalDetailsByUserIdError: null
 };
 
 export const resources = (state = initialState, action) => {
@@ -87,6 +93,28 @@ export const resources = (state = initialState, action) => {
         ...state,
         resourcesByUserIdError: action.error,
         resourcesByUserIdError: null
+      };
+
+    case FETCH_PERSONAL_DETAILS_BY_USER_ID_SUCCESS:
+      return {
+        ...state,
+        personalDetailsByUserId: action.payload,
+        personalDetailsByUserIdLoading: false,
+        personalDetailsByUserIdError: null
+      };
+
+    case FETCH_PERSONAL_DETAILS_BY_USER_ID_LOADING:
+      return {
+        ...state,
+        personalDetailsByUserIdLoading: true,
+        personalDetailsByUserIdError: null
+      };
+
+    case FETCH_PERSONAL_DETAILS_BY_USER_ID_ERROR:
+      return {
+        ...state,
+        personalDetailsByUserIdError: action.error,
+        personalDetailsByUserIdLoading: false
       };
     default:
       return state;

@@ -11,7 +11,10 @@ import {
   UPDATE_RESOURCE_BY_USER_ID_LOADING,
   FETCH_RESOURCES_BY_USER_ID_LOADING,
   FETCH_RESOURCES_BY_USER_ID_SUCCESS,
-  FETCH_RESOURCES_BY_USER_ID_ERROR
+  FETCH_RESOURCES_BY_USER_ID_ERROR,
+  FETCH_PERSONAL_DETAILS_BY_USER_ID_LOADING,
+  FETCH_PERSONAL_DETAILS_BY_USER_ID_SUCCESS,
+  FETCH_PERSONAL_DETAILS_BY_USER_ID_ERROR
 } from './types';
 import Axios from 'axios';
 import { getHeaders } from '../Utils/common-methods';
@@ -187,3 +190,44 @@ export const updateResourceByUserId = (resource, userId) => {
       });
   };
 };
+
+export function fetchPersonalDetailsByUserIdLoading() {
+  return {
+    type: FETCH_PERSONAL_DETAILS_BY_USER_ID_LOADING
+  };
+}
+
+export function fetchPersonalDetailsByUserIdSuccess(value) {
+  return {
+    type: FETCH_PERSONAL_DETAILS_BY_USER_ID_SUCCESS,
+    payload: value
+  };
+}
+export function fetchPersonalDetailsByUserIdError(error) {
+  return {
+    type: FETCH_PERSONAL_DETAILS_BY_USER_ID_ERROR,
+    error
+  };
+}
+
+export const fetchPersonalDetailsByUserId = (userId) => {
+  return (dispatch) => {
+    dispatch(fetchPersonalDetailsByUserIdLoading());
+    Axios.get(
+      `http://localhost:8105/mentor/resources/user/5f1f0c2b91f3775dd4c991a5/` +
+        userId +
+        '/Personal Details'
+    )
+      .then((res) => {
+        if (res.error) {
+          throw res.error;
+        }
+        dispatch(fetchPersonalDetailsByUserIdSuccess(res.data));
+        return res;
+      })
+      .catch((error) => {
+        dispatch(fetchPersonalDetailsByUserIdError(error));
+      });
+  };
+};
+//http://localhost:8105/mentor/resources/user/5f1f0c2b91f3775dd4c991a5/rohan/Personal%20Details
