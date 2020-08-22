@@ -72,6 +72,23 @@ export const RenderableComponentByType = ({ field, setFieldsValue, form }) => {
           <Input placeholder='' type='text' value={value} />
         </Form.Item>
       );
+    case COMPONENT_TYPES.TEXT_AREA:
+      return (
+        <Form.Item
+          label={label}
+          name={label}
+          rules={[
+            {
+              pattern: pattern,
+              message: 'Not a valid'
+            },
+            { required: mandatory === 'true' && label !== 'userId', message: 'Please enter text!' }
+          ]}
+          initialValue={value.toString()}
+          hidden={isTrueSet}>
+          <Input.TextArea placeholder='' type='text' value={value} />
+        </Form.Item>
+      );
     case COMPONENT_TYPES.RADIO:
       return (
         <Form.Item

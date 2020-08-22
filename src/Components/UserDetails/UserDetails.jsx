@@ -307,6 +307,7 @@ const UserDetails = (props) => {
               onOk={() => setvisibleModal(false)}
               onCancel={() => setvisibleModal(false)}>
               <DynamicFormContainer
+                setvisibleModal={setvisibleModal}
                 fields={getFieldsFromAttributeModels(currentResourceAttribute.attributes)}
                 template={currentResourceAttribute}
                 currentIndex={currentResourceAttribute.keyValue || 0}
