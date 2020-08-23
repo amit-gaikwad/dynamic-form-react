@@ -117,7 +117,6 @@ const UserDetails = (props) => {
   };
 
   const addNewResourceClick = (resource) => {
-    debugger;
     const templateResource = (props.templateResources || []).find(
       (r) => r.resourceName === resource.resourceName
     );

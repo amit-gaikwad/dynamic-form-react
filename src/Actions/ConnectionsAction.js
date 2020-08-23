@@ -3,6 +3,9 @@ import {
   FETCH_CONNECTION_BY_USER_ID_LOADING,
   FETCH_CONNECTION_BY_USER_ID_SUCCESS,
   FETCH_CONNECTION_BY_USER_ID_ERROR,
+  FETCH_USER_IDS_CONNECTION_BY_USER_ID_LOADING,
+  FETCH_USER_IDS_CONNECTION_BY_USER_ID_SUCCESS,
+  FETCH_USER_IDS_CONNECTION_BY_USER_ID_ERROR,
   CONNECT_FROM_USER_TO_USER_LOADING,
   CONNECT_FROM_USER_TO_USER_SUCCESS,
   CONNECT_FROM_USER_TO_USER_ERROR
@@ -43,6 +46,44 @@ export const fetchConnectionsByUserId = (userId) => {
       })
       .catch((error) => {
         dispatch(fetchConnectionsByUserIdError(error));
+      });
+  };
+};
+
+export function fetchUserIdsConnectionsByUserIdLoading() {
+  return {
+    type: FETCH_USER_IDS_CONNECTION_BY_USER_ID_LOADING
+  };
+}
+
+export function fetchUserIdsConnectionsByUserIdSuccess(value) {
+  return {
+    type: FETCH_USER_IDS_CONNECTION_BY_USER_ID_SUCCESS,
+    payload: value
+  };
+}
+export function fetchUserIdsConnectionsByUserIdError(error) {
+  return {
+    type: FETCH_USER_IDS_CONNECTION_BY_USER_ID_ERROR,
+    error
+  };
+}
+//http://localhost:8107/mentor/connections/userProfiles/5f1f0c2b91f3775dd4c991a5/rohan
+export const fetchUserIdsConnectionsByUserId = (userId) => {
+  return (dispatch) => {
+    dispatch(fetchUserIdsConnectionsByUserIdLoading());
+    Axios.get(
+      `http://localhost:8107/mentor/connections/retrieve/5f1f0c2b91f3775dd4c991a5/${userId}`
+    )
+      .then((res) => {
+        if (res.error) {
+          throw res.error;
+        }
+        dispatch(fetchUserIdsConnectionsByUserIdSuccess(res.data));
+        return res;
+      })
+      .catch((error) => {
+        dispatch(fetchUserIdsConnectionsByUserIdError(error));
       });
   };
 };

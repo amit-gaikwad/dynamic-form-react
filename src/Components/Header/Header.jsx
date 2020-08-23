@@ -9,6 +9,7 @@ const { Header, Content, Footer, Sider } = Layout;
 export const HeaderComponent = (props) => {
   const userId = get(props, 'match.params.id', '');
   localStorage.setItem('userID', userId);
+  console.log('props.notificationsByUserId.length', props.notificationsByUserId);
   return (
     <Header
       style={{
@@ -38,7 +39,7 @@ export const HeaderComponent = (props) => {
               </Link>
             </Menu.Item>
             <Menu.Item key='3'>
-              {props.notificationsByUserId.length && (
+              {props.notificationsByUserId.length > 0 && (
                 <Badge
                   count={props.notificationsByUserId.length}
                   overflowCount={5}

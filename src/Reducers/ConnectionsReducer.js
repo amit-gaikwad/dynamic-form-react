@@ -4,7 +4,10 @@ import {
   SEND_CONNECTION_REQUEST_ERROR,
   FETCH_CONNECTION_BY_USER_ID_LOADING,
   FETCH_CONNECTION_BY_USER_ID_SUCCESS,
-  FETCH_CONNECTION_BY_USER_ID_ERROR
+  FETCH_CONNECTION_BY_USER_ID_ERROR,
+  FETCH_USER_IDS_CONNECTION_BY_USER_ID_LOADING,
+  FETCH_USER_IDS_CONNECTION_BY_USER_ID_SUCCESS,
+  FETCH_USER_IDS_CONNECTION_BY_USER_ID_ERROR
 } from '../Actions/types';
 
 const initialState = {
@@ -13,7 +16,10 @@ const initialState = {
   sendConnectedUser: [],
   connectionsByUserIdLoading: false,
   connectionsByUserIdError: null,
-  connectionsByUserId: []
+  connectionsByUserId: [],
+  userIdsconnectionsByUserIdLoading: false,
+  userIdsconnectionsByUserIdError: null,
+  userIdsconnectionsByUserId: []
 };
 export const connectionReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -30,6 +36,28 @@ export const connectionReducer = (state = initialState, action) => {
         ...state,
         connectionsByUserIdLoading: true,
         connectionsByUserIdError: null
+      };
+
+    case FETCH_USER_IDS_CONNECTION_BY_USER_ID_ERROR:
+      return {
+        ...state,
+        userIdsconnectionsByUserIdError: action.error,
+        userIdsconnectionsByUserIdLoading: false
+      };
+
+    case FETCH_USER_IDS_CONNECTION_BY_USER_ID_SUCCESS:
+      return {
+        ...state,
+        userIdsconnectionsByUserId: action.payload,
+        userIdsconnectionsByUserIdLoading: false,
+        userIdsconnectionsByUserIdError: null
+      };
+
+    case FETCH_USER_IDS_CONNECTION_BY_USER_ID_LOADING:
+      return {
+        ...state,
+        userIdsconnectionsByUserIdLoading: true,
+        userIdsconnectionsByUserIdError: null
       };
 
     case FETCH_CONNECTION_BY_USER_ID_ERROR:

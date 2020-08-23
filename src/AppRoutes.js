@@ -6,6 +6,7 @@ import { UserDetailsContainer } from './Components/UserDetails/UserDetails';
 import { history } from './Utils/history';
 import { NotificationsContainer } from './Components/Notifications/Notifications';
 import { NetworkContainer } from './Components/Network/Network';
+import { NonEditableUserDetailsContainer } from './Components/UserDetails/NonEditableUserDetails';
 
 export const AppRoutes = (props) => {
   return (
@@ -15,7 +16,11 @@ export const AppRoutes = (props) => {
       <Route exact path='/user/:id/connections' component={NetworkContainer} />
       <Route exact path='/user/:id/notifications' component={NotificationsContainer} />
       <Route exact path='/user/:id/' component={UserDetailsContainer} />
-      <Route exact path='/user/fromUserId/:fromUserId/:id' component={UserDetailsContainer} />
+      <Route
+        exact
+        path='/user/fromUserId/:id/toUserId/:toUserId'
+        component={NonEditableUserDetailsContainer}
+      />
     </Router>
   );
 };

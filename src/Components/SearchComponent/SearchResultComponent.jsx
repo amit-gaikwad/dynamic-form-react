@@ -377,7 +377,11 @@ export const SearchResultComponent = (props) => {
         return (
           <Col span={11} key={i} offset={1}>
             <Card
-              style={{ width: '90%' }}
+              style={{
+                width: '90%',
+                borderRadius: '2px',
+                boxShadow: '2px 2px 2px 2px rgba(208, 216, 243, 0.6)'
+              }}
               actions={
                 connectedUserIds.includes(user.userId)
                   ? [
@@ -405,9 +409,7 @@ export const SearchResultComponent = (props) => {
                     ]
               }>
               <Meta
-                avatar={
-                  <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
-                }
+                avatar={<Avatar src={user['Photo']} />}
                 title={`${user['First Name']} ${user['Last Name']}`}
                 //description='This is the description'
               />

@@ -36,7 +36,10 @@ const PageLayoutComponent = (props) => {
     <Layout className='layout'>
       <HeaderComponent {...props}></HeaderComponent>
       <Layout style={{ marginTop: 64 }}>
-        <Sider width={'20%'} style={{ background: '#f0f2f5' }}>
+        <Sider
+          width={'20%'}
+          style={{ background: '#f0f2f5' }}
+          className={props.blurBackground ? 'blurBg' : ''}>
           {!isEmpty(user) ? (
             <Card
               style={{ width: 300, margin: 20 }}
@@ -47,7 +50,7 @@ const PageLayoutComponent = (props) => {
                 title={
                   <a
                     href={
-                      'https://localhost:3000/user/' + user.userId
+                      'http://localhost:3000/user/' + user.userId
                     }>{`${user['First Name']} ${user['Last Name']}`}</a>
                 }
                 description={`${user['First Name']} ${user['Last Name']}`}
@@ -59,16 +62,18 @@ const PageLayoutComponent = (props) => {
             </Skeleton>
           )}
         </Sider>
-        <Content>
+        <Content className={props.blurBackground ? 'blurBg' : ''}>
           <div className='site-layout-content'>{props.content}</div>
         </Content>
-        <Sider width={'30%'} style={{ background: '#f0f2f5' }}>
+        <Sider
+          width={'30%'}
+          style={{ background: '#f0f2f5' }}
+          className={props.blurBackground ? 'blurBg' : ''}>
           <Card title='Upcoming Events' bordered={true} style={{ width: 350, margin: 20 }}>
             <List
               itemLayout='horizontal'
               dataSource={data}
               renderItem={(item) => {
-                debugger;
                 return (
                   <List.Item>
                     <List.Item.Meta
@@ -76,7 +81,7 @@ const PageLayoutComponent = (props) => {
                         <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
                       }
                       title={<a href='https://ant.design'>{item.title}</a>}
-                      description='Ant Design, a design language for background applications, is refined by Ant UED Team'
+                      description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut eget bibendum elit. Fusce facilisis accumsan dui, efficitur commodo ante facilisis ut.'
                     />
                   </List.Item>
                 );
@@ -98,7 +103,8 @@ PageLayoutComponent.propTypes = {
 const mapStateToProps = (state) => {
   return {
     notificationsByUserId: state.notificationsReducer.notificationsByUserId,
-    personalDetailsByUserId: state.resources.personalDetailsByUserId || []
+    personalDetailsByUserId: state.resources.personalDetailsByUserId || [],
+    blurBackground: state.userReducer.blurBackground
   };
 };
 

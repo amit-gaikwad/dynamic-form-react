@@ -7,7 +7,8 @@ import { connect } from 'react-redux';
 import {
   fetchUsersBySearchString,
   sendConnectionRequest,
-  getsentConnectionRequest
+  getsentConnectionRequest,
+  setBlurBackground
 } from '../../Actions/UserAction';
 
 const optionsData = [
@@ -44,6 +45,10 @@ export const SearchComponent = (props) => {
     }
   };
 
+  useEffect(() => {
+    props.setBlurBackground(showSearchResult);
+  }, [showSearchResult]);
+
   const handleShowResultPopUp = (e) => {
     if (!isEmpty(inputRef.current) && inputRef.current.contains(e.target)) {
       return;
@@ -79,8 +84,9 @@ export const SearchComponent = (props) => {
       <Col span={12} offset={1}>
         <Input placeholder='search' onChange={onSearchTextChange}></Input>
       </Col>
+
       {showSearchResult && (
-        <Col span={24} style={{ width: '400px', height: '500px', background: 'lightgray' }}>
+        <Col span={24} style={{ width: '400px', height: '500px', background: '#f3f6f8' }}>
           {isEmpty(props.users) ? (
             <div>No records Found...</div>
           ) : (
@@ -112,7 +118,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   fetchUsersBySearchString: (obj) => dispatch(fetchUsersBySearchString(obj)),
   sendConnectionRequest: (obj) => dispatch(sendConnectionRequest(obj)),
-  getsentConnectionRequest: (obj) => dispatch(getsentConnectionRequest(obj))
+  getsentConnectionRequest: (obj) => dispatch(getsentConnectionRequest(obj)),
+  setBlurBackground: (value) => dispatch(setBlurBackground(value))
 });
 
 export const SearchContainer = connect(mapStateToProps, mapDispatchToProps)(SearchComponent);

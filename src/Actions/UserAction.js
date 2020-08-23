@@ -5,7 +5,8 @@ import {
   FETCH_USERS_BY_SEARCH_STRING_ERROR,
   SEND_CONNECTION_REQUEST_LOADING,
   SEND_CONNECTION_REQUEST_SUCCESS,
-  SEND_CONNECTION_REQUEST_ERROR
+  SEND_CONNECTION_REQUEST_ERROR,
+  SET_BLUR_BACKGROUND
 } from './types';
 
 export function fetchUsersBySearchStringLoading() {
@@ -20,6 +21,14 @@ export function fetchUsersBySearchStringSuccess(value) {
     payload: value
   };
 }
+
+export function setBlurBackground(value) {
+  return {
+    type: SET_BLUR_BACKGROUND,
+    payload: value
+  };
+}
+
 export function fetchUsersBySearchStringError(error) {
   return {
     type: FETCH_USERS_BY_SEARCH_STRING_ERROR,

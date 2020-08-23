@@ -10,7 +10,8 @@ const PersonalDetailsWithCover = ({
   name,
   summary = '',
   onEditClick,
-  isItTemplate
+  isItTemplate,
+  onlyView
 }) => {
   console.log('currentResource', currentResource);
   return (
@@ -48,7 +49,7 @@ const PersonalDetailsWithCover = ({
         <Row>
           <Col offset={2} span={4}>{`    ${name}`}</Col>
 
-          {!isItTemplate && (
+          {!isItTemplate && !onlyView && (
             <Col offset={2} span={2}>
               <EditOutlined
                 onClick={() => {
