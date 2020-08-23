@@ -48,7 +48,7 @@ export function fetchResourcesByNamespaceError(error) {
 export const fetchResources = () => {
   return (dispatch) => {
     dispatch(fetchResourcesByNamespaceLoading());
-    Axios.get(`http://localhost:8105/mentor/resources/template/5f1f0c2b91f3775dd4c991a5`)
+    Axios.get(`http://localhost:8105/mentor/resources/template/5f420797fc99e13c8cf8d145`)
       .then((res) => {
         if (res.error) {
           throw res.error;
@@ -84,7 +84,7 @@ export function fetchResourcesByUserIdError(error) {
 export const fetchResourcesByUserId = (userId) => {
   return (dispatch) => {
     dispatch(fetchResourcesByUserIdLoading());
-    Axios.get(`http://localhost:8105/mentor/resources/user/5f1f0c2b91f3775dd4c991a5/` + userId)
+    Axios.get(`http://localhost:8105/mentor/resources/user/5f420797fc99e13c8cf8d145/` + userId)
       .then((res) => {
         if (res.error) {
           throw res.error;
@@ -214,7 +214,7 @@ export const fetchPersonalDetailsByUserId = (userId) => {
   return (dispatch) => {
     dispatch(fetchPersonalDetailsByUserIdLoading());
     Axios.get(
-      `http://localhost:8105/mentor/resources/user/5f1f0c2b91f3775dd4c991a5/` +
+      `http://localhost:8105/mentor/resources/user/5f420797fc99e13c8cf8d145/` +
         userId +
         '/Personal Details'
     )
@@ -230,4 +230,4 @@ export const fetchPersonalDetailsByUserId = (userId) => {
       });
   };
 };
-//http://localhost:8105/mentor/resources/user/5f1f0c2b91f3775dd4c991a5/rohan/Personal%20Details
+//http://localhost:8105/mentor/resources/user/5f420797fc99e13c8cf8d145/rohan/Personal%20Details

@@ -15,11 +15,9 @@ const { Panel } = Collapse;
 const text = 'This is text';
 const Notifications = (props) => {
   const [connectionRequests, setconnectionRequests] = useState([]);
+  const userId = get(props, 'match.params.id', '');
 
   useEffect(() => {
-    const userId = get(props, 'match.params.id', '');
-    console.log('props', props);
-
     props.fetchNotificationsByUserId(userId);
   }, []);
 
@@ -28,18 +26,14 @@ const Notifications = (props) => {
     props.notificationsByUserId.forEach((item) => {
       connections.push(getFieldsValueFromAtributes(item.attributes));
     });
-    console.log('connections', connections);
     setconnectionRequests(connections);
   }, [props.notificationsByUserId]);
 
   const onAcceptClick = (item) => {
-    const userId = get(props, 'match.params.id', '');
-    console.log('onAcceptClick', item);
     props.connectFromToUser({ fromUserId: userId, toUserId: item.userId });
   };
 
   const onDeclineClick = (item) => {
-    const userId = get(props, 'match.params.id', '');
     props.rejectConnection({ fromUserId: userId, toUserId: item.userId });
   };
 
@@ -73,11 +67,11 @@ const Notifications = (props) => {
                         </Button>
                       ]}>
                       <List.Item.Meta
-                        avatar={
-                          <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
-                        }
+                        avatar={<Avatar src={item['Photo']} />}
                         title={
-                          <a href='https://ant.design'>{`${item['First Name']} ${item['Last Name']}`}</a>
+                          <a
+                            href={`http://localhost:3000/user/fromUserId/${userId}/toUserId/${item.userId}`}
+                            target='_blank'>{`${item['First Name']} ${item['Last Name']}`}</a>
                         }
                         description={`${item['First Name']} ${item['Last Name']}`}
                       />

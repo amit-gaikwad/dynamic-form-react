@@ -27,12 +27,12 @@ export function fetchNotificationsByUserIdError(error) {
   };
 }
 
-//http://localhost:8106/mentor/notifications/connection/requests/5f1f0c2b91f3775dd4c991a5/suraj
+//http://localhost:8106/mentor/notifications/connection/requests/5f420797fc99e13c8cf8d145/suraj
 export const fetchNotificationsByUserId = (userId) => {
   return (dispatch) => {
     dispatch(fetchNotificationsByUserIdLoading());
     Axios.get(
-      `http://localhost:8106/mentor/notifications/connection/requests/5f1f0c2b91f3775dd4c991a5/${userId}`
+      `http://localhost:8106/mentor/notifications/connection/requests/5f420797fc99e13c8cf8d145/${userId}`
     )
       .then((res) => {
         if (res.error) {
@@ -70,7 +70,7 @@ export const fetchUserIdsNotificationsByUserId = (userId) => {
   return (dispatch) => {
     dispatch(fetchUserIdsNotificationsByUserIdLoading());
     Axios.get(
-      `http://localhost:8106/mentor/notifications/requests/5f1f0c2b91f3775dd4c991a5/${userId}`
+      `http://localhost:8106/mentor/notifications/requests/5f420797fc99e13c8cf8d145/${userId}`
     )
       .then((res) => {
         if (res.error) {

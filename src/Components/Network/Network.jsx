@@ -15,9 +15,9 @@ const { Panel } = Collapse;
 const text = 'This is text';
 const NetworkComponent = (props) => {
   const [connectionsByUser, setconnectionsByUser] = useState([]);
+  const userId = get(props, 'match.params.id', '');
 
   useEffect(() => {
-    const userId = get(props, 'match.params.id', '');
     props.fetchConnectionsByUserId(userId);
   }, []);
 
@@ -26,12 +26,10 @@ const NetworkComponent = (props) => {
     props.connectionsByUserId.forEach((item) => {
       connections.push(getFieldsValueFromAtributes(item.attributes));
     });
-    console.log('connections', connections);
     setconnectionsByUser(connections);
   }, [props.connectionsByUserId]);
 
   const onDisconnectClick = (item) => {
-    const userId = get(props, 'match.params.id', '');
     props.disconnectConnection({ fromUserId: userId, toUserId: item.userId });
   };
 
@@ -58,11 +56,11 @@ const NetworkComponent = (props) => {
                     </Button>
                   ]}>
                   <List.Item.Meta
-                    avatar={
-                      <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
-                    }
+                    avatar={<Avatar src={item['Photo']} />}
                     title={
-                      <a href='https://ant.design'>{`${item['First Name']} ${item['Last Name']}`}</a>
+                      <a
+                        href={`http://localhost:3000/user/fromUserId/${userId}/toUserId/${item.userId}`}
+                        target='_blank'>{`${item['First Name']} ${item['Last Name']}`}</a>
                     }
                     description={`${item['First Name']} ${item['Last Name']}`}
                   />

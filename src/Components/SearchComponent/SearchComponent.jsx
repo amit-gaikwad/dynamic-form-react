@@ -86,7 +86,14 @@ export const SearchComponent = (props) => {
       </Col>
 
       {showSearchResult && (
-        <Col span={24} style={{ width: '400px', height: '500px', background: '#f3f6f8' }}>
+        <Col
+          span={24}
+          style={{
+            width: '400px',
+            height: '500px',
+            background: '#f3f6f8',
+            border: '1px solid black'
+          }}>
           {isEmpty(props.users) ? (
             <div>No records Found...</div>
           ) : (

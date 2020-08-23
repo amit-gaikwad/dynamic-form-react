@@ -47,7 +47,6 @@ export const RenderableComponentByType = ({ field, setFieldsValue, form }) => {
       if (!info.file.url) {
         info.file.preview = await getBase64(info.file.originFileObj);
       }
-      console.log('info.file.preview', info.file.preview, label, form.getFieldsValue());
       setFieldsValue({ [label]: info.file.preview });
       setImageUrl(info.file.preview);
       setloading(false);

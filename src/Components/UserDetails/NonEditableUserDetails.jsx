@@ -15,33 +15,58 @@ import {
   getFieldsValueFromAtributes
 } from '../../Utils/common-methods';
 import { Loader } from '../Loader/Loader';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, first } from 'lodash';
 import { PageLayout } from '../Layout/PageLayout';
 import PersonalDetailsWithCover from '../PersonalDetails/PersonalDetailsWithCover';
 import { fetchUserIdsNotificationsByUserId } from '../../Actions/NotificationsAction';
-import { fetchUserIdsConnectionsByUserId } from '../../Actions/ConnectionsAction';
+import {
+  fetchUserIdsConnectionsByUserId,
+  disconnectConnection,
+  rejectConnection,
+  connectFromToUser
+} from '../../Actions/ConnectionsAction';
+import { sendConnectionRequest } from '../../Actions/UserAction';
 
 const NonEditableUserDetails = (props) => {
+  const toUserId = props.match.params.toUserId;
+  const fromUserId = props.match.params.id;
   useEffect(() => {
-    const toUserId = props.match.params.toUserId;
-    const fromUserId = props.match.params.id;
     props.fetchResourcesByNamesapce();
     props.fetchUserIdsNotificationsByUserId(fromUserId);
     props.fetchUserIdsConnectionsByUserId(fromUserId);
     props.fetchResourcesByUserId(toUserId);
   }, []);
 
+  const onDisconnectClick = () => {
+    props.disconnectConnection({ fromUserId: fromUserId, toUserId: toUserId });
+  };
+
+  const onDeclineClick = () => {
+    props.rejectConnection({ fromUserId: fromUserId, toUserId: toUserId });
+  };
+
+  const onAcceptClick = () => {
+    props.connectFromToUser({ fromUserId: fromUserId, toUserId: toUserId });
+  };
+  const sendConnectionRequestClick = () => {
+    props.sendConnectionRequest({
+      userIdFrom: fromUserId,
+      userIdTo: toUserId,
+      notificationAbout: 'Connection'
+    });
+  };
+
   const renderComponents = () => {
-    const connectionAllAttributes = get(props, 'userIdsconnectionsByUserId.attributes', []);
+    const connectionAllAttributes =
+      (first(props.userIdsconnectionsByUserId) || {}).attributes || [];
     const connectionAttribute =
-      connectionAllAttributes.find((atr) => atr.attribute.keyName === 'Connection') || {};
+      connectionAllAttributes.find((atr) => atr.attribute.keyName === 'connections') || {};
     const connectedUsers = get(connectionAttribute, 'attribute.keyValue', '').split(',');
-    console.log(
-      'userIdsconnectionsByUserId',
-      props.userIdsconnectionsByUserId.attributes,
-      connectedUsers
-    );
-    console.log('userIdsnotificationsByUserId', props.userIdsnotificationsByUserId);
+    const notificationAllAttributes = props.userIdsnotificationsByUserId.attributes || [];
+    const notificationAttribute =
+      notificationAllAttributes.find((atr) => atr.attribute.keyName === 'Connection') || {};
+    const notificationUsers = get(notificationAttribute, 'attribute.keyValue', '').split(',');
+
     return (
       <Row style={{ margin: '10px' }} gutter={[26, 26]}>
         {(props.templateResources || []).map((template) => {
@@ -75,15 +100,24 @@ const NonEditableUserDetails = (props) => {
           const fieldsValue = getFieldsValueFromAtributes(currentResource.attributes);
           if (template.resourceName === 'Personal Details') {
             return (
-              <PersonalDetailsWithCover
-                onlyView={true}
-                isItTemplate={isItTemplate}
-                name={`${fieldsValue['First Name']} ${fieldsValue['Last Name']}`}
-                profileImageUrl={fieldsValue['Photo']}
-                onEditClick={() => {}}
-                addNewFreshResourceClick={() => {}}
-                currentResource={currentResource}
-                resourceName={currentResource.resourceName}></PersonalDetailsWithCover>
+              <>
+                <PersonalDetailsWithCover
+                  onlyView={true}
+                  isItTemplate={isItTemplate}
+                  name={`${fieldsValue['First Name']} ${fieldsValue['Last Name']}`}
+                  profileImageUrl={fieldsValue['Photo']}
+                  onEditClick={() => {}}
+                  addNewFreshResourceClick={() => {}}
+                  currentResource={currentResource}
+                  resourceName={currentResource.resourceName}
+                  connectedUsers={connectedUsers}
+                  notificationUsers={notificationUsers}
+                  sendConnectionRequestClick={sendConnectionRequestClick}
+                  onDeclineClick={onDeclineClick}
+                  onAcceptClick={onAcceptClick}
+                  onDisconnectClick={onDisconnectClick}
+                  toUserId={toUserId}></PersonalDetailsWithCover>
+              </>
             );
           }
           return (
@@ -177,7 +211,11 @@ const mapDispatchToProps = (dispatch) => ({
   updateResourceByUserId: (resource, userId) => dispatch(updateResourceByUserId(resource, userId)),
   fetchUserIdsNotificationsByUserId: (userId) =>
     dispatch(fetchUserIdsNotificationsByUserId(userId)),
-  fetchUserIdsConnectionsByUserId: (userId) => dispatch(fetchUserIdsConnectionsByUserId(userId))
+  fetchUserIdsConnectionsByUserId: (userId) => dispatch(fetchUserIdsConnectionsByUserId(userId)),
+  disconnectConnection: (obj) => dispatch(disconnectConnection(obj)),
+  rejectConnection: (obj) => dispatch(rejectConnection(obj)),
+  connectFromToUser: (obj) => dispatch(connectFromToUser(obj)),
+  sendConnectionRequest: (obj) => dispatch(sendConnectionRequest(obj))
 });
 
 export const NonEditableUserDetailsContainer = connect(

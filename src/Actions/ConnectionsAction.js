@@ -10,7 +10,10 @@ import {
   CONNECT_FROM_USER_TO_USER_SUCCESS,
   CONNECT_FROM_USER_TO_USER_ERROR
 } from './types';
-import { fetchNotificationsByUserId } from './NotificationsAction';
+import {
+  fetchNotificationsByUserId,
+  fetchUserIdsNotificationsByUserId
+} from './NotificationsAction';
 
 export function fetchConnectionsByUserIdLoading() {
   return {
@@ -30,12 +33,12 @@ export function fetchConnectionsByUserIdError(error) {
     error
   };
 }
-//http://localhost:8107/mentor/connections/userProfiles/5f1f0c2b91f3775dd4c991a5/rohan
+//http://localhost:8107/mentor/connections/userProfiles/5f420797fc99e13c8cf8d145/rohan
 export const fetchConnectionsByUserId = (userId) => {
   return (dispatch) => {
     dispatch(fetchConnectionsByUserIdLoading());
     Axios.get(
-      `http://localhost:8107/mentor/connections/userProfiles/5f1f0c2b91f3775dd4c991a5/${userId}`
+      `http://localhost:8107/mentor/connections/userProfiles/5f420797fc99e13c8cf8d145/${userId}`
     )
       .then((res) => {
         if (res.error) {
@@ -68,12 +71,12 @@ export function fetchUserIdsConnectionsByUserIdError(error) {
     error
   };
 }
-//http://localhost:8107/mentor/connections/userProfiles/5f1f0c2b91f3775dd4c991a5/rohan
+//http://localhost:8107/mentor/connections/userProfiles/5f420797fc99e13c8cf8d145/rohan
 export const fetchUserIdsConnectionsByUserId = (userId) => {
   return (dispatch) => {
     dispatch(fetchUserIdsConnectionsByUserIdLoading());
     Axios.get(
-      `http://localhost:8107/mentor/connections/retrieve/5f1f0c2b91f3775dd4c991a5/${userId}`
+      `http://localhost:8107/mentor/connections/retrieve/5f420797fc99e13c8cf8d145/${userId}`
     )
       .then((res) => {
         if (res.error) {
@@ -112,7 +115,7 @@ export const connectFromToUser = ({ fromUserId, toUserId, tag }) => {
     dispatch(connectFromToUserLoading());
     const tagText = tag ? `/${tag}` : '/connection';
     Axios.post(
-      `http://localhost:8107/mentor/connections/connect/5f1f0c2b91f3775dd4c991a5/${fromUserId}/${toUserId}${tagText}`
+      `http://localhost:8107/mentor/connections/connect/5f420797fc99e13c8cf8d145/${fromUserId}/${toUserId}${tagText}`
     )
       .then((res) => {
         if (res.error) {
@@ -120,6 +123,8 @@ export const connectFromToUser = ({ fromUserId, toUserId, tag }) => {
         }
         dispatch(fetchNotificationsByUserId(fromUserId));
         dispatch(connectFromToUserSuccess(res.data));
+        dispatch(fetchUserIdsConnectionsByUserId(fromUserId));
+        dispatch(fetchUserIdsNotificationsByUserId(fromUserId));
         return res;
       })
       .catch((error) => {
@@ -152,13 +157,15 @@ export const rejectConnection = ({ fromUserId, toUserId, tag }) => {
     // dispatch(rejectConnectionLoading());
     const tagText = tag ? `/${tag}` : '/connection';
     Axios.post(
-      `http://localhost:8107/mentor/connections/reject/5f1f0c2b91f3775dd4c991a5/${fromUserId}/${toUserId}`
+      `http://localhost:8107/mentor/connections/reject/5f420797fc99e13c8cf8d145/${fromUserId}/${toUserId}`
     )
       .then((res) => {
         if (res.error) {
           throw res.error;
         }
         dispatch(fetchNotificationsByUserId(fromUserId));
+        dispatch(fetchUserIdsConnectionsByUserId(fromUserId));
+        dispatch(fetchUserIdsNotificationsByUserId(fromUserId));
         // dispatch(rejectConnectionSuccess(res.data));
         return res;
       })
@@ -173,13 +180,15 @@ export const disconnectConnection = ({ fromUserId, toUserId, tag }) => {
     // dispatch(rejectConnectionLoading());
     const tagText = tag ? `/${tag}` : '/connection';
     Axios.post(
-      `http://localhost:8107/mentor/connections/disconnect/5f1f0c2b91f3775dd4c991a5/${fromUserId}/${toUserId}${tagText}`
+      `http://localhost:8107/mentor/connections/disconnect/5f420797fc99e13c8cf8d145/${fromUserId}/${toUserId}${tagText}`
     )
       .then((res) => {
         if (res.error) {
           throw res.error;
         }
         dispatch(fetchConnectionsByUserId(fromUserId));
+        dispatch(fetchUserIdsConnectionsByUserId(fromUserId));
+        dispatch(fetchUserIdsNotificationsByUserId(fromUserId));
         // dispatch(rejectConnectionSuccess(res.data));
         return res;
       })

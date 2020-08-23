@@ -33,7 +33,6 @@ const UserDetails = (props) => {
 
   const onHandleSubmit = (event, templateResource, currentIndex, form) => {
     const values = form.getFieldsValue();
-    console.log('dorm.getFieldsValue()', form.getFieldsValue());
     const newResource = omit(templateResource, ['resourceId']);
     const istemplateResource = newResource.attributes.find(
       (attr) => attr.attribute.keyName == 'template'

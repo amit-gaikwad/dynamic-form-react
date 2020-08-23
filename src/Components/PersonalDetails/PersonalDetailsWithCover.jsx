@@ -1,6 +1,6 @@
 import React from 'react';
 import { UserOutlined, PlusCircleOutlined, EditOutlined } from '@ant-design/icons';
-import { Row, Col, Avatar, Card } from 'antd';
+import { Row, Col, Avatar, Card, Button, Divider } from 'antd';
 
 const PersonalDetailsWithCover = ({
   profileImageUrl,
@@ -11,9 +11,15 @@ const PersonalDetailsWithCover = ({
   summary = '',
   onEditClick,
   isItTemplate,
-  onlyView
+  connectedUsers,
+  notificationUsers,
+  onlyView,
+  sendConnectionRequestClick,
+  onDeclineClick,
+  onAcceptClick,
+  onDisconnectClick,
+  toUserId
 }) => {
-  console.log('currentResource', currentResource);
   return (
     <Col span={24}>
       <Card
@@ -46,7 +52,7 @@ const PersonalDetailsWithCover = ({
             </>
           )}
         </Row>
-        <Row>
+        <Row style={{ width: '100%' }}>
           <Col offset={2} span={4}>{`    ${name}`}</Col>
 
           {!isItTemplate && !onlyView && (
@@ -59,9 +65,42 @@ const PersonalDetailsWithCover = ({
             </Col>
           )}
 
-          <Col offset={2} span={24}>
+          <Col offset={2} span={22}>
             {summary}
           </Col>
+          <Divider></Divider>
+        </Row>
+        <Row>
+          {onlyView && (
+            <Col>
+              {(connectedUsers || []).includes(toUserId) ? (
+                <Col span={4}>
+                  <Button type='danger' onClick={onDisconnectClick}>
+                    Disconnect
+                  </Button>
+                </Col>
+              ) : (notificationUsers || []).includes(toUserId) ? (
+                <>
+                  <Col span={4}>
+                    <Button type='danger' onClick={onDeclineClick}>
+                      Decline
+                    </Button>
+                  </Col>
+                  <Col span={4}>
+                    <Button type='primary' onClick={onAcceptClick}>
+                      Accept
+                    </Button>
+                  </Col>
+                </>
+              ) : (
+                <Col span={4}>
+                  <Button type='primary' onClick={sendConnectionRequestClick}>
+                    Connect
+                  </Button>
+                </Col>
+              )}
+            </Col>
+          )}
         </Row>
       </Card>
     </Col>

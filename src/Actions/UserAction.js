@@ -8,6 +8,8 @@ import {
   SEND_CONNECTION_REQUEST_ERROR,
   SET_BLUR_BACKGROUND
 } from './types';
+import { fetchUserIdsConnectionsByUserId } from './ConnectionsAction';
+import { fetchUserIdsNotificationsByUserId } from './NotificationsAction';
 
 export function fetchUsersBySearchStringLoading() {
   return {
@@ -40,7 +42,7 @@ export const fetchUsersBySearchString = ({ categories, searchStr }) => {
   return (dispatch) => {
     dispatch(fetchUsersBySearchStringLoading());
     Axios.get(
-      `http://localhost:8190/mentor/search/user/5f1f0c2b91f3775dd4c991a5/${categories}/${searchStr}`
+      `http://localhost:8190/mentor/search/user/5f420797fc99e13c8cf8d145/${categories}/${searchStr}`
     )
       .then((res) => {
         if (res.error) {
@@ -75,7 +77,7 @@ export function sendConnectionRequestError(error) {
 }
 
 export const sendConnectionRequest = ({
-  namesapceId = '5f1f0c2b91f3775dd4c991a5',
+  namesapceId = '5f420797fc99e13c8cf8d145',
   userIdFrom,
   userIdTo,
   notificationAbout
@@ -90,6 +92,8 @@ export const sendConnectionRequest = ({
           throw res.error;
         }
         dispatch(sendConnectionRequestSuccess(res.data));
+        dispatch(fetchUserIdsConnectionsByUserId(userIdFrom));
+        dispatch(fetchUserIdsNotificationsByUserId(userIdFrom));
         return res;
       })
       .catch((error) => {
@@ -98,7 +102,7 @@ export const sendConnectionRequest = ({
   };
 };
 
-export const getsentConnectionRequest = ({ namesapceId = '5f1f0c2b91f3775dd4c991a5', userId }) => {
+export const getsentConnectionRequest = ({ namesapceId = '5f420797fc99e13c8cf8d145', userId }) => {
   return (dispatch) => {
     dispatch(sendConnectionRequestLoading());
     Axios.get(`http://localhost:8106/mentor/notifications/initiated/${namesapceId}/${userId}`)
