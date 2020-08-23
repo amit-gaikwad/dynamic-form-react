@@ -35,6 +35,38 @@ const PersonalDetailsWithCover = ({
           <Col span={4} offset={2} style={{ marginTop: '-75px' }}>
             <Avatar size={160} icon={<UserOutlined />} src={profileImageUrl} />
           </Col>
+          {onlyView && (
+            <Col span={16} offset={2} style={{ paddingTop: '18px' }}>
+              <Row>
+                {(connectedUsers || []).includes(toUserId) ? (
+                  <Col span={4}>
+                    <Button type='danger' onClick={onDisconnectClick}>
+                      Disconnect
+                    </Button>
+                  </Col>
+                ) : (notificationUsers || []).includes(toUserId) ? (
+                  <>
+                    <Col span={4}>
+                      <Button type='danger' onClick={onDeclineClick}>
+                        Decline
+                      </Button>
+                    </Col>
+                    <Col span={4}>
+                      <Button type='primary' onClick={onAcceptClick}>
+                        Accept
+                      </Button>
+                    </Col>
+                  </>
+                ) : (
+                  <Col span={4}>
+                    <Button type='primary' onClick={sendConnectionRequestClick}>
+                      Connect
+                    </Button>
+                  </Col>
+                )}
+              </Row>
+            </Col>
+          )}
 
           {isItTemplate && (
             <>
@@ -53,7 +85,7 @@ const PersonalDetailsWithCover = ({
           )}
         </Row>
         <Row style={{ width: '100%' }}>
-          <Col offset={2} span={4}>{`    ${name}`}</Col>
+          <Col offset={2} span={8} style={{ paddingLeft: '15px' }}>{`    ${name}`}</Col>
 
           {!isItTemplate && !onlyView && (
             <Col offset={2} span={2}>
@@ -70,7 +102,7 @@ const PersonalDetailsWithCover = ({
           </Col>
           <Divider></Divider>
         </Row>
-        <Row>
+        {/* <Row>
           {onlyView && (
             <Col>
               {(connectedUsers || []).includes(toUserId) ? (
@@ -101,7 +133,7 @@ const PersonalDetailsWithCover = ({
               )}
             </Col>
           )}
-        </Row>
+        </Row> */}
       </Card>
     </Col>
   );
