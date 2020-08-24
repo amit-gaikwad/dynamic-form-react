@@ -10,7 +10,13 @@ import {
   FETCH_RESOURCES_BY_USER_ID_ERROR,
   FETCH_PERSONAL_DETAILS_BY_USER_ID_LOADING,
   FETCH_PERSONAL_DETAILS_BY_USER_ID_SUCCESS,
-  FETCH_PERSONAL_DETAILS_BY_USER_ID_ERROR
+  FETCH_PERSONAL_DETAILS_BY_USER_ID_ERROR,
+  FETCH_POST_TEMPLATE_LOADING,
+  FETCH_POST_TEMPLATE_SUCCESS,
+  FETCH_POST_TEMPLATE_ERROR,
+  FETCH_POSTS_BY_USER_ID_LOADING,
+  FETCH_POSTS_BY_USER_ID_SUCCESS,
+  FETCH_POSTS_BY_USER_ID_ERROR
 } from '../Actions/types';
 
 const initialState = {
@@ -25,7 +31,13 @@ const initialState = {
   resourcesByUserIdError: null,
   personalDetailsByUserId: [],
   personalDetailsByUserIdLoading: false,
-  personalDetailsByUserIdError: null
+  personalDetailsByUserIdError: null,
+  postTemplate: [],
+  postTemplateLoading: false,
+  postTemplateError: null,
+  postsByUserId: [],
+  postsByUserIdLoading: false,
+  postsByUserIdError: null
 };
 
 export const resources = (state = initialState, action) => {
@@ -115,6 +127,50 @@ export const resources = (state = initialState, action) => {
         ...state,
         personalDetailsByUserIdError: action.error,
         personalDetailsByUserIdLoading: false
+      };
+
+    case FETCH_POST_TEMPLATE_SUCCESS:
+      return {
+        ...state,
+        postTemplate: action.payload,
+        postTemplateLoading: false,
+        postTemplateError: null
+      };
+
+    case FETCH_POST_TEMPLATE_LOADING:
+      return {
+        ...state,
+        postTemplateLoading: true,
+        postTemplateError: null
+      };
+
+    case FETCH_POST_TEMPLATE_ERROR:
+      return {
+        ...state,
+        postTemplateError: action.error,
+        postTemplateLoading: false
+      };
+
+    case FETCH_POSTS_BY_USER_ID_SUCCESS:
+      return {
+        ...state,
+        postsByUserId: action.payload,
+        postsByUserIdLoading: false,
+        postsByUserIdError: null
+      };
+
+    case FETCH_POSTS_BY_USER_ID_LOADING:
+      return {
+        ...state,
+        postsByUserIdLoading: true,
+        postsByUserIdError: null
+      };
+
+    case FETCH_POSTS_BY_USER_ID_ERROR:
+      return {
+        ...state,
+        postsByUserIdError: action.error,
+        postsByUserIdLoading: false
       };
     default:
       return state;

@@ -14,7 +14,13 @@ import {
   FETCH_RESOURCES_BY_USER_ID_ERROR,
   FETCH_PERSONAL_DETAILS_BY_USER_ID_LOADING,
   FETCH_PERSONAL_DETAILS_BY_USER_ID_SUCCESS,
-  FETCH_PERSONAL_DETAILS_BY_USER_ID_ERROR
+  FETCH_PERSONAL_DETAILS_BY_USER_ID_ERROR,
+  FETCH_POST_TEMPLATE_LOADING,
+  FETCH_POST_TEMPLATE_SUCCESS,
+  FETCH_POST_TEMPLATE_ERROR,
+  FETCH_POSTS_BY_USER_ID_LOADING,
+  FETCH_POSTS_BY_USER_ID_SUCCESS,
+  FETCH_POSTS_BY_USER_ID_ERROR
 } from './types';
 import Axios from 'axios';
 import { getHeaders } from '../Utils/common-methods';
@@ -117,7 +123,7 @@ export function createUserResourceError(error) {
   };
 }
 
-export const createResource = (resource, userId) => {
+export const createResource = (resource, userId, fromWhichPage) => {
   return (dispatch) => {
     dispatch(createUserResourceLoading());
     return Axios.post(`http://localhost:8105/mentor/resources/addAttribute`, resource, {
@@ -131,6 +137,9 @@ export const createResource = (resource, userId) => {
       .then((res) => {
         if (res.error) {
           throw res.error;
+        }
+        if (fromWhichPage === 'Home') {
+          dispatch(fetchPostsByUserId(userId));
         }
 
         dispatch(fetchResourcesByUserId(userId));
@@ -162,7 +171,7 @@ export function updateResourceByUserIdError(error) {
   };
 }
 
-export const updateResourceByUserId = (resource, userId) => {
+export const updateResourceByUserId = (resource, userId, fromWhichPage) => {
   return (dispatch) => {
     dispatch(updateResourceByUserIdLoading());
     return Axios.post(
@@ -180,6 +189,9 @@ export const updateResourceByUserId = (resource, userId) => {
       .then((res) => {
         if (res.error) {
           throw res.error;
+        }
+        if (fromWhichPage === 'Home') {
+          dispatch(fetchPostsByUserId(userId));
         }
         dispatch(fetchResourcesByUserId(userId));
         dispatch(updateResourceByUserIdSuccess(res.data));
@@ -230,4 +242,85 @@ export const fetchPersonalDetailsByUserId = (userId) => {
       });
   };
 };
+
+export function fetchPostTemplateLoading() {
+  return {
+    type: FETCH_POST_TEMPLATE_LOADING
+  };
+}
+
+export function fetchPostTemplateSuccess(value) {
+  return {
+    type: FETCH_POST_TEMPLATE_SUCCESS,
+    payload: value
+  };
+}
+export function fetchPostTemplateError(error) {
+  return {
+    type: FETCH_POST_TEMPLATE_ERROR,
+    error
+  };
+}
+
+//http://localhost:8105/mentor/resources/5f420797fc99e13c8cf8d145/5f425826fc99e14d20f20476
+
+export const fetchPostTemplate = () => {
+  return (dispatch) => {
+    dispatch(fetchPostTemplateLoading());
+    Axios.get(
+      `http://localhost:8105/mentor/resources/5f420797fc99e13c8cf8d145/5f425826fc99e14d20f20476`
+    )
+      .then((res) => {
+        if (res.error) {
+          throw res.error;
+        }
+        dispatch(fetchPostTemplateSuccess(res.data));
+        return res;
+      })
+      .catch((error) => {
+        dispatch(fetchPostTemplateError(error));
+      });
+  };
+};
 //http://localhost:8105/mentor/resources/user/5f420797fc99e13c8cf8d145/rohan/Personal%20Details
+
+export function fetchPostsByUserIdLoading() {
+  return {
+    type: FETCH_POSTS_BY_USER_ID_LOADING
+  };
+}
+
+export function fetchPostsByUserIdSuccess(value) {
+  return {
+    type: FETCH_POSTS_BY_USER_ID_SUCCESS,
+    payload: value
+  };
+}
+export function fetchPostsByUserIdError(error) {
+  return {
+    type: FETCH_POSTS_BY_USER_ID_ERROR,
+    error
+  };
+}
+
+//http://localhost:8105/mentor/resources/5f420797fc99e13c8cf8d145/5f425826fc99e14d20f20476
+//http://localhost:8105/mentor/resources/user/5f420797fc99e13c8cf8d145/rohan1232/Post%20Details
+
+export const fetchPostsByUserId = (userId) => {
+  return (dispatch) => {
+    dispatch(fetchPostsByUserIdLoading());
+    Axios.get(
+      `http://localhost:8105/mentor/resources/user/5f420797fc99e13c8cf8d145/${userId}/Post Details`
+    )
+      .then((res) => {
+        if (res.error) {
+          throw res.error;
+        }
+        dispatch(fetchPostsByUserIdSuccess(res.data));
+        return res;
+      })
+      .catch((error) => {
+        dispatch(fetchPostsByUserIdError(error));
+      });
+  };
+};

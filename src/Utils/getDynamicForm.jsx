@@ -52,21 +52,23 @@ export const DynamicFormContainer = (props) => {
           />
         </React.Fragment>
       ))}
-      <Divider></Divider>
+      {!props.fromPostPage && <Divider></Divider>}
       <Row>
-        <Col span={3} offset={15}>
-          <Button
-            size='large'
-            disabled={false}
-            onClick={() => {
-              props.setvisibleModal(false);
-            }}>
-            Cancel
-          </Button>
-        </Col>
+        {!props.fromPostPage && (
+          <Col span={3} offset={15}>
+            <Button
+              size='large'
+              disabled={false}
+              onClick={() => {
+                props.setvisibleModal(false);
+              }}>
+              Cancel
+            </Button>
+          </Col>
+        )}
         <Col span={2} offset={2}>
           <Button type='primary' htmlType='submit' size='large' disabled={false}>
-            Save
+            {props.fromPostPage ? 'Post' : 'Save'}
           </Button>
         </Col>
       </Row>

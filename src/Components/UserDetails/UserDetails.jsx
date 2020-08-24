@@ -157,7 +157,7 @@ const UserDetails = (props) => {
     return (
       <Row style={{ margin: '10px' }} gutter={[26, 26]}>
         {(props.templateResources || []).map((template) => {
-          if (template.resourceName === 'Tags') {
+          if (template.resourceName === 'Tags' || 'Post Details' === template.resourceName) {
             return;
           }
           let attributes = template.attributes;
