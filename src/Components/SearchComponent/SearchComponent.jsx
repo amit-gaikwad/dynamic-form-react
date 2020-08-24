@@ -30,6 +30,7 @@ export const SearchComponent = (props) => {
   const handleChange = (value) => {
     setselectedCategory(value);
     props.fetchUsersBySearchString({
+      userId: props.userId,
       categories: value,
       searchStr: searchString
     });
@@ -38,6 +39,7 @@ export const SearchComponent = (props) => {
     if (event.target.value) {
       setsearchString(event.target.value);
       props.fetchUsersBySearchString({
+        userId: props.userId,
         categories: selectedCategory,
         searchStr: event.target.value
       });

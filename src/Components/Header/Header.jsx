@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { Layout, Menu, Breadcrumb, Input, Row, Col, Badge } from 'antd';
 import { SearchContainer } from '../SearchComponent/SearchComponent';
 import { get } from 'lodash';
+import logo from './logo3.png';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -19,8 +20,10 @@ export const HeaderComponent = (props) => {
         zIndex: 1
       }}>
       <Row>
-        <Col span={2}>
-          <div className='logo' />
+        <Col span={1}>
+          <div className='logo'>
+            <img src={logo} width={'100%'} height={'100%'}></img>
+          </div>
         </Col>
         <Col span={10}>
           <SearchContainer {...props} userId={userId}></SearchContainer>

@@ -37,12 +37,13 @@ export function fetchUsersBySearchStringError(error) {
     error
   };
 }
+//http://localhost:8190/mentor/search/user/n/u/si/ss
 
-export const fetchUsersBySearchString = ({ categories, searchStr }) => {
+export const fetchUsersBySearchString = ({ userId, categories, searchStr }) => {
   return (dispatch) => {
     dispatch(fetchUsersBySearchStringLoading());
     Axios.get(
-      `http://localhost:8190/mentor/search/user/5f420797fc99e13c8cf8d145/${categories}/${searchStr}`
+      `http://localhost:8190/mentor/search/user/5f420797fc99e13c8cf8d145/${userId}/${categories}/${searchStr}`
     )
       .then((res) => {
         if (res.error) {

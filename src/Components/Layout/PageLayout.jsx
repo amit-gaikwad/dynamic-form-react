@@ -14,13 +14,19 @@ import { isEmpty } from 'lodash';
 const { Header, Content, Footer, Sider } = Layout;
 const data = [
   {
-    title: 'Upcoming Event 1'
+    title: 'Renegade San Francisco',
+    description:
+      'Renegade San Francisco returns with 275+ creatives for a springtime marketplace on August 29 + 30 at Fort Mason Center Festival Pavilion. Renegade Craft is free to attend & all are welcome.'
   },
   {
-    title: 'Upcoming Event 2'
+    title: 'REIMAGINE 2020',
+    description:
+      'Get an exclusive inside look at the future of blockchain and crypto in our system. Join the Reimagine "Disrupt The System" Virtual Conference, a 72-hour live event bringing together industry leaders, universities, and enterprises innovating to solve real problems, now.'
   },
   {
-    title: 'Upcoming Event 3'
+    title: 'COMEDY AT ZINQUE',
+    description:
+      'Comedy for the classy has a spot at Zinque in Downtown Los Angeles.New comics every Sunday at 830p. Produced by Mitchell Lamar.939 S Broadway.'
   }
 ];
 const PageLayoutComponent = (props) => {
@@ -81,7 +87,8 @@ const PageLayoutComponent = (props) => {
                         <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
                       }
                       title={<a href='https://ant.design'>{item.title}</a>}
-                      description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut eget bibendum elit. Fusce facilisis accumsan dui, efficitur commodo ante facilisis ut.'
+                      description={item.description}
+                      //description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut eget bibendum elit. Fusce facilisis accumsan dui, efficitur commodo ante facilisis ut.'
                     />
                   </List.Item>
                 );
