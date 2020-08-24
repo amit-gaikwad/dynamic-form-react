@@ -16,7 +16,7 @@ import {
 import { omit, cloneDeep, isEmpty, first } from 'lodash';
 import { Loader } from '../Loader/Loader';
 import { PostWrapperComponent } from '../Posts/PostWrapperComponent';
-import { Col, Row, Card, Tooltip } from 'antd';
+import { Col, Row, Card, Tooltip, Divider } from 'antd';
 
 const HomeComponent = (props) => {
   const userId = props.match.params.id;
@@ -111,29 +111,38 @@ const HomeComponent = (props) => {
   }
   return (
     <PageLayout
+      {...props}
       content={
         <div>
           {props.postsByUserIdLoading ? (
             <Loader></Loader>
           ) : (
             <>
-              <DynamicFormContainer
-                fromPostPage={true}
-                fields={fields}
-                template={props.postTemplate}
-                //  currentIndex={currentResourceAttribute.keyValue || 0}
-                onHandleSubmit={onHandleSubmit}></DynamicFormContainer>
-              <Row style={{ width: '100%' }} gutter={[16, 16]}>
-                {postResources.map((item) => {
-                  const postData = getFieldsValueFromAtributes(item);
-                  return (
-                    <Col span={24}>
-                      <PostWrapperComponent
-                        post={postData['User Post']}
-                        user={user}></PostWrapperComponent>
-                    </Col>
-                  );
-                })}
+              <Row style={{ width: '100%' }}>
+                <Col span={24} style={{ fontSize: '20px', fontWeight: 'bold' }}>
+                  Start a Post
+                </Col>
+                <Col span={24}>
+                  <DynamicFormContainer
+                    fromPostPage={true}
+                    fields={fields}
+                    template={props.postTemplate}
+                    //  currentIndex={currentResourceAttribute.keyValue || 0}
+                    onHandleSubmit={onHandleSubmit}></DynamicFormContainer>
+                </Col>
+                <Divider></Divider>
+                <Row style={{ width: '100%' }} gutter={[16, 16]}>
+                  {postResources.map((item) => {
+                    const postData = getFieldsValueFromAtributes(item);
+                    return (
+                      <Col span={24}>
+                        <PostWrapperComponent
+                          post={postData['User Post']}
+                          user={user}></PostWrapperComponent>
+                      </Col>
+                    );
+                  })}
+                </Row>
               </Row>
             </>
           )}

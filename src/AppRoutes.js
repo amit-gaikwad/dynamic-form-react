@@ -12,8 +12,8 @@ import { HomeContainer } from './Components/HomeComponent/HomeComponent';
 export const AppRoutes = (props) => {
   return (
     <Router history={history}>
-      <Route exact path='/' component={PersonalDetails} />
-      <Route exact path='/personal-details' component={PersonalDetails} />
+      {/* <Route exact path='/' component={PersonalDetails} />
+      <Route exact path='/personal-details' component={PersonalDetails} /> */}
       <Route exact path='/user/:id/connections' component={NetworkContainer} />
       <Route exact path='/user/:id/notifications' component={NotificationsContainer} />
       <Route exact path='/user/:id/' component={UserDetailsContainer} />

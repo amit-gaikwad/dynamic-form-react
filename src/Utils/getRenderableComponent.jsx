@@ -5,7 +5,7 @@ import moment from 'moment';
 import { get } from 'lodash';
 
 // type:"upload",value:"",mandatory:true,maxLength:"",minLength:"",pattern:"",options:"", label:""
-export const RenderableComponentByType = ({ field, setFieldsValue, form }) => {
+export const RenderableComponentByType = ({ field, setFieldsValue, form, fromPostPage }) => {
   let { type, value, options, label, mandatory, maxLength, minLength, pattern, hidden } = field;
   var isTrueSet = hidden === 'true';
   const [loading, setloading] = useState(false);
@@ -74,7 +74,7 @@ export const RenderableComponentByType = ({ field, setFieldsValue, form }) => {
     case COMPONENT_TYPES.TEXT_AREA:
       return (
         <Form.Item
-          label={label}
+          label={!fromPostPage && label}
           name={label}
           rules={[
             {

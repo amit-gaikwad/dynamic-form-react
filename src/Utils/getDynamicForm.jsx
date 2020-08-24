@@ -35,7 +35,7 @@ export const DynamicFormContainer = (props) => {
   return (
     <Form
       layout={'horizontal'}
-      labelCol={{ span: 7 }}
+      labelCol={!props.fromPostPage && { span: 7 }}
       className='dynamic-form'
       style={{ margin: '10px' }}
       initialValues={{ remember: true }}
@@ -47,6 +47,7 @@ export const DynamicFormContainer = (props) => {
         <React.Fragment key={field.label}>
           <RenderableComponentByType
             field={{ ...field }}
+            fromPostPage={props.fromPostPage}
             setFieldsValue={form.setFieldsValue}
             form={form}
           />
@@ -66,7 +67,7 @@ export const DynamicFormContainer = (props) => {
             </Button>
           </Col>
         )}
-        <Col span={2} offset={2}>
+        <Col span={2} offset={props.fromPostPage ? 22 : 2}>
           <Button type='primary' htmlType='submit' size='large' disabled={false}>
             {props.fromPostPage ? 'Post' : 'Save'}
           </Button>

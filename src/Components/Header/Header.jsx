@@ -28,7 +28,7 @@ export const HeaderComponent = (props) => {
         <Col span={12}>
           <Menu style={{ backgroundColor: '#283e4a', color: '#b4bfc7' }} mode='horizontal'>
             <Menu.Item key='1'>
-              <Link style={{ color: '#b4bfc7' }} to='/'>
+              <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}/home`}>
                 Home
               </Link>
             </Menu.Item>
