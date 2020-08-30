@@ -16,7 +16,10 @@ import {
   FETCH_POST_TEMPLATE_ERROR,
   FETCH_POSTS_BY_USER_ID_LOADING,
   FETCH_POSTS_BY_USER_ID_SUCCESS,
-  FETCH_POSTS_BY_USER_ID_ERROR
+  FETCH_POSTS_BY_USER_ID_ERROR,
+  FETCH_SYSTEM_TEMPLATES_LOADING,
+  FETCH_SYSTEM_TEMPLATES_ERROR,
+  FETCH_SYSTEM_TEMPLATES_SUCCESS
 } from '../Actions/types';
 
 const initialState = {
@@ -37,7 +40,10 @@ const initialState = {
   postTemplateError: null,
   postsByUserId: [],
   postsByUserIdLoading: false,
-  postsByUserIdError: null
+  postsByUserIdError: null,
+  systemTemplates: [],
+  systemTemplatesLoading: false,
+  systemTemplatesError: null
 };
 
 export const resources = (state = initialState, action) => {
@@ -164,6 +170,27 @@ export const resources = (state = initialState, action) => {
         ...state,
         postsByUserIdLoading: true,
         postsByUserIdError: null
+      };
+
+    case FETCH_SYSTEM_TEMPLATES_ERROR:
+      return {
+        ...state,
+        systemTemplatesError: action.error,
+        systemTemplatesLoading: false
+      };
+    case FETCH_SYSTEM_TEMPLATES_SUCCESS:
+      return {
+        ...state,
+        systemTemplates: action.payload,
+        systemTemplatesLoading: false,
+        systemTemplatesError: null
+      };
+
+    case FETCH_SYSTEM_TEMPLATES_LOADING:
+      return {
+        ...state,
+        systemTemplatesLoading: true,
+        systemTemplatesError: null
       };
 
     case FETCH_POSTS_BY_USER_ID_ERROR:

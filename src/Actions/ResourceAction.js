@@ -20,7 +20,10 @@ import {
   FETCH_POST_TEMPLATE_ERROR,
   FETCH_POSTS_BY_USER_ID_LOADING,
   FETCH_POSTS_BY_USER_ID_SUCCESS,
-  FETCH_POSTS_BY_USER_ID_ERROR
+  FETCH_POSTS_BY_USER_ID_ERROR,
+  FETCH_SYSTEM_TEMPLATES_LOADING,
+  FETCH_SYSTEM_TEMPLATES_ERROR,
+  FETCH_SYSTEM_TEMPLATES_SUCCESS
 } from './types';
 import Axios from 'axios';
 import { getHeaders } from '../Utils/common-methods';
@@ -267,21 +270,61 @@ export function fetchPostTemplateError(error) {
 export const fetchPostTemplate = () => {
   return (dispatch) => {
     dispatch(fetchPostTemplateLoading());
-    Axios.get(
-      `http://localhost:8105/mentor/resources/5f420797fc99e13c8cf8d145/5f425826fc99e14d20f20476`
-    )
+    fetchResourcesById('5f425826fc99e14d20f20476')
       .then((res) => {
-        if (res.error) {
-          throw res.error;
-        }
         dispatch(fetchPostTemplateSuccess(res.data));
-        return res;
       })
       .catch((error) => {
         dispatch(fetchPostTemplateError(error));
       });
   };
 };
+
+const fetchResourcesById = (id) => {
+  return Axios.get(`http://localhost:8105/mentor/resources/5f420797fc99e13c8cf8d145/${id}`).then(
+    (res) => {
+      if (res.error) {
+        throw res.error;
+      }
+      return res;
+    }
+  );
+};
+
+export function fetchSystemTemplatesLoading() {
+  return {
+    type: FETCH_SYSTEM_TEMPLATES_LOADING
+  };
+}
+
+export function fetchSystemTemplatesSuccess(value) {
+  return {
+    type: FETCH_SYSTEM_TEMPLATES_SUCCESS,
+    payload: value
+  };
+}
+export function fetchSystemTemplatesError(error) {
+  return {
+    type: FETCH_SYSTEM_TEMPLATES_ERROR,
+    error
+  };
+}
+
+//http://localhost:8105/mentor/resources/5f420797fc99e13c8cf8d145/5f425826fc99e14d20f20476
+
+export const fetchSystemTemplates = () => {
+  return (dispatch) => {
+    dispatch(fetchSystemTemplatesLoading());
+    fetchResourcesById('5f420a53fc99e14d20f20460')
+      .then((res) => {
+        dispatch(fetchSystemTemplatesSuccess(res.data));
+      })
+      .catch((error) => {
+        dispatch(fetchSystemTemplatesError(error));
+      });
+  };
+};
+
 //http://localhost:8105/mentor/resources/user/5f420797fc99e13c8cf8d145/rohan/Personal%20Details
 
 export function fetchPostsByUserIdLoading() {

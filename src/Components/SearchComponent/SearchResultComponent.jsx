@@ -6,6 +6,7 @@ import {
   getFieldsValueFromAtributes
 } from '../../Utils/common-methods';
 import { get } from 'lodash';
+import { history } from '../../Utils/history';
 
 export const SearchResultComponent = (props) => {
   const sendConnectedUser = props.sendConnectedUser.attributes || [];
@@ -54,11 +55,20 @@ export const SearchResultComponent = (props) => {
                       </Button>
                     ]
               }>
-              <Meta
-                avatar={<Avatar src={user['Photo']} />}
-                title={`${user['First Name']} ${user['Last Name']}`}
-                //description='This is the description'
-              />
+              <a
+                target='_blank'
+                href={`http://localhost:3000/user/fromUserId/${props.userId}/toUserId/${user.userId}`}
+                // onClick={() => {
+                //   history.push("");
+                //   console.log('history', history); //history
+                // }}
+                style={{ cursor: 'pointer' }}>
+                <Meta
+                  avatar={<Avatar src={user['Photo']} />}
+                  title={`${user['First Name']} ${user['Last Name']}`}
+                  //description='This is the description'
+                />
+              </a>
             </Card>
           </Col>
         );

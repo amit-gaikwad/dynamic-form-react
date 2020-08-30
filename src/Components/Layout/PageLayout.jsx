@@ -7,7 +7,7 @@ import { HeaderComponent } from '../Header/Header';
 import { useEffect } from 'react';
 import { fetchNotificationsByUserId } from '../../Actions/NotificationsAction';
 import Meta from 'antd/lib/card/Meta';
-import { fetchPersonalDetailsByUserId } from '../../Actions/ResourceAction';
+import { fetchPersonalDetailsByUserId, fetchSystemTemplates } from '../../Actions/ResourceAction';
 import { getFieldsValueFromAtributes } from '../../Utils/common-methods';
 import { isEmpty } from 'lodash';
 
@@ -33,6 +33,7 @@ const PageLayoutComponent = (props) => {
   useEffect(() => {
     props.fetchNotificationsByUserId(localStorage.getItem('userID'));
     props.fetchPersonalDetailsByUserId(localStorage.getItem('userID'));
+    props.fetchSystemTemplates();
   }, []);
   let user = {};
   if (props.personalDetailsByUserId[0]) {
@@ -117,7 +118,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   fetchNotificationsByUserId: (id) => dispatch(fetchNotificationsByUserId(id)),
-  fetchPersonalDetailsByUserId: (userId) => dispatch(fetchPersonalDetailsByUserId(userId))
+  fetchPersonalDetailsByUserId: (userId) => dispatch(fetchPersonalDetailsByUserId(userId)),
+  fetchSystemTemplates: () => dispatch(fetchSystemTemplates())
 });
 
 export const PageLayout = connect(mapStateToProps, mapDispatchToProps)(PageLayoutComponent);
