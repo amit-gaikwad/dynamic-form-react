@@ -7,6 +7,7 @@ import {
 } from '../../Utils/common-methods';
 import { get } from 'lodash';
 import { history } from '../../Utils/history';
+import { URL_PATH } from '../../Utils/config';
 
 export const SearchResultComponent = (props) => {
   const sendConnectedUser = props.sendConnectedUser.attributes || [];
@@ -57,7 +58,7 @@ export const SearchResultComponent = (props) => {
               }>
               <a
                 target='_blank'
-                href={`http://localhost:3000/user/fromUserId/${props.userId}/toUserId/${user.userId}`}
+                href={`${URL_PATH}/user/fromUserId/${props.userId}/toUserId/${user.userId}`}
                 // onClick={() => {
                 //   history.push("");
                 //   console.log('history', history); //history

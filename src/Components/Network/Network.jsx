@@ -9,6 +9,7 @@ import { fetchConnectionsByUserId, disconnectConnection } from '../../Actions/Co
 import { Collapse } from 'antd';
 import { useState } from 'react';
 import { connectFromToUser } from '../../Actions/ConnectionsAction';
+import { URL_PATH } from '../../Utils/config';
 
 const { Panel } = Collapse;
 
@@ -59,7 +60,7 @@ const NetworkComponent = (props) => {
                     avatar={<Avatar src={item['Photo']} />}
                     title={
                       <a
-                        href={`http://localhost:3000/user/fromUserId/${userId}/toUserId/${item.userId}`}
+                        href={`${URL_PATH}/user/fromUserId/${userId}/toUserId/${item.userId}`}
                         target='_blank'>{`${item['First Name']} ${item['Last Name']}`}</a>
                     }
                     description={`${item['First Name']} ${item['Last Name']}`}

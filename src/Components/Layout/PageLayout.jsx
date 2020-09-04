@@ -10,6 +10,7 @@ import Meta from 'antd/lib/card/Meta';
 import { fetchPersonalDetailsByUserId, fetchSystemTemplates } from '../../Actions/ResourceAction';
 import { getFieldsValueFromAtributes } from '../../Utils/common-methods';
 import { isEmpty } from 'lodash';
+import { URL_PATH } from '../../Utils/config';
 
 const { Header, Content, Footer, Sider } = Layout;
 const data = [
@@ -56,9 +57,7 @@ const PageLayoutComponent = (props) => {
                 avatar={<Avatar src={user['Photo']} />}
                 title={
                   <a
-                    href={
-                      'http://localhost:3000/user/' + user.userId
-                    }>{`${user['First Name']} ${user['Last Name']}`}</a>
+                    href={`${URL_PATH}/user/${user.userId}`}>{`${user['First Name']} ${user['Last Name']}`}</a>
                 }
                 description={`${user['First Name']} ${user['Last Name']}`}
               />
