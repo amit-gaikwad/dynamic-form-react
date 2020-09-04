@@ -50,7 +50,7 @@ const PageLayoutComponent = (props) => {
           className={props.blurBackground ? 'blurBg' : ''}>
           {!isEmpty(user) ? (
             <Card
-              style={{ width: 300, margin: 20 }}
+              style={{ width: '80%', margin: 20 }}
               cover={<div style={{ background: 'black', height: '100px' }}></div>}
               actions={[<Button key='setting'>View Profile</Button>]}>
               <Meta

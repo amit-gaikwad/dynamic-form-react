@@ -1,6 +1,7 @@
 import React from 'react';
 import { UserOutlined, PlusCircleOutlined, EditOutlined } from '@ant-design/icons';
 import { Row, Col, Avatar, Card, Button, Divider } from 'antd';
+import { get } from 'lodash';
 
 const PersonalDetailsWithCover = ({
   profileImageUrl,
@@ -18,8 +19,15 @@ const PersonalDetailsWithCover = ({
   onDeclineClick,
   onAcceptClick,
   onDisconnectClick,
-  toUserId
+  toUserId,
+  sendConnectedUser
 }) => {
+  console.log('sendConnectedUser', sendConnectedUser);
+  const sendConnectedUser1 = sendConnectedUser.attributes || [];
+
+  const connectedUserIdsAttribute =
+    sendConnectedUser1.find((attr) => attr.attribute.keyName === 'Connection') || {};
+  const connectedUserIds = get(connectedUserIdsAttribute, 'attribute.keyValue', '').split(',');
   return (
     <Col span={24}>
       <Card
@@ -32,33 +40,39 @@ const PersonalDetailsWithCover = ({
         }}>
         <Row style={{ background: 'black', height: '200px' }}></Row>
         <Row>
-          <Col span={4} offset={2} style={{ marginTop: '-75px' }}>
+          <Col span={8} offset={2} style={{ marginTop: '-75px' }}>
             <Avatar size={160} icon={<UserOutlined />} src={profileImageUrl} />
           </Col>
           {onlyView && (
-            <Col span={16} offset={2} style={{ paddingTop: '18px' }}>
+            <Col span={12} style={{ paddingTop: '18px' }}>
               <Row>
                 {(connectedUsers || []).includes(toUserId) ? (
-                  <Col span={4}>
+                  <Col span={8}>
                     <Button type='danger' onClick={onDisconnectClick}>
                       Disconnect
                     </Button>
                   </Col>
                 ) : (notificationUsers || []).includes(toUserId) ? (
                   <>
-                    <Col span={4}>
+                    <Col span={8}>
                       <Button type='danger' onClick={onDeclineClick}>
                         Decline
                       </Button>
                     </Col>
-                    <Col span={4}>
+                    <Col span={8}>
                       <Button type='primary' onClick={onAcceptClick}>
                         Accept
                       </Button>
                     </Col>
                   </>
+                ) : connectedUserIds.includes(toUserId) ? (
+                  <Col span={8}>
+                    <Button type='blur' disabled={true}>
+                      Already sent Request
+                    </Button>
+                  </Col>
                 ) : (
-                  <Col span={4}>
+                  <Col span={8}>
                     <Button type='primary' onClick={sendConnectionRequestClick}>
                       Connect
                     </Button>
@@ -137,6 +151,10 @@ const PersonalDetailsWithCover = ({
       </Card>
     </Col>
   );
+};
+
+PersonalDetailsWithCover.defaultProps = {
+  sendConnectedUser: {}
 };
 
 export default PersonalDetailsWithCover;

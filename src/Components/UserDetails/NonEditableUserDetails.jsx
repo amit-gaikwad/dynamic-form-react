@@ -25,7 +25,7 @@ import {
   rejectConnection,
   connectFromToUser
 } from '../../Actions/ConnectionsAction';
-import { sendConnectionRequest } from '../../Actions/UserAction';
+import { sendConnectionRequest, getsentConnectionRequest } from '../../Actions/UserAction';
 
 const NonEditableUserDetails = (props) => {
   const toUserId = props.match.params.toUserId;
@@ -35,6 +35,9 @@ const NonEditableUserDetails = (props) => {
     props.fetchUserIdsNotificationsByUserId(fromUserId);
     props.fetchUserIdsConnectionsByUserId(fromUserId);
     props.fetchResourcesByUserId(toUserId);
+    props.getsentConnectionRequest({
+      userId: fromUserId
+    });
   }, []);
 
   const onDisconnectClick = () => {
@@ -116,6 +119,7 @@ const NonEditableUserDetails = (props) => {
                   onDeclineClick={onDeclineClick}
                   onAcceptClick={onAcceptClick}
                   onDisconnectClick={onDisconnectClick}
+                  sendConnectedUser={props.sendConnectedUser}
                   toUserId={toUserId}></PersonalDetailsWithCover>
               </>
             );
@@ -200,7 +204,8 @@ const mapStateToProps = (state) => {
     resourcesByUserId: state.resources.resourcesByUserId || [],
     resourcesByUserIdLoading: state.resources.resourcesByUserIdLoading,
     userIdsconnectionsByUserId: state.connectionReducer.userIdsconnectionsByUserId,
-    userIdsnotificationsByUserId: state.notificationsReducer.userIdsnotificationsByUserId
+    userIdsnotificationsByUserId: state.notificationsReducer.userIdsnotificationsByUserId,
+    sendConnectedUser: state.userReducer.sendConnectedUser
   };
 };
 
@@ -215,7 +220,8 @@ const mapDispatchToProps = (dispatch) => ({
   disconnectConnection: (obj) => dispatch(disconnectConnection(obj)),
   rejectConnection: (obj) => dispatch(rejectConnection(obj)),
   connectFromToUser: (obj) => dispatch(connectFromToUser(obj)),
-  sendConnectionRequest: (obj) => dispatch(sendConnectionRequest(obj))
+  sendConnectionRequest: (obj) => dispatch(sendConnectionRequest(obj)),
+  getsentConnectionRequest: (obj) => dispatch(getsentConnectionRequest(obj))
 });
 
 export const NonEditableUserDetailsContainer = connect(
