@@ -16,7 +16,7 @@ import {
 import { omit, cloneDeep, isEmpty, first } from 'lodash';
 import { Loader } from '../Loader/Loader';
 import { PostWrapperComponent } from '../Posts/PostWrapperComponent';
-import { Col, Row, Card, Tooltip, Divider } from 'antd';
+import { Col, Row, Card, Tooltip, Divider, List } from 'antd';
 
 const HomeComponent = (props) => {
   const userId = props.match.params.id;
@@ -132,16 +132,18 @@ const HomeComponent = (props) => {
                 </Col>
                 <Divider></Divider>
                 <Row style={{ width: '100%' }} gutter={[16, 16]}>
-                  {postResources.map((item) => {
-                    const postData = getFieldsValueFromAtributes(item);
-                    return (
-                      <Col span={24}>
-                        <PostWrapperComponent
-                          post={postData['User Post']}
-                          user={user}></PostWrapperComponent>
-                      </Col>
-                    );
-                  })}
+                  <List itemLayout='vertical' size='large'>
+                    {postResources.map((item) => {
+                      const postData = getFieldsValueFromAtributes(item);
+                      return (
+                        <Col span={24}>
+                          <PostWrapperComponent
+                            post={postData['User Post']}
+                            user={user}></PostWrapperComponent>
+                        </Col>
+                      );
+                    })}
+                  </List>
                 </Row>
               </Row>
             </>

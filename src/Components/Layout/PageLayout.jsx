@@ -9,7 +9,7 @@ import { fetchNotificationsByUserId } from '../../Actions/NotificationsAction';
 import Meta from 'antd/lib/card/Meta';
 import { fetchPersonalDetailsByUserId, fetchSystemTemplates } from '../../Actions/ResourceAction';
 import { getFieldsValueFromAtributes } from '../../Utils/common-methods';
-import { isEmpty } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import { URL_PATH } from '../../Utils/config';
 import {
   AppstoreOutlined,
@@ -24,6 +24,7 @@ import {
 } from '@ant-design/icons';
 import { useState } from 'react';
 import { ChatList } from '../Chat/ChatList';
+import { Link } from 'react-router-dom';
 const { SubMenu } = Menu;
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -36,6 +37,7 @@ const PageLayoutComponent = (props) => {
     props.fetchSystemTemplates();
   }, []);
   let user = {};
+  const userId = get(props, 'match.params.id', '');
   if (props.personalDetailsByUserId[0]) {
     user = getFieldsValueFromAtributes(props.personalDetailsByUserId[0].attributes);
   }
@@ -56,8 +58,8 @@ const PageLayoutComponent = (props) => {
           <div style={{ position: 'fixed', width: '20%' }}>
             <Row style={{ width: '80%', margin: '20px' }}>
               <Menu
-                defaultSelectedKeys={['1']}
-                defaultOpenKeys={['sub1']}
+                // defaultSelectedKeys={['1']}
+                // defaultOpenKeys={['sub1']}
                 mode='inline'
                 style={{ border: '1px dashed gray' }}
                 inlineCollapsed={collapsed}>
@@ -65,18 +67,32 @@ const PageLayoutComponent = (props) => {
                   Hide Menu
                 </Menu.Item>
                 <Menu.Item key='2' icon={<UserOutlined />}>
-                  My Profile
+                  <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}`}>
+                    My Profile
+                  </Link>
                 </Menu.Item>
                 <SubMenu key='sub1' icon={<UsergroupAddOutlined />} title='Connections'>
-                  <Menu.Item key='5'>1st</Menu.Item>
-                  <Menu.Item key='6'>2nd</Menu.Item>
-                  <Menu.Item key='7'>3rd</Menu.Item>
+                  <Menu.Item key='5'>
+                    <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}/connections`}>
+                      Connections
+                    </Link>
+                  </Menu.Item>
+                  <Menu.Item key='6'>
+                    <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}/connections`}>
+                      Groups
+                    </Link>
+                  </Menu.Item>
+                  <Menu.Item key='7'>
+                    <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}/connections`}>
+                      Broadcast List
+                    </Link>
+                  </Menu.Item>
                 </SubMenu>
                 <Menu.Item key='4' icon={<ContainerOutlined />}>
                   Send Invite To Friend
                 </Menu.Item>
-                <Menu.Item key='4' icon={<ContainerOutlined />}>
-                  inbox
+                <Menu.Item key='19' icon={<ContainerOutlined />}>
+                  Inbox
                 </Menu.Item>
                 <SubMenu key='sub2' icon={<AppstoreOutlined />} title='Settings'>
                   <Menu.Item key='9'>Option 9</Menu.Item>

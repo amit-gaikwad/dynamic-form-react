@@ -1,7 +1,17 @@
 import React, { useState, createElement } from 'react';
 import moment from 'moment';
-import { Comment, Tooltip, Avatar, Card, Row, List, Popover } from 'antd';
+import { Comment, Tooltip, Avatar, Card, Row, List, Popover, Space } from 'antd';
 import { DislikeOutlined, LikeOutlined, DislikeFilled, LikeFilled } from '@ant-design/icons';
+import {
+  MessageOutlined,
+  StarOutlined,
+  DownCircleOutlined,
+  CreditCardOutlined,
+  BookOutlined,
+  SaveOutlined,
+  QuestionCircleOutlined,
+  ShareAltOutlined
+} from '@ant-design/icons';
 
 export const PostWrapperComponent = (props) => {
   const [likes, setLikes] = useState(0);
@@ -40,18 +50,43 @@ export const PostWrapperComponent = (props) => {
     setshowOptions(!showOptions);
   };
   const popUpOptions = () => (
-    <List>
-      <List.Item>Up Vote</List.Item>
-      <List.Item>Take A Notes</List.Item>
-      <List.Item>Register</List.Item>
-      <List.Item>Save</List.Item>
-      <List.Item>Ask Question</List.Item>
-      <List.Item>Share</List.Item>
+    <List style={{ width: '150px' }}>
+      <List.Item>
+        <IconText icon={LikeFilled} text='Up Vote' key='list-vertical-star-o' />
+      </List.Item>
+      <List.Item>
+        <IconText icon={CreditCardOutlined} text='Take A Notes' key='list-vertical-star-o' />
+      </List.Item>
+      <List.Item>
+        <IconText icon={BookOutlined} text='Register' key='list-vertical-star-o' />
+      </List.Item>
+      <List.Item>
+        <IconText icon={SaveOutlined} text='Save' key='list-vertical-star-o' />
+      </List.Item>
+      <List.Item>
+        <IconText icon={QuestionCircleOutlined} text='Ask Question' key='list-vertical-star-o' />
+      </List.Item>
+      <List.Item>
+        <IconText icon={ShareAltOutlined} text='Share' key='list-vertical-star-o' />
+      </List.Item>
     </List>
+  );
+  const IconText = ({ icon, text }) => (
+    <Space>
+      {React.createElement(icon)}
+      {text}
+    </Space>
   );
 
   return (
-    <Card
+    <List.Item
+      onClick={handleOptionsShow}
+      key={props.id}
+      actions={[
+        <IconText icon={StarOutlined} text='156' key='list-vertical-star-o' />,
+        <IconText icon={LikeOutlined} text='156' key='list-vertical-like-o' />,
+        <IconText icon={MessageOutlined} text='2' key='list-vertical-message' />
+      ]}
       style={
         showOptions
           ? {
@@ -61,39 +96,29 @@ export const PostWrapperComponent = (props) => {
               //boxShadow: '0 0 0 5px rgba(0, 0, 0, .25),inset 0 0 0 5px rgba(0, 0, 0, .125)',
               background: 'rgba(0, 0, 0, .075)'
             }
-          : {}
+          : {
+              cursor: 'pointer',
+              border: '1px solid rgba(0, 0, 0, .125)'
+            }
       }
-      onClick={handleOptionsShow}>
-      <Popover
-        content={popUpOptions}
-        trigger='click'
-        visible={showOptions}
-        placement='right'
-        style={{ left: '150px' }}
-        onVisibleChange={handleOptionsShow}>
-        <Row style={{ cursor: 'pointer' }}>
-          <Comment
-            actions={actions}
-            author={<a>{`${props.user['First Name']} ${props.user['Last Name']}`}</a>}
-            avatar={<Avatar src={props.user['Photo']} alt='Amit Gaikwad' />}
-            content={
-              <>
-                <p>{props.post}</p>
-                {/* <img
-              src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
-              height={'100px'}
-              width={'100px'}></img> */}
-              </>
-            }
-            datetime={
-              <Tooltip title={moment('2020-08-23').format('YYYY-MM-DD HH:mm:ss')}>
-                <span>{moment('2020-08-23').fromNow()}</span>
-              </Tooltip>
-            }
-          />
-        </Row>
-      </Popover>
-      ,
-    </Card>
+      extra={
+        <Popover
+          content={popUpOptions}
+          trigger='click'
+          visible={showOptions}
+          placement='leftTop'
+          onVisibleChange={handleOptionsShow}>
+          <DownCircleOutlined style={{ fontSize: '26px' }} />
+        </Popover>
+      }>
+      <List.Item.Meta
+        avatar={<Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />}
+        title={<a>{`${props.user['First Name']} ${props.user['Last Name']}`}</a>}
+        description={
+          'Ant Design, a design language for background applications, is refined by Ant UED Team.'
+        }
+      />
+      {props.post}
+    </List.Item>
   );
 };
