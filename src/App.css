@@ -38,10 +38,10 @@
   }
 }
 
+
 .site-layout-content {
   background: #fff;
   padding: 24px;
-  min-height: 280px;
   font-size: large;
 }
 .logo {
@@ -91,4 +91,9 @@
   -ms-filter: blur(2px);
   filter: blur(2px);
   background-color: #ccc;
+}
+
+.chatList .ant-card-head{
+    background: var(--cool-gray-80,#283e4a);
+    color: white;
 }

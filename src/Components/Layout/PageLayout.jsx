@@ -45,82 +45,85 @@ const PageLayoutComponent = (props) => {
     setcollapsed(!collapsed);
   };
   return (
-    <Layout className='layout'>
-      <HeaderComponent {...props}></HeaderComponent>
-      <Layout style={{ marginTop: 64 }}>
-        <Sider
-          width={'20%'}
-          style={{ background: '#f0f2f5' }}
-          className={props.blurBackground ? 'blurBg' : ''}>
-          {/* <Button type='primary' onClick={toggleCollapsed} style={{ marginBottom: 16 }}>
+    <>
+      <Layout className='layout'>
+        <HeaderComponent {...props}></HeaderComponent>
+        <Layout style={{ marginTop: 64 }}>
+          <Sider
+            width={'25%'}
+            style={{ background: '#f0f2f5' }}
+            className={props.blurBackground ? 'blurBg' : ''}>
+            {/* <Button type='primary' onClick={toggleCollapsed} style={{ marginBottom: 16 }}>
               {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
             </Button> */}
-          <div style={{ position: 'fixed', width: '20%' }}>
-            <Row style={{ width: '80%', margin: '20px' }}>
-              <Menu
-                // defaultSelectedKeys={['1']}
-                // defaultOpenKeys={['sub1']}
-                mode='inline'
-                style={{ border: '1px dashed gray' }}
-                inlineCollapsed={collapsed}>
-                <Menu.Item key='1' icon={<PieChartOutlined />}>
-                  Hide Menu
-                </Menu.Item>
-                <Menu.Item key='2' icon={<UserOutlined />}>
-                  <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}`}>
-                    My Profile
-                  </Link>
-                </Menu.Item>
-                <SubMenu key='sub1' icon={<UsergroupAddOutlined />} title='Connections'>
-                  <Menu.Item key='5'>
-                    <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}/connections`}>
-                      Connections
+            <div style={{ position: 'fixed', width: '25%' }}>
+              <Row style={{ width: '80%', margin: '20px' }}>
+                <Menu
+                  // defaultSelectedKeys={['1']}
+                  // defaultOpenKeys={['sub1']}
+                  mode='inline'
+                  style={{ border: '1px dashed gray' }}
+                  inlineCollapsed={collapsed}>
+                  {/* <div key='1' icon={<PieChartOutlined />} onClick={toggleCollapsed}>
+                    Hide Menu
+                  </div> */}
+                  <Menu.Item key='2' icon={<UserOutlined />}>
+                    <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}`}>
+                      My Profile
                     </Link>
                   </Menu.Item>
-                  <Menu.Item key='6'>
-                    <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}/connections`}>
-                      Groups
-                    </Link>
-                  </Menu.Item>
-                  <Menu.Item key='7'>
-                    <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}/connections`}>
-                      Broadcast List
-                    </Link>
-                  </Menu.Item>
-                </SubMenu>
-                <Menu.Item key='4' icon={<ContainerOutlined />}>
-                  Send Invite To Friend
-                </Menu.Item>
-                <Menu.Item key='19' icon={<ContainerOutlined />}>
-                  Inbox
-                </Menu.Item>
-                <SubMenu key='sub2' icon={<AppstoreOutlined />} title='Settings'>
-                  <Menu.Item key='9'>Option 9</Menu.Item>
-                  <Menu.Item key='10'>Option 10</Menu.Item>
-                  <SubMenu key='sub3' title='Submenu'>
-                    <Menu.Item key='11'>Option 11</Menu.Item>
-                    <Menu.Item key='12'>Option 12</Menu.Item>
+                  <SubMenu key='sub1' icon={<UsergroupAddOutlined />} title='Connections'>
+                    <Menu.Item key='5'>
+                      <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}/connections`}>
+                        Connections
+                      </Link>
+                    </Menu.Item>
+                    <Menu.Item key='6'>
+                      <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}/connections`}>
+                        Groups
+                      </Link>
+                    </Menu.Item>
+                    <Menu.Item key='7'>
+                      <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}/connections`}>
+                        Broadcast List
+                      </Link>
+                    </Menu.Item>
                   </SubMenu>
-                </SubMenu>
-                <Menu.Item key='13' icon={<ContainerOutlined />}>
-                  CAREER RESOURCES
-                </Menu.Item>
-              </Menu>
-            </Row>
-          </div>
-        </Sider>
-        <Content className={props.blurBackground ? 'blurBg' : ''} style={{ marginTop: '20px' }}>
-          <div className='site-layout-content'>{props.content}</div>
-        </Content>
-        <Sider
-          width={'30%'}
-          style={{ background: '#f0f2f5' }}
-          className={props.blurBackground ? 'blurBg' : ''}>
-          <ChatList></ChatList>
-        </Sider>
+                  <Menu.Item key='4' icon={<ContainerOutlined />}>
+                    Send Invite To Friend
+                  </Menu.Item>
+                  <Menu.Item key='19' icon={<ContainerOutlined />}>
+                    Inbox
+                  </Menu.Item>
+                  <SubMenu key='sub2' icon={<AppstoreOutlined />} title='Settings'>
+                    <Menu.Item key='9'>Option 9</Menu.Item>
+                    <Menu.Item key='10'>Option 10</Menu.Item>
+                    <SubMenu key='sub3' title='Submenu'>
+                      <Menu.Item key='11'>Option 11</Menu.Item>
+                      <Menu.Item key='12'>Option 12</Menu.Item>
+                    </SubMenu>
+                  </SubMenu>
+                  <Menu.Item key='13' icon={<ContainerOutlined />}>
+                    CAREER RESOURCES
+                  </Menu.Item>
+                </Menu>
+              </Row>
+            </div>
+          </Sider>
+          <Content className={props.blurBackground ? 'blurBg' : ''} style={{ marginTop: '20px' }}>
+            <div className='site-layout-content'>{props.content}</div>
+          </Content>
+          <Sider
+            width={'30%'}
+            style={{ background: '#f0f2f5' }}
+            className={props.blurBackground ? 'blurBg' : ''}>
+            {/* <ChatList></ChatList> */}
+          </Sider>
+        </Layout>
+        <Footer style={{ textAlign: 'center' }}>Mentor Link App ©2020</Footer>
       </Layout>
-      <Footer style={{ textAlign: 'center' }}>Mentor Link App ©2020</Footer>
-    </Layout>
+      <ChatList></ChatList>
+    </>
   );
 };
 

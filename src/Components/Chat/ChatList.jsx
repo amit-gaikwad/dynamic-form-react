@@ -1,5 +1,5 @@
-import { Card, Row, Input, List, Avatar } from 'antd';
-import React from 'react';
+import { Card, Row, Input, List, Avatar, Divider } from 'antd';
+import React, { useLayoutEffect } from 'react';
 import { useState } from 'react';
 
 // const data = [
@@ -55,32 +55,102 @@ const data = [
       'I am on the way, we can tech a look after I reach there',
       'Comedy for the classy has a spot at Zinque in Downtown Los Angeles.New comics every Sunday at 830p. Produced by Mitchell Lamar.939 S Broadway.'
     ]
+  },
+  {
+    title: 'Amit Gaikwad',
+    messages: [
+      'How are you',
+      'Renegade San Francisco returns with 275+ creatives for a springtime marketplace on August 29 + 30 at Fort Mason Center Festival Pavilion. Renegade Craft is free to attend & all are welcome.'
+    ]
+  },
+  {
+    title: 'Mrunal Umate',
+    messages: [
+      'I am at Pune Center',
+      'Get an exclusive inside look at the future of blockchain and crypto in our system. Join the Reimagine "Disrupt The System" Virtual Conference, a 72-hour live event bringing together industry leaders, universities, and enterprises innovating to solve real problems, now.'
+    ]
+  },
+  {
+    title: 'Ashok Patil',
+    messages: [
+      'Is there any alternative for JavaScript',
+      'Comedy for the classy has a spot at Zinque in Downtown Los Angeles.New comics every Sunday at 830p. Produced by Mitchell Lamar.939 S Broadway.'
+    ]
+  },
+  {
+    title: 'Nilesh Mane',
+    messages: [
+      'Something is wrong there, can you please check that?',
+      'Comedy for the classy has a spot at Zinque in Downtown Los Angeles.New comics every Sunday at 830p. Produced by Mitchell Lamar.939 S Broadway.'
+    ]
+  },
+  {
+    title: 'Suyog Jagtap',
+    messages: [
+      'I am on the way, we can tech a look after I reach there',
+      'Comedy for the classy has a spot at Zinque in Downtown Los Angeles.New comics every Sunday at 830p. Produced by Mitchell Lamar.939 S Broadway.'
+    ]
   }
 ];
+
+function useWindowSize() {
+  const [size, setSize] = useState([0, 0]);
+  useLayoutEffect(() => {
+    function updateSize() {
+      console.log('size changed');
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+  return size;
+}
+
 export const ChatList = () => {
   const [showMessaging, setshowMessaging] = useState(true);
+  const [width, height] = useWindowSize();
+  console.log('width', width, height);
+  const style = Object.assign({
+    height: (height * 72) / 100,
+    overflowY: 'auto',
+    paddingRight: '-10px'
+  });
   return (
     <div>
-      <div style={{ position: 'fixed', width: '20%' }}>
+      <div style={{ position: 'fixed', bottom: '0', right: '0%' }}>
         {showMessaging ? (
           <Card
             title='Messaging'
             bordered={true}
+            className='chatList'
             style={{
-              width: 350,
+              width: (width * 26) / 100,
+              height: (height * 80) / 100,
               margin: 20,
               borderRadius: '2px',
               boxShadow: '2px black'
             }}>
-            <Row>
+            <Row style={{ marginBottom: '6px' }}>
               <Input placeholder='Search Messages' />
             </Row>
             <List
               itemLayout='horizontal'
+              id='search-result'
               dataSource={data}
+              style={{
+                height: (height * 80) / 100 - 120,
+                overflowY: 'auto',
+                paddingRight: '-10px'
+              }}
               renderItem={(item) => {
                 return (
-                  <List.Item>
+                  <List.Item
+                    style={{
+                      cursor: 'pointer',
+                      border: '1px solid rgba(0, 0, 0, .125)',
+                      marginTop: '2px'
+                    }}>
                     <List.Item.Meta
                       avatar={
                         <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />

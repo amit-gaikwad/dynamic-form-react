@@ -35,11 +35,11 @@ export const HeaderComponent = (props) => {
                 Home
               </Link>
             </Menu.Item>
-            <Menu.Item key='2'>
+            {/* <Menu.Item key='2'>
               <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}/connections`}>
                 My Network
               </Link>
-            </Menu.Item>
+            </Menu.Item> */}
             <Menu.Item key='3'>
               {props.notificationsByUserId.length > 0 ? (
                 <Badge
