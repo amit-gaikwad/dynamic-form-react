@@ -8,6 +8,8 @@ import { NotificationsContainer } from './Components/Notifications/Notifications
 import { NetworkContainer } from './Components/Network/Network';
 import { NonEditableUserDetailsContainer } from './Components/UserDetails/NonEditableUserDetails';
 import { HomeContainer } from './Components/HomeComponent/HomeComponent';
+import { EventContainer } from './Components/Event/Event';
+import { PersonalChatContainer } from './Components/Chat/PersonalChat';
 
 export const AppRoutes = (props) => {
   return (
@@ -18,10 +20,16 @@ export const AppRoutes = (props) => {
       <Route exact path='/user/:id/notifications' component={NotificationsContainer} />
       <Route exact path='/user/:id/' component={UserDetailsContainer} />
       <Route exact path='/user/:id/home' component={HomeContainer} />
+      <Route exact path='/user/:id/create-event' component={EventContainer} />
       <Route
         exact
         path='/user/fromUserId/:id/toUserId/:toUserId'
         component={NonEditableUserDetailsContainer}
+      />
+      <Route
+        exact
+        path='/message/fromUserId/:id/toUserId/:toUserId'
+        component={PersonalChatContainer}
       />
     </Router>
   );

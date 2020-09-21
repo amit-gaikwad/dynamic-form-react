@@ -22,7 +22,6 @@ const PersonalDetailsWithCover = ({
   toUserId,
   sendConnectedUser
 }) => {
-  console.log('sendConnectedUser', sendConnectedUser);
   const sendConnectedUser1 = sendConnectedUser.attributes || [];
 
   const connectedUserIdsAttribute =

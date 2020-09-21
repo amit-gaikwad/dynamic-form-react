@@ -55,7 +55,6 @@ export const SearchComponent = (props) => {
         (attributes || []).find((a) => a.attribute.keyName === 'search') || {};
       const options = get(searchAttribute, 'attribute.keyValues', []);
       setOptionsData(options);
-      console.log('options', options);
       setselectedCategory(options[0]);
     }
   }, [props.systemTemplates]);

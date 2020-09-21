@@ -104,7 +104,6 @@ const HomeComponent = (props) => {
   }
   const fields = getFieldsFromAttributeModels(newResource.attributes || []);
 
-  console.log('postResources', postResources, fields);
   let user = {};
   if (props.personalDetailsByUserId[0]) {
     user = getFieldsValueFromAtributes(props.personalDetailsByUserId[0].attributes);

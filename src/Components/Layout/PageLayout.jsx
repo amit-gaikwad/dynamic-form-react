@@ -110,17 +110,22 @@ const PageLayoutComponent = (props) => {
               </Row>
             </div>
           </Sider>
-          <Content className={props.blurBackground ? 'blurBg' : ''} style={{ marginTop: '20px' }}>
+          <Content
+            className={props.blurBackground ? 'blurBg' : ''}
+            style={{
+              marginTop: '20px',
+              boxShadow: '0 0 0 1px rgba(0,0,0,.15), 0 2px 3px rgba(0,0,0,.2)'
+            }}>
             <div className='site-layout-content'>{props.content}</div>
           </Content>
           <Sider
             width={'30%'}
-            style={{ background: '#f0f2f5' }}
+            style={{ background: '#f5f5f5' }}
             className={props.blurBackground ? 'blurBg' : ''}>
             {/* <ChatList></ChatList> */}
           </Sider>
         </Layout>
-        <Footer style={{ textAlign: 'center' }}>Mentor Link App ©2020</Footer>
+        {/* <Footer style={{ textAlign: 'center' }}>Mentor Link App ©2020</Footer> */}
       </Layout>
       <ChatList></ChatList>
     </>

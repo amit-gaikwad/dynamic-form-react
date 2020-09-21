@@ -1,4 +1,4 @@
-import { Card, Row, Input, List, Avatar, Divider } from 'antd';
+import { Card, Row, Input, List, Avatar, Divider, Button } from 'antd';
 import React, { useLayoutEffect } from 'react';
 import { useState } from 'react';
 
@@ -97,7 +97,6 @@ function useWindowSize() {
   const [size, setSize] = useState([0, 0]);
   useLayoutEffect(() => {
     function updateSize() {
-      console.log('size changed');
       setSize([window.innerWidth, window.innerHeight]);
     }
     window.addEventListener('resize', updateSize);
@@ -110,7 +109,6 @@ function useWindowSize() {
 export const ChatList = () => {
   const [showMessaging, setshowMessaging] = useState(true);
   const [width, height] = useWindowSize();
-  console.log('width', width, height);
   const style = Object.assign({
     height: (height * 72) / 100,
     overflowY: 'auto',
@@ -130,7 +128,8 @@ export const ChatList = () => {
               margin: 20,
               borderRadius: '2px',
               boxShadow: '2px black'
-            }}>
+            }}
+            extra={<Button type='primary'>Start Chat</Button>}>
             <Row style={{ marginBottom: '6px' }}>
               <Input placeholder='Search Messages' />
             </Row>
@@ -139,7 +138,7 @@ export const ChatList = () => {
               id='search-result'
               dataSource={data}
               style={{
-                height: (height * 80) / 100 - 120,
+                height: (height * 80) / 100 - 125,
                 overflowY: 'auto',
                 paddingRight: '-10px'
               }}

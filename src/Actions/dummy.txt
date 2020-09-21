@@ -1,0 +1,37 @@
+Primary workflow -- P1
+• Login using either google or facebook or phone# (like whatsapp). (BE)
+• Middle column will be "the feed' from mentorlink (BE)
+○ It will show the events around interests, suggestions on the courses, jobs etc.(BE)
+
+
+
+Feed -- P1
+
+○ Follow-up (take notes, register, save for a later use, ask question to the mentor)
+○ Share it (with a specific connection or group)
+• Upvote/downvote will be used by the backend to show-more or avoid such items
+• Take notes, register (if event), save have their respective actions
+• Ask a question – use the same column to chat with the mentor (AI mentor or mentor)
+• Share – send via direct message (pops a new window with a search bar). User can choose among his/her
+connections or broadcast list or groups
+
+
+Chat – P1
+With chat column, on the top there will be list of recently connected mentors. By default there will
+always be mentorlink bot.
+Chat will be the right most column. Will show history and have a text input window.
+• Query the super mentor for to get more refined results
+If a user has mentors, then he can query a specific mentor. In case the user is querying a human
+mentor to ask a p2p question, it will show in the middle column. At the top would 1. name of the
+mentor 2. his/her star rating. There will be a search bar at the top.
+One could sign-up with a human mentor to get mentorship on an ongoing basis. Lower
+
+
+Connections -- P2
+Clicking on the connection will change the middle column (main) and it will now show 3 subsections,
+each individually scrollable: connections, groups, broadcast lists. There will be a search bar at the top.
+Next to search bar, there will be pull down menu to add a connection/group/bcast-list.
+One could click on each of these items (i.e. connection, group, ..) and get a pop-up window to get
+short info about that item. Pop will have 3 or 4 small actions e.g. get more info (which will give you
+summary, interests, profile in another window), send a message, delete..
+Groups, Broadcast list are lower priorities.

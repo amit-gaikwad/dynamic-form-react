@@ -11,9 +11,7 @@ import { UserOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import PersonalDetailsWithCover from './PersonalDetailsWithCover';
 
 export const PersonalDetails = (props) => {
-  const onHandleSubmit = (event) => {
-    console.log('event', event);
-  };
+  const onHandleSubmit = (event) => {};
   // const renderComponents = (details) => {
   //   return (
   //     <Row style={{ border: '1px solid', margin: '10px' }}>
