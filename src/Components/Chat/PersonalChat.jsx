@@ -7,6 +7,7 @@ import { DynamicFormContainer } from '../../Utils/getDynamicForm';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import moment from 'moment';
+import './ChatList.css';
 var stompClient = null;
 const sessionId = '12';
 
@@ -87,51 +88,83 @@ const PersonalChat = (props) => {
           <Row style={{ width: '100%' }}>Private Messages</Row>
 
           <Row style={{ width: '100%' }}>
-            {/* {this.state.broadcastMessage.length ?
-                  [<div id="history"><div id="old" onClick={this.fetchHostory}>Older</div><hr /><div id="today">Today</div></div>] : ""} */}
-
-            {/* {broadcastMessage.map((msg) => {
-                return ( */}
-            <List
-              style={{ width: '100%' }}
-              itemLayout='horizontal'
-              id='search-result'
-              dataSource={broadcastMessage}
-              // style={{
-              //   height: (height * 80) / 100 - 125,
-              //   overflowY: 'auto',
-              //   paddingRight: '-10px'
-              // }}
-              renderItem={(msg) => {
-                console.log('msg in table', msg);
-                return (
-                  <List.Item
-                    style={{
-                      cursor: 'pointer',
-                      border: '1px solid rgba(0, 0, 0, .125)',
-                      marginTop: '2px'
-                    }}
-                    extra={msg.sender === username && <span>{msg.message}</span>}>
-                    {msg.sender !== username && (
-                      <List.Item.Meta
-                        avatar={
-                          <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
-                        }
-                        title={
-                          <a href='https://ant.design'>
-                            {msg.sender}
-                            {`. ${moment(msg.dateTime).format('hh:mm a')}`}
-                          </a>
-                        }
-                        description={msg.message}
+            <div className='msg_history_container' id='search-result'>
+              {broadcastMessage.map((msg) => {
+                return msg.sender !== username ? (
+                  <div className='msg_history_left'>
+                    <div className='incomming_msg_avatar'>
+                      <Avatar
+                        size='large'
+                        src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
                       />
-                    )}
-                  </List.Item>
+                    </div>
+                    <div className='received_msg'>
+                      <div className='received_msg_text'>
+                        <div className='msg_actual_text'>{msg.message}</div>
+                        <div>12:30pm</div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className='msg_history_right'>
+                    <div className='outgoing_msg'>
+                      <div className='outgoing_msg_text'>
+                        <div className='msg_actual_text'>{msg.message}</div>
+                        <div>12:31pm</div>
+                      </div>
+                    </div>
+                  </div>
                 );
-              }}
-            />
-            {/* );
-              })} */}
+              })}
+            </div>
+
+            {broadcastMessage.map((msg) => {
+              return (
+                <></>
+                // <div className='msg_history_container'>
+                //   <div className='msg_history'>
+                //     <div className='incomming_msg_avatar'>(())</div>
+                //     <div className='received_msg'>
+                //       <div className='received_msg_text'>
+                //         <p>This is text from sender</p>
+                //         <div>12:30pm</div>
+                //       </div>
+                //     </div>
+                //   </div>
+                //   <div className='msg_history'>
+                //     <div className='outgoing_msg'>
+                //       <div className='outgoing_msg_text'>
+                //         <p>This is text from me</p>
+                //         <div>12:31pm</div>
+                //       </div>
+                //     </div>
+                //   </div>
+                // </div>
+
+                // <List.Item
+                //   style={{
+                //     cursor: 'pointer',
+                //     border: '1px solid rgba(0, 0, 0, .125)',
+                //     marginTop: '2px'
+                //   }}
+                //   extra={msg.sender === username && <span>{msg.message}</span>}>
+                //   {msg.sender !== username && (
+                //     <List.Item.Meta
+                //       avatar={
+                //         <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
+                //       }
+                //       title={
+                //         <a href='https://ant.design'>
+                //           {msg.sender}
+                //           {`. ${moment(msg.dateTime).format('hh:mm a')}`}
+                //         </a>
+                //       }
+                //       description={msg.message}
+                //     />
+                //   )}
+                // </List.Item>
+              );
+            })}
           </Row>
           <Row style={{ width: '100%' }}>
             <Input.TextArea onChange={onTextChange} value={messageText} />

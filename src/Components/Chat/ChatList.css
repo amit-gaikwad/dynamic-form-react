@@ -1,0 +1,60 @@
+
+.msg_history_container{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 493px;
+  overflow-y: auto;
+}
+
+.msg_history_left {
+  display: flex;
+}
+
+.incomming_msg_avatar{
+  width: 6%;
+  display: inline-block;
+  border-radius: 50px;
+  height: 40px;
+}
+
+.received_msg{
+  width: 92%;
+  vertical-align: top;
+}
+
+.received_msg_text{
+  width: 57%;
+}
+
+.received_msg_text .msg_actual_text{
+  background: #eee;
+  border-radius: 14px;
+  color: black;
+  width: 100%;
+  padding: 16px;
+}
+
+.received_msg_text div{
+  direction: rtl;
+}
+
+.msg_history{
+margin: 26px 0 26px;
+}
+
+.outgoing_msg{
+  float: right;
+  width: 46%;
+}
+
+.outgoing_msg_text .msg_actual_text {
+  width: 100%;
+  background: green;
+  border-radius: 10px;
+  padding: 12px;
+  color: white;
+}
+.outgoing_msg_text div{
+direction: rtl;
+}
