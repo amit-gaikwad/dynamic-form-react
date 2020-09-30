@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import moment from 'moment';
 var stompClient = null;
+const sessionId = '12';
 
 const PersonalChat = (props) => {
   const [broadcastMessage, setbroadcastMessage] = useState([]);
@@ -17,67 +18,60 @@ const PersonalChat = (props) => {
 
   const onMessageReceived = (payload) => {
     var message = JSON.parse(payload.body);
+    console.log('message', message);
     if (message.type === 'CHAT') {
-      // roomNotification.map((notification, i) => {
-      //   if (notification.sender === message.sender + ' ~ joined') {
-      //     notification.status = 'online';
-      //   }
-      // });
       broadcastMessage.push({
-        message: message.content,
-        sender: message.sender,
-        dateTime: message.dateTime
+        message: message.text,
+        sender: message.from,
+        dateTime: message.time
       });
       setbroadcastMessage(broadcastMessage);
     }
   };
 
   const sendMessage = () => {
-    if (stompClient) {
-      var chatMessage = {
-        sender: username,
-        content: messageText,
+    var messageContent = messageText.trim();
+    if (messageContent && stompClient) {
+      var message = {
+        from: username,
+        to: toUsername,
+        text: messageText,
+        uniqueID: sessionId,
         type: 'CHAT'
       };
-      // send public message
-      stompClient.send('/app/sendMessage', {}, JSON.stringify(chatMessage));
+      stompClient.send('/app/secured/room', {}, JSON.stringify(message));
       setmessageText('');
     }
-    // if (stompClient) {
-    //   var chatMessage = {
-    //     sender: username,
-    //     receiver: toUsername,
-    //     content: messageText,
-    //     type: 'CHAT'
-    //   };
-    //   stompClient.send('/app/sendPrivateMessage', {}, JSON.stringify(chatMessage));
-    // }
   };
 
   const onConnected = () => {
-    // Subscribing to the public topic
-    stompClient.subscribe('/topic/pubic', onMessageReceived);
+    const fromusername = username;
+    const tousername = toUsername;
 
-    // Registering user to server as a public chat user
-    stompClient.send('/app/addUser', {}, JSON.stringify({ sender: username, type: 'JOIN' }));
+    //	 var user = message.
+    // Subscribe to the Public Topic
+    stompClient.subscribe('/secured/user/queue/' + tousername + '/' + sessionId, onMessageReceived);
 
-    // // Subscribing to the private topic
-    // const name = toUsername > username ? toUsername : username;
-    // stompClient.subscribe('/user/' + name.toString().toLowerCase() + '/reply', onMessageReceived);
+    var message = {
+      from: fromusername,
+      to: tousername,
+      text: 'hi', // messageInput.value || '',
+      uniqueID: sessionId,
+      type: 'JOIN'
+    };
 
-    // // Registering user to server as a private chat user
-    // stompClient.send(
-    //   '/app/addPrivateUser',
-    //   {},
-    //   JSON.stringify({ sender: toUsername, type: 'JOIN' })
-    // );
+    // Tell your username to the server
+    stompClient.send('/app/secured/room', {}, JSON.stringify(message));
+
+    //  connectingElement.classList.add('hidden');
   };
 
   useEffect(() => {
     const Stomp = require('stompjs');
     var SockJS = require('sockjs-client');
-    SockJS = new SockJS('http://localhost:8080/ws');
-    stompClient = Stomp.over(SockJS);
+    var socket = new SockJS('http://localhost:8080/secured/room');
+    stompClient = Stomp.over(socket);
+
     stompClient.connect({}, onConnected);
   }, []);
 
@@ -91,10 +85,7 @@ const PersonalChat = (props) => {
       content={
         <Row style={{ width: '100%' }}>
           <Row style={{ width: '100%' }}>Private Messages</Row>
-          <Row style={{ width: '100%' }}>
-            <Input onChange={onTextChange} value={messageText} />
-            <Button onClick={sendMessage}>Send</Button>
-          </Row>
+
           <Row style={{ width: '100%' }}>
             {/* {this.state.broadcastMessage.length ?
                   [<div id="history"><div id="old" onClick={this.fetchHostory}>Older</div><hr /><div id="today">Today</div></div>] : ""} */}
@@ -112,31 +103,39 @@ const PersonalChat = (props) => {
               //   paddingRight: '-10px'
               // }}
               renderItem={(msg) => {
+                console.log('msg in table', msg);
                 return (
                   <List.Item
                     style={{
                       cursor: 'pointer',
                       border: '1px solid rgba(0, 0, 0, .125)',
                       marginTop: '2px'
-                    }}>
-                    <List.Item.Meta
-                      avatar={
-                        <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
-                      }
-                      title={
-                        <a href='https://ant.design'>
-                          {msg.sender}
-                          {`. ${moment(msg.dateTime).format('hh:mm a')}`}
-                        </a>
-                      }
-                      description={msg.message}
-                    />
+                    }}
+                    extra={msg.sender === username && <span>{msg.message}</span>}>
+                    {msg.sender !== username && (
+                      <List.Item.Meta
+                        avatar={
+                          <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
+                        }
+                        title={
+                          <a href='https://ant.design'>
+                            {msg.sender}
+                            {`. ${moment(msg.dateTime).format('hh:mm a')}`}
+                          </a>
+                        }
+                        description={msg.message}
+                      />
+                    )}
                   </List.Item>
                 );
               }}
             />
             {/* );
               })} */}
+          </Row>
+          <Row style={{ width: '100%' }}>
+            <Input.TextArea onChange={onTextChange} value={messageText} />
+            <Button onClick={sendMessage}>Send</Button>
           </Row>
         </Row>
       }
