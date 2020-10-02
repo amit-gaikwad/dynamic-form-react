@@ -19,6 +19,8 @@ const PersonalChat = (props) => {
 
   const onMessageReceived = (payload) => {
     var message = JSON.parse(payload.body);
+    const arr = [...broadcastMessage];
+    console.log('broadcastMessage', broadcastMessage, arr);
     console.log('message', message);
     if (message.type === 'CHAT') {
       broadcastMessage.push({
@@ -26,7 +28,7 @@ const PersonalChat = (props) => {
         sender: message.from,
         dateTime: message.time
       });
-      setbroadcastMessage(broadcastMessage);
+      setbroadcastMessage([...broadcastMessage]);
     }
   };
 
@@ -74,6 +76,9 @@ const PersonalChat = (props) => {
     stompClient = Stomp.over(socket);
 
     stompClient.connect({}, onConnected);
+
+    const username = props.match.params.id;
+    const toUsername = props.match.params.toUserId;
   }, []);
 
   const onTextChange = (event) => {

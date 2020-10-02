@@ -9,6 +9,7 @@
 
 .msg_history_left {
   display: flex;
+  margin-bottom: 10px;
 }
 
 .incomming_msg_avatar{
@@ -36,12 +37,10 @@
 }
 
 .received_msg_text div{
+  font-size: 13px;
   direction: rtl;
 }
 
-.msg_history{
-margin: 26px 0 26px;
-}
 
 .outgoing_msg{
   float: right;
@@ -56,5 +55,6 @@ margin: 26px 0 26px;
   color: white;
 }
 .outgoing_msg_text div{
-direction: rtl;
+  font-size: 13px;
+  direction: rtl;
 }
