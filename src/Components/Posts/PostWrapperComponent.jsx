@@ -13,6 +13,13 @@ import {
   ShareAltOutlined
 } from '@ant-design/icons';
 
+export const IconText = ({ icon, text }) => (
+  <Space>
+    {React.createElement(icon)}
+    {text}
+  </Space>
+);
+
 export const PostWrapperComponent = (props) => {
   const [likes, setLikes] = useState(0);
   const [dislikes, setDislikes] = useState(0);
@@ -70,12 +77,6 @@ export const PostWrapperComponent = (props) => {
         <IconText icon={ShareAltOutlined} text='Share' key='list-vertical-star-o' />
       </List.Item>
     </List>
-  );
-  const IconText = ({ icon, text }) => (
-    <Space>
-      {React.createElement(icon)}
-      {text}
-    </Space>
   );
 
   return (

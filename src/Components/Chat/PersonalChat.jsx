@@ -7,6 +7,17 @@ import { DynamicFormContainer } from '../../Utils/getDynamicForm';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import moment from 'moment';
+import { IconText } from '../Posts/PostWrapperComponent';
+import {
+  MessageOutlined,
+  StarOutlined,
+  DownCircleOutlined,
+  CreditCardOutlined,
+  BookOutlined,
+  SaveOutlined,
+  QuestionCircleOutlined,
+  ShareAltOutlined
+} from '@ant-design/icons';
 import './ChatList.css';
 var stompClient = null;
 const sessionId = '12';
@@ -20,8 +31,6 @@ const PersonalChat = (props) => {
   const onMessageReceived = (payload) => {
     var message = JSON.parse(payload.body);
     const arr = [...broadcastMessage];
-    console.log('broadcastMessage', broadcastMessage, arr);
-    console.log('message', message);
     if (message.type === 'CHAT') {
       broadcastMessage.push({
         message: message.text,
@@ -90,13 +99,26 @@ const PersonalChat = (props) => {
       {...props}
       content={
         <Row style={{ width: '100%' }}>
-          <Row style={{ width: '100%' }}>Private Messages</Row>
+          <Row style={{ width: '100%', borderBottom: '2px solid white' }} className='chat_parent'>
+            <div class='chat_header'>
+              <Avatar
+                size='large'
+                src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+              />
+              <div class='chat_about'>
+                <div class='chat_with'>Amit Gaikwad</div>
+                <div class='chat_num_messages'>
+                  <IconText icon={StarOutlined} text='156' key='list-vertical-star-o' />
+                </div>
+              </div>
+            </div>
+          </Row>
 
-          <Row style={{ width: '100%' }}>
+          <Row style={{ width: '100%', padding: 10 }} className='chat_parent'>
             <div className='msg_history_container' id='search-result'>
-              {broadcastMessage.map((msg) => {
+              {broadcastMessage.map((msg, index) => {
                 return msg.sender !== username ? (
-                  <div className='msg_history_left'>
+                  <div className='msg_history_left' key={index}>
                     <div className='incomming_msg_avatar'>
                       <Avatar
                         size='large'
@@ -111,7 +133,7 @@ const PersonalChat = (props) => {
                     </div>
                   </div>
                 ) : (
-                  <div className='msg_history_right'>
+                  <div className='msg_history_right' key={index}>
                     <div className='outgoing_msg'>
                       <div className='outgoing_msg_text'>
                         <div className='msg_actual_text'>{msg.message}</div>
@@ -122,58 +144,20 @@ const PersonalChat = (props) => {
                 );
               })}
             </div>
-
-            {broadcastMessage.map((msg) => {
-              return (
-                <></>
-                // <div className='msg_history_container'>
-                //   <div className='msg_history'>
-                //     <div className='incomming_msg_avatar'>(())</div>
-                //     <div className='received_msg'>
-                //       <div className='received_msg_text'>
-                //         <p>This is text from sender</p>
-                //         <div>12:30pm</div>
-                //       </div>
-                //     </div>
-                //   </div>
-                //   <div className='msg_history'>
-                //     <div className='outgoing_msg'>
-                //       <div className='outgoing_msg_text'>
-                //         <p>This is text from me</p>
-                //         <div>12:31pm</div>
-                //       </div>
-                //     </div>
-                //   </div>
-                // </div>
-
-                // <List.Item
-                //   style={{
-                //     cursor: 'pointer',
-                //     border: '1px solid rgba(0, 0, 0, .125)',
-                //     marginTop: '2px'
-                //   }}
-                //   extra={msg.sender === username && <span>{msg.message}</span>}>
-                //   {msg.sender !== username && (
-                //     <List.Item.Meta
-                //       avatar={
-                //         <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
-                //       }
-                //       title={
-                //         <a href='https://ant.design'>
-                //           {msg.sender}
-                //           {`. ${moment(msg.dateTime).format('hh:mm a')}`}
-                //         </a>
-                //       }
-                //       description={msg.message}
-                //     />
-                //   )}
-                // </List.Item>
-              );
-            })}
           </Row>
-          <Row style={{ width: '100%' }}>
-            <Input.TextArea onChange={onTextChange} value={messageText} />
-            <Button onClick={sendMessage}>Send</Button>
+          <Row style={{ width: '100%', marginTop: 10 }} className='chat_bottom_section'>
+            <Col span={21}>
+              <Input.TextArea
+                autoSize={{ minRows: 3, maxRows: 3 }}
+                className='chat_textbox'
+                onChange={onTextChange}
+                value={messageText}
+                placeholder='Type your message'
+              />
+            </Col>
+            <Col span={3} offset={0}>
+              <Button onClick={sendMessage}>Send</Button>
+            </Col>
           </Row>
         </Row>
       }
