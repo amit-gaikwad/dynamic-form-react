@@ -45,10 +45,10 @@ const PersonalChat = (props) => {
     var messageContent = messageText.trim();
     if (messageContent && stompClient) {
       var message = {
-        from: username,
-        to: toUsername,
-        text: messageText,
-        uniqueID: sessionId,
+        sender: username,
+        sendee: toUsername,
+        content: messageText,
+        uniqueId: sessionId,
         type: 'CHAT'
       };
       stompClient.send('/app/secured/room', {}, JSON.stringify(message));
@@ -62,10 +62,10 @@ const PersonalChat = (props) => {
 
     stompClient.subscribe('/secured/user/queue/' + tousername + '/' + sessionId, onMessageReceived);
     var message = {
-      from: fromusername,
-      to: tousername,
-      text: 'hi',
-      uniqueID: sessionId,
+      sender: fromusername,
+      sendee: tousername,
+      content: 'hi',
+      uniqueId: sessionId,
       type: 'JOIN'
     };
 
@@ -78,7 +78,7 @@ const PersonalChat = (props) => {
   useEffect(() => {
     const Stomp = require('stompjs');
     var SockJS = require('sockjs-client');
-    var socket = new SockJS('http://localhost:8080/secured/room');
+    var socket = new SockJS('http://localhost:8110/secured/room');
     stompClient = Stomp.over(socket);
 
     stompClient.connect({}, onConnected);

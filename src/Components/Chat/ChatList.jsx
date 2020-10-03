@@ -1,6 +1,7 @@
-import { Card, Row, Input, List, Avatar, Divider, Button } from 'antd';
+import { Card, Row, Input, List, Avatar, Divider, Button, Col, Select } from 'antd';
 import React, { useLayoutEffect } from 'react';
 import { useState } from 'react';
+import { Collapse } from 'antd';
 
 // const data = [
 //   {
@@ -102,6 +103,50 @@ const data = [
     userId: 'suyog'
   }
 ];
+const data2 = [
+  {
+    title: 'Amit Gaikwad',
+    userId: 'amit',
+    messages: [
+      'How are you',
+      'Renegade San Francisco returns with 275+ creatives for a springtime marketplace on August 29 + 30 at Fort Mason Center Festival Pavilion. Renegade Craft is free to attend & all are welcome.'
+    ]
+  },
+  {
+    title: 'Mrunal Umate',
+    messages: [
+      'I am at Pune Center',
+      'Get an exclusive inside look at the future of blockchain and crypto in our system. Join the Reimagine "Disrupt The System" Virtual Conference, a 72-hour live event bringing together industry leaders, universities, and enterprises innovating to solve real problems, now.'
+    ],
+    userId: 'mrunal'
+  },
+  {
+    title: 'Ashok Patil',
+    messages: [
+      'Is there any alternative for JavaScript',
+      'Comedy for the classy has a spot at Zinque in Downtown Los Angeles.New comics every Sunday at 830p. Produced by Mitchell Lamar.939 S Broadway.'
+    ],
+    userId: 'ashok'
+  },
+  {
+    title: 'Nilesh Mane',
+    messages: [
+      'Something is wrong there, can you please check that?',
+      'Comedy for the classy has a spot at Zinque in Downtown Los Angeles.New comics every Sunday at 830p. Produced by Mitchell Lamar.939 S Broadway.'
+    ],
+    userId: 'nilesh'
+  },
+  {
+    title: 'Suyog Jagtap',
+    messages: [
+      'I am on the way, we can tech a look after I reach there',
+      'Comedy for the classy has a spot at Zinque in Downtown Los Angeles.New comics every Sunday at 830p. Produced by Mitchell Lamar.939 S Broadway.'
+    ],
+    userId: 'suyog'
+  }
+];
+
+const searchOptions = ['Message', 'User', 'Group'];
 
 function useWindowSize() {
   const [size, setSize] = useState([0, 0]);
@@ -115,8 +160,10 @@ function useWindowSize() {
   }, []);
   return size;
 }
+const { Panel } = Collapse;
 
 export const ChatList = (props) => {
+  const [selectedTypeSearch, setselectedTypeSearch] = useState(searchOptions[0]);
   const [showMessaging, setshowMessaging] = useState(true);
   const [width, height] = useWindowSize();
   const username = props.match.params.id;
@@ -126,6 +173,15 @@ export const ChatList = (props) => {
     overflowY: 'auto',
     paddingRight: '-10px'
   });
+
+  const handleChange = (value) => {
+    setselectedTypeSearch(value);
+    // props.fetchUsersBySearchString({
+    //   userId: props.userId,
+    //   categories: value,
+    //   searchStr: searchString
+    // });
+  };
   return (
     <div>
       <div style={{ position: 'fixed', bottom: '0', right: '0%' }}>
@@ -141,43 +197,109 @@ export const ChatList = (props) => {
               borderRadius: '2px',
               boxShadow: '2px black'
             }}
-            extra={<Button type='primary'>Start Chat</Button>}>
+            // extra={<Button type='primary'>Start Chat</Button>}
+          >
             <Row style={{ marginBottom: '6px' }}>
-              <Input placeholder='Search Messages' />
+              <Col span={17}>
+                <Input placeholder={`Search ${selectedTypeSearch}`} />
+              </Col>
+              <Col span={6} offset={1}>
+                <Select
+                  style={{ width: '100%' }}
+                  placeholder='Please select'
+                  value={selectedTypeSearch}
+                  onChange={handleChange}>
+                  {searchOptions.map((op, i) => (
+                    <Select.Option key={i.toString(36) + i} value={op}>
+                      {op}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Col>
             </Row>
-            <List
-              itemLayout='horizontal'
-              id='search-result'
-              dataSource={data}
-              style={{
-                height: (height * 80) / 100 - 125,
-                overflowY: 'auto',
-                paddingRight: '-10px'
-              }}
-              renderItem={(item) => {
-                return (
-                  <List.Item
-                    style={{
-                      cursor: 'pointer',
-                      border: '1px solid rgba(0, 0, 0, .125)',
-                      marginTop: '2px'
-                    }}>
-                    <List.Item.Meta
-                      avatar={
-                        <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
-                      }
-                      title={
-                        <a href={`/message/fromUserId/${username}/toUserId/${item.userId}`}>
-                          {item.title}
-                        </a>
-                      }
-                      description={item.messages[0]}
-                      //description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut eget bibendum elit. Fusce facilisis accumsan dui, efficitur commodo ante facilisis ut.'
-                    />
-                  </List.Item>
-                );
-              }}
-            />
+            <Collapse defaultActiveKey={['1']} accordion>
+              <Panel header='Personal Chat' key='1'>
+                <List
+                  itemLayout='horizontal'
+                  id='search-result'
+                  dataSource={data}
+                  style={{
+                    height: (height * 80) / 100 - 260,
+                    overflowY: 'auto',
+                    paddingRight: '-10px'
+                  }}
+                  renderItem={(item) => {
+                    return (
+                      <List.Item
+                        extra={[
+                          <Button>
+                            <a href={`/message/fromUserId/${username}/toUserId/${item.userId}`}>
+                              Start Chat
+                            </a>
+                          </Button>
+                        ]}
+                        style={{
+                          cursor: 'pointer',
+                          border: '1px solid rgba(0, 0, 0, .125)',
+                          marginTop: '2px'
+                        }}>
+                        <List.Item.Meta
+                          avatar={
+                            <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
+                          }
+                          title={
+                            <a href={`/message/fromUserId/${username}/toUserId/${item.userId}`}>
+                              {item.title}
+                            </a>
+                          }
+                          description={
+                            <Collapse defaultActiveKey={['1']}>
+                              <Panel header='History'>{item.messages[0]}</Panel>
+                            </Collapse>
+                          }
+                          //description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut eget bibendum elit. Fusce facilisis accumsan dui, efficitur commodo ante facilisis ut.'
+                        />
+                      </List.Item>
+                    );
+                  }}
+                />
+              </Panel>
+              <Panel header='Group Chat' key='2'>
+                <List
+                  itemLayout='horizontal'
+                  id='search-result'
+                  dataSource={data}
+                  style={{
+                    height: (height * 80) / 100 - 260,
+                    overflowY: 'auto',
+                    paddingRight: '-10px'
+                  }}
+                  renderItem={(item) => {
+                    return (
+                      <List.Item
+                        style={{
+                          cursor: 'pointer',
+                          border: '1px solid rgba(0, 0, 0, .125)',
+                          marginTop: '2px'
+                        }}>
+                        <List.Item.Meta
+                          avatar={
+                            <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
+                          }
+                          title={
+                            <a href={`/message/fromUserId/${username}/toUserId/${item.userId}`}>
+                              {item.title}
+                            </a>
+                          }
+                          description={item.messages[0]}
+                          //description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut eget bibendum elit. Fusce facilisis accumsan dui, efficitur commodo ante facilisis ut.'
+                        />
+                      </List.Item>
+                    );
+                  }}
+                />
+              </Panel>
+            </Collapse>
           </Card>
         ) : (
           <Card title='Messaging' bordered={true} style={{ width: 350, margin: 20 }}></Card>

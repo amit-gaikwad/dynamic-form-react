@@ -97,9 +97,7 @@ const LeftSection = (props) => {
           </Menu.Item>
         </SubMenu> */}
         <Menu.Item key='sub1' icon={<UsergroupAddOutlined />}>
-          <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}/connections`}>
-            Connections
-          </Link>
+          <Link to={`/user/${userId}/connections`}>Connections</Link>
         </Menu.Item>
         <Menu.Item key='4' icon={<ContainerOutlined />}>
           Send Invite To Friend

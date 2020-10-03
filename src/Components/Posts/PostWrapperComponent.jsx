@@ -12,6 +12,8 @@ import {
   QuestionCircleOutlined,
   ShareAltOutlined
 } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
+import ShortInfoComponent from '../PersonalDetails/ShortInfo';
 
 export const IconText = ({ icon, text }) => (
   <Space>
@@ -53,16 +55,28 @@ export const PostWrapperComponent = (props) => {
     <span key='comment-basic-reply-to'> Add Comment</span>
   ];
 
-  const handleOptionsShow = () => {
-    setshowOptions(!showOptions);
+  const handleOptionsShow = (e) => {
+    if (e.nativeEvent && e.nativeEvent.which === 1) {
+    } else if (e.nativeEvent && e.nativeEvent.which === 3) {
+      setshowOptions(!showOptions);
+    } else {
+      setshowOptions(false);
+    }
+    e.preventDefault && e.preventDefault();
   };
+
   const popUpOptions = () => (
     <List style={{ width: '150px' }}>
       <List.Item>
         <IconText icon={LikeFilled} text='Up Vote' key='list-vertical-star-o' />
       </List.Item>
       <List.Item>
-        <IconText icon={CreditCardOutlined} text='Take A Notes' key='list-vertical-star-o' />
+        <IconText icon={DislikeOutlined} text='Down Vote' key='list-vertical-star-o' />
+      </List.Item>
+      <List.Item>
+        <Link to={`/message/fromUserId/${props.user.userId}/toUserId/${props.user.userId}`}>
+          <IconText icon={CreditCardOutlined} text='Take A Notes' key='list-vertical-star-o' />
+        </Link>
       </List.Item>
       <List.Item>
         <IconText icon={BookOutlined} text='Register' key='list-vertical-star-o' />
@@ -71,7 +85,9 @@ export const PostWrapperComponent = (props) => {
         <IconText icon={SaveOutlined} text='Save' key='list-vertical-star-o' />
       </List.Item>
       <List.Item>
-        <IconText icon={QuestionCircleOutlined} text='Ask Question' key='list-vertical-star-o' />
+        <Link to={`/message/fromUserId/${props.user.userId}/toUserId/${props.user.userId}`}>
+          <IconText icon={QuestionCircleOutlined} text='Ask Question' key='list-vertical-star-o' />
+        </Link>
       </List.Item>
       <List.Item>
         <IconText icon={ShareAltOutlined} text='Share' key='list-vertical-star-o' />
@@ -81,7 +97,8 @@ export const PostWrapperComponent = (props) => {
 
   return (
     <List.Item
-      onClick={handleOptionsShow}
+      //   onClick={handleOptionsShow}
+      onContextMenu={handleOptionsShow}
       key={props.id}
       actions={[
         <IconText icon={StarOutlined} text='156' key='list-vertical-star-o' />,
@@ -114,7 +131,14 @@ export const PostWrapperComponent = (props) => {
       }>
       <List.Item.Meta
         avatar={<Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />}
-        title={<a>{`${props.user['First Name']} ${props.user['Last Name']}`}</a>}
+        title={
+          <Tooltip
+            placement='left'
+            color='white'
+            title={<ShortInfoComponent user={props.user}></ShortInfoComponent>}>
+            <a>{`${props.user['First Name']} ${props.user['Last Name']}`}</a>
+          </Tooltip>
+        }
         description={
           'Ant Design, a design language for background applications, is refined by Ant UED Team.'
         }

@@ -27,7 +27,7 @@
 
 .received_msg_text{
   min-width: 10px;
-  max-width: 57%;
+  max-width: 80%;
   display: inline-block;
 }
 
@@ -48,7 +48,7 @@
 .outgoing_msg{
   float: right;
   min-width: 10px;
-  max-width: 46%;
+  max-width: 60%;
 }
 
 .outgoing_msg_text .msg_actual_text {

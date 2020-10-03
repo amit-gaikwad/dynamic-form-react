@@ -17,6 +17,7 @@ import { omit, cloneDeep, isEmpty, first } from 'lodash';
 import { Loader } from '../Loader/Loader';
 import { PostWrapperComponent } from '../Posts/PostWrapperComponent';
 import { Col, Row, Card, Tooltip, Divider, List } from 'antd';
+import ShortInfoComponent from '../PersonalDetails/ShortInfo';
 
 const HomeComponent = (props) => {
   const userId = props.match.params.id;
@@ -129,6 +130,8 @@ const HomeComponent = (props) => {
                     //  currentIndex={currentResourceAttribute.keyValue || 0}
                     onHandleSubmit={onHandleSubmit}></DynamicFormContainer>
                 </Col>
+                <Divider></Divider>
+                <ShortInfoComponent user={user}></ShortInfoComponent>
                 <Divider></Divider>
                 <Row style={{ width: '100%' }} gutter={[16, 16]}>
                   <List itemLayout='vertical' size='large'>
