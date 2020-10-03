@@ -225,10 +225,12 @@ export function fetchPersonalDetailsByUserIdError(error) {
   };
 }
 
-export const fetchPersonalDetailsByUserId = (userId) => {
+export const fetchPersonalDetailsByUserId = (userId, notDispatch = false) => {
   return (dispatch) => {
-    dispatch(fetchPersonalDetailsByUserIdLoading());
-    Axios.get(
+    if (!notDispatch) {
+      dispatch(fetchPersonalDetailsByUserIdLoading());
+    }
+    return Axios.get(
       `http://localhost:8105/mentor/resources/user/5f420797fc99e13c8cf8d145/` +
         userId +
         '/Personal Details'
@@ -237,11 +239,14 @@ export const fetchPersonalDetailsByUserId = (userId) => {
         if (res.error) {
           throw res.error;
         }
-        dispatch(fetchPersonalDetailsByUserIdSuccess(res.data));
+        if (!notDispatch) {
+          dispatch(fetchPersonalDetailsByUserIdSuccess(res.data));
+        }
         return res;
       })
       .catch((error) => {
         dispatch(fetchPersonalDetailsByUserIdError(error));
+        return error;
       });
   };
 };

@@ -2,31 +2,31 @@ import React from 'react';
 import { PageLayout } from '../Layout/PageLayout';
 import { connect } from 'react-redux';
 import { Button, Col, Divider, Input, Row, List, Avatar } from 'antd';
-import { getFieldsFromAttributeModels } from '../../Utils/common-methods';
+import {
+  getFieldsFromAttributeModels,
+  getFieldsValueFromAtributes
+} from '../../Utils/common-methods';
 import { DynamicFormContainer } from '../../Utils/getDynamicForm';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import moment from 'moment';
 import { IconText } from '../Posts/PostWrapperComponent';
-import {
-  MessageOutlined,
-  StarOutlined,
-  DownCircleOutlined,
-  CreditCardOutlined,
-  BookOutlined,
-  SaveOutlined,
-  QuestionCircleOutlined,
-  ShareAltOutlined
-} from '@ant-design/icons';
+import { StarOutlined } from '@ant-design/icons';
 import './ChatList.css';
+import { fetchPersonalDetailsByUserId } from '../../Actions/ResourceAction';
+import { get } from 'lodash';
 var stompClient = null;
-const sessionId = '12';
 
 const PersonalChat = (props) => {
   const [broadcastMessage, setbroadcastMessage] = useState([]);
+  const [toUserDetails, settoUserDetails] = useState({});
   const [messageText, setmessageText] = useState('');
   const username = props.match.params.id;
   const toUsername = props.match.params.toUserId;
+  let sessionId = username + toUsername;
+  if (toUsername > username) {
+    sessionId = toUsername + username;
+  }
 
   const onMessageReceived = (payload) => {
     var message = JSON.parse(payload.body);
@@ -60,14 +60,11 @@ const PersonalChat = (props) => {
     const fromusername = username;
     const tousername = toUsername;
 
-    //	 var user = message.
-    // Subscribe to the Public Topic
     stompClient.subscribe('/secured/user/queue/' + tousername + '/' + sessionId, onMessageReceived);
-
     var message = {
       from: fromusername,
       to: tousername,
-      text: 'hi', // messageInput.value || '',
+      text: 'hi',
       uniqueID: sessionId,
       type: 'JOIN'
     };
@@ -85,9 +82,13 @@ const PersonalChat = (props) => {
     stompClient = Stomp.over(socket);
 
     stompClient.connect({}, onConnected);
-
-    const username = props.match.params.id;
-    const toUsername = props.match.params.toUserId;
+    props.fetchPersonalDetailsByUserId(toUsername, true).then((res) => {
+      let user = {};
+      if (get(res, 'data[0]')) {
+        user = getFieldsValueFromAtributes(get(res, 'data[0].attributes', []));
+      }
+      settoUserDetails(user);
+    });
   }, []);
 
   const onTextChange = (event) => {
@@ -106,7 +107,11 @@ const PersonalChat = (props) => {
                 src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
               />
               <div class='chat_about'>
-                <div class='chat_with'>Amit Gaikwad</div>
+                <div class='chat_with'>
+                  <a
+                    target='_blank'
+                    href={`/user/fromUserId/${username}/toUserId/${toUsername}`}>{`${toUserDetails['First Name']} ${toUserDetails['Last Name']}`}</a>
+                </div>
                 <div class='chat_num_messages'>
                   <IconText icon={StarOutlined} text='156' key='list-vertical-star-o' />
                 </div>
@@ -169,6 +174,9 @@ const mapStateToProps = (state) => {
   return {};
 };
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  fetchPersonalDetailsByUserId: (user, notDispatch) =>
+    dispatch(fetchPersonalDetailsByUserId(user, notDispatch))
+});
 
 export const PersonalChatContainer = connect(mapStateToProps, mapDispatchToProps)(PersonalChat);

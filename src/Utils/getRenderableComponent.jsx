@@ -85,7 +85,12 @@ export const RenderableComponentByType = ({ field, setFieldsValue, form, fromPos
           ]}
           initialValue={value.toString()}
           hidden={isTrueSet}>
-          <Input.TextArea placeholder='' type='text' value={value} />
+          <Input.TextArea
+            placeholder=''
+            type='text'
+            value={value}
+            autoSize={{ minRows: 4, maxRows: 4 }}
+          />
         </Form.Item>
       );
     case COMPONENT_TYPES.RADIO:
