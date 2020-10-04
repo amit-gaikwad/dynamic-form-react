@@ -165,6 +165,7 @@ const { Panel } = Collapse;
 export const ChatList = (props) => {
   const [selectedTypeSearch, setselectedTypeSearch] = useState(searchOptions[0]);
   const [showMessaging, setshowMessaging] = useState(true);
+  const [showHistoryForUserIds, setshowHistoryForUserIds] = useState([]);
   const [width, height] = useWindowSize();
   const username = props.match.params.id;
 
@@ -181,6 +182,23 @@ export const ChatList = (props) => {
     //   categories: value,
     //   searchStr: searchString
     // });
+  };
+
+  const onShowHistoryClick = (item) => {
+    console.log('item', item, showHistoryForUserIds, showHistoryForUserIds.includes(item.userId));
+    // {
+    //   title: 'Amit Gaikwad',
+    //   userId: 'amit',
+    //   messages: [
+    //     'How are you',
+    //     'Renegade San Francisco returns with 275+ creatives for a springtime marketplace on August 29 + 30 at Fort Mason Center Festival Pavilion. Renegade Craft is free to attend & all are welcome.'
+    //   ]
+    // }
+    if (!showHistoryForUserIds.includes(item.userId)) {
+      showHistoryForUserIds.push(item.userId);
+      const ids = [...showHistoryForUserIds];
+      setshowHistoryForUserIds(ids);
+    }
   };
   return (
     <div>
@@ -231,34 +249,43 @@ export const ChatList = (props) => {
                   renderItem={(item) => {
                     return (
                       <List.Item
-                        extra={[
-                          <Button>
-                            <a href={`/message/fromUserId/${username}/toUserId/${item.userId}`}>
-                              Start Chat
-                            </a>
-                          </Button>
-                        ]}
                         style={{
                           cursor: 'pointer',
-                          border: '1px solid rgba(0, 0, 0, .125)',
+                          border: '3px solid rgba(0, 0, 0, .125)',
                           marginTop: '2px'
                         }}>
-                        <List.Item.Meta
-                          avatar={
-                            <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
-                          }
-                          title={
+                        <Row style={{ width: '100%' }}>
+                          <Col span={2}>
+                            <Avatar
+                              size={25}
+                              src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+                            />
+                          </Col>
+                          <Col span={10}>
                             <a href={`/message/fromUserId/${username}/toUserId/${item.userId}`}>
                               {item.title}
                             </a>
-                          }
-                          description={
-                            <Collapse defaultActiveKey={['1']}>
-                              <Panel header='History'>{item.messages[0]}</Panel>
-                            </Collapse>
-                          }
-                          //description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut eget bibendum elit. Fusce facilisis accumsan dui, efficitur commodo ante facilisis ut.'
-                        />
+                          </Col>
+                          <Col span={6}>
+                            {!showHistoryForUserIds.includes(item.userId) && (
+                              <a onClick={() => onShowHistoryClick(item)}>Show History</a>
+                            )}
+                          </Col>
+                          <Col span={6}>
+                            <a href={`/message/fromUserId/${username}/toUserId/${item.userId}`}>
+                              Start Chat
+                            </a>
+                          </Col>
+                          {showHistoryForUserIds.includes(item.userId) && (
+                            <Col span={24} style={{ padding: 10 }}>
+                              <Collapse defaultActiveKey={['1']}>
+                                <Panel header='History' key='1'>
+                                  {item.messages[0]}
+                                </Panel>
+                              </Collapse>
+                            </Col>
+                          )}
+                        </Row>
                       </List.Item>
                     );
                   }}
@@ -279,7 +306,7 @@ export const ChatList = (props) => {
                       <List.Item
                         style={{
                           cursor: 'pointer',
-                          border: '1px solid rgba(0, 0, 0, .125)',
+                          border: '2px solid black',
                           marginTop: '2px'
                         }}>
                         <List.Item.Meta
