@@ -29,7 +29,9 @@ export const HeaderComponent = (props) => {
           <SearchContainer {...props} userId={userId}></SearchContainer>
         </Col>
         <Col span={12}>
-          <Menu style={{ backgroundColor: '#283e4a', color: '#b4bfc7' }} mode='horizontal'>
+          <Menu
+            style={{ backgroundColor: '#283e4a', color: '#b4bfc7', lineHeight: '63px' }}
+            mode='horizontal'>
             <Menu.Item key='1'>
               <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}/home`}>
                 Home

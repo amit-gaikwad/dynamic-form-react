@@ -54,9 +54,45 @@ const HomeComponent = (props) => {
           keyValue: 'add'
         }
       });
+
+      const metaData = [
+        { keyName: 'hidden', keyValue: 'true', keyValues: null },
+        { keyName: 'mandatory', keyValue: 'true', keyValues: null },
+        { keyName: 'editable', keyValue: 'false', keyValues: null }
+      ];
+      const obj = {
+        attribute: {
+          keyName: 'date',
+          keyValue: new Date()
+        },
+        metaData
+      };
+      newResource.attributes.unshift(obj);
+      // newResource.attributes.unshift({
+      //   attribute: {
+      //     keyName: 'date',
+      //     keyValue: new Date()
+      //   }
+      // });
       newResource.resourceId = postsByUserId.resourceId;
+      console.log('newResource', newResource);
+
       props.updateResourceByUserId(newResource, userId);
     } else {
+      console.log('add newResource', newResource);
+      const metaData = [
+        { keyName: 'hidden', keyValue: 'true', keyValues: null },
+        { keyName: 'mandatory', keyValue: 'true', keyValues: null },
+        { keyName: 'editable', keyValue: 'false', keyValues: null }
+      ];
+      const obj = {
+        attribute: {
+          keyName: 'date',
+          keyValue: new Date()
+        },
+        metaData
+      };
+      newResource.attributes.unshift(obj);
       props.createResource(omit(newResource, ['mode']), userId);
     }
   };
@@ -131,8 +167,6 @@ const HomeComponent = (props) => {
                     onHandleSubmit={onHandleSubmit}></DynamicFormContainer>
                 </Col>
                 <Divider></Divider>
-                <ShortInfoComponent user={user}></ShortInfoComponent>
-                <Divider></Divider>
                 <Row style={{ width: '100%' }} gutter={[16, 16]}>
                   <List itemLayout='vertical' size='large'>
                     {postResources.map((item) => {
@@ -141,6 +175,7 @@ const HomeComponent = (props) => {
                         <Col span={24}>
                           <PostWrapperComponent
                             post={postData['User Post']}
+                            date={postData['date']}
                             user={user}></PostWrapperComponent>
                         </Col>
                       );

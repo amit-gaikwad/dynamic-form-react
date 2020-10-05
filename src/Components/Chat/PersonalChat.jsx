@@ -1,7 +1,7 @@
 import React from 'react';
 import { PageLayout } from '../Layout/PageLayout';
 import { connect } from 'react-redux';
-import { Button, Col, Divider, Input, Row, List, Avatar } from 'antd';
+import { Button, Col, Divider, Input, Row, List, Avatar, Tooltip } from 'antd';
 import {
   getFieldsFromAttributeModels,
   getFieldsValueFromAtributes
@@ -15,6 +15,7 @@ import { StarOutlined } from '@ant-design/icons';
 import './ChatList.css';
 import { fetchPersonalDetailsByUserId } from '../../Actions/ResourceAction';
 import { get } from 'lodash';
+import ShortInfoComponent from '../PersonalDetails/ShortInfo';
 var stompClient = null;
 
 const PersonalChat = (props) => {
@@ -108,9 +109,12 @@ const PersonalChat = (props) => {
               />
               <div class='chat_about'>
                 <div class='chat_with'>
-                  <a
-                    target='_blank'
-                    href={`/user/fromUserId/${username}/toUserId/${toUsername}`}>{`${toUserDetails['First Name']} ${toUserDetails['Last Name']}`}</a>
+                  <Tooltip
+                    placement='left'
+                    color='white'
+                    title={<ShortInfoComponent user={toUserDetails}></ShortInfoComponent>}>
+                    <a>{`${toUserDetails['First Name']} ${toUserDetails['Last Name']}`}</a>
+                  </Tooltip>
                 </div>
                 <div class='chat_num_messages'>
                   <IconText icon={StarOutlined} text='156' key='list-vertical-star-o' />

@@ -1,6 +1,6 @@
 import React, { useState, createElement } from 'react';
 import moment from 'moment';
-import { Comment, Tooltip, Avatar, Card, Row, List, Popover, Space } from 'antd';
+import { Comment, Tooltip, Avatar, Card, Row, List, Popover, Space, Col } from 'antd';
 import { DislikeOutlined, LikeOutlined, DislikeFilled, LikeFilled } from '@ant-design/icons';
 import {
   MessageOutlined,
@@ -94,6 +94,7 @@ export const PostWrapperComponent = (props) => {
       </List.Item>
     </List>
   );
+  console.log('props.date ', props.date);
 
   return (
     <List.Item
@@ -136,12 +137,18 @@ export const PostWrapperComponent = (props) => {
             placement='left'
             color='white'
             title={<ShortInfoComponent user={props.user}></ShortInfoComponent>}>
-            <a>{`${props.user['First Name']} ${props.user['Last Name']}`}</a>
+            <Row style={{ width: '100%' }}>
+              <Col span={24}>
+                <a>{`${props.user['First Name']} ${props.user['Last Name']}`}</a>
+              </Col>
+              <Col span={24} style={{ fontSize: 12, color: 'gray', fontWeight: 'normal' }}>
+                {props.user.description ||
+                  'Ant Design, a design language for background applications'}
+              </Col>
+            </Row>
           </Tooltip>
         }
-        description={
-          'Ant Design, a design language for background applications, is refined by Ant UED Team.'
-        }
+        description={moment(props.date || new Date()).fromNow()}
       />
       {props.post}
     </List.Item>
