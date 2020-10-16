@@ -47,7 +47,12 @@ const PageLayoutComponent = (props) => {
             {/* <Button type='primary' onClick={toggleCollapsed} style={{ marginBottom: 16 }}>
               {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
             </Button> */}
-            <div style={{ position: 'fixed', width: '25%' }}>
+            <div
+            // style={{
+            //   position: props.blurBackground && 'fixed',
+            //   width: props.blurBackground && '25%'
+            // }}
+            >
               <LeftSectionContainer {...props}></LeftSectionContainer>
             </div>
           </Sider>

@@ -194,7 +194,12 @@ export const ChatList = (props) => {
     //     'Renegade San Francisco returns with 275+ creatives for a springtime marketplace on August 29 + 30 at Fort Mason Center Festival Pavilion. Renegade Craft is free to attend & all are welcome.'
     //   ]
     // }
-    if (!showHistoryForUserIds.includes(item.userId)) {
+    const index = showHistoryForUserIds.indexOf(item.userId);
+    if (index != -1) {
+      showHistoryForUserIds.splice(index, 1);
+      const ids = [...showHistoryForUserIds];
+      setshowHistoryForUserIds(ids);
+    } else {
       showHistoryForUserIds.push(item.userId);
       const ids = [...showHistoryForUserIds];
       setshowHistoryForUserIds(ids);
@@ -236,13 +241,14 @@ export const ChatList = (props) => {
               </Col>
             </Row>
             <Collapse defaultActiveKey={['1']} accordion>
+              <Panel header='Mentorlink Chat' key='0'></Panel>
               <Panel header='Personal Chat' key='1'>
                 <List
                   itemLayout='horizontal'
                   id='search-result'
                   dataSource={data}
                   style={{
-                    height: (height * 80) / 100 - 260,
+                    height: (height * 80) / 100 - 300,
                     overflowY: 'auto',
                     paddingRight: '-10px'
                   }}
@@ -267,9 +273,13 @@ export const ChatList = (props) => {
                             </a>
                           </Col>
                           <Col span={6}>
-                            {!showHistoryForUserIds.includes(item.userId) && (
-                              <a onClick={() => onShowHistoryClick(item)}>Show History</a>
-                            )}
+                            {
+                              <a onClick={() => onShowHistoryClick(item)}>
+                                {!showHistoryForUserIds.includes(item.userId)
+                                  ? `Show History`
+                                  : `Hide History`}
+                              </a>
+                            }
                           </Col>
                           <Col span={6}>
                             <a href={`/message/fromUserId/${username}/toUserId/${item.userId}`}>
@@ -278,11 +288,7 @@ export const ChatList = (props) => {
                           </Col>
                           {showHistoryForUserIds.includes(item.userId) && (
                             <Col span={24} style={{ padding: 10 }}>
-                              <Collapse defaultActiveKey={['1']}>
-                                <Panel header='History' key='1'>
-                                  {item.messages[0]}
-                                </Panel>
-                              </Collapse>
+                              {item.messages[0]}
                             </Col>
                           )}
                         </Row>
@@ -297,7 +303,7 @@ export const ChatList = (props) => {
                   id='search-result'
                   dataSource={data}
                   style={{
-                    height: (height * 80) / 100 - 260,
+                    height: (height * 80) / 100 - 300,
                     overflowY: 'auto',
                     paddingRight: '-10px'
                   }}

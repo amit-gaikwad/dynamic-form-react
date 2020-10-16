@@ -42,34 +42,39 @@ const NetworkComponent = (props) => {
           <Col> My Network</Col>
           <Divider></Divider>
           <Col span={24}>
-            <List
-              itemLayout='horizontal'
-              dataSource={connectionsByUser}
-              renderItem={(item) => (
-                <List.Item
-                  actions={[
-                    <Button
-                      type='danger'
-                      onClick={() => {
-                        onDisconnectClick(item);
-                      }}>
-                      Disconnect
-                    </Button>
-                  ]}>
-                  <List.Item.Meta
-                    avatar={<Avatar src={item['Photo']} />}
-                    title={
-                      <a
-                        href={`${URL_PATH}/user/fromUserId/${userId}/toUserId/${item.userId}`}
-                        target='_blank'>{`${item['First Name']} ${item['Last Name']}`}</a>
-                    }
-                    description={`${item['First Name']} ${item['Last Name']}`}
-                  />
-                </List.Item>
-              )}
-            />
+            <Collapse defaultActiveKey={['1']} accordion>
+              <Panel header='Connections' key='1'>
+                <List
+                  itemLayout='horizontal'
+                  dataSource={connectionsByUser}
+                  renderItem={(item) => (
+                    <List.Item
+                      actions={[
+                        <Button
+                          type='danger'
+                          onClick={() => {
+                            onDisconnectClick(item);
+                          }}>
+                          Disconnect
+                        </Button>
+                      ]}>
+                      <List.Item.Meta
+                        avatar={<Avatar src={item['Photo']} />}
+                        title={
+                          <a
+                            href={`${URL_PATH}/user/fromUserId/${userId}/toUserId/${item.userId}`}
+                            target='_blank'>{`${item['First Name']} ${item['Last Name']}`}</a>
+                        }
+                        description={`${item['First Name']} ${item['Last Name']}`}
+                      />
+                    </List.Item>
+                  )}
+                />
+              </Panel>
+              <Panel header='Groups' key='2'></Panel>
+              <Panel header='Broadcast List' key='3'></Panel>
+            </Collapse>
           </Col>
-          <Divider></Divider>
         </Row>
       }></PageLayout>
   );

@@ -6,19 +6,8 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchPersonalDetailsByUserId } from '../../Actions/ResourceAction';
-import {
-  AppstoreOutlined,
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-  PieChartOutlined,
-  DesktopOutlined,
-  ContainerOutlined,
-  MailOutlined,
-  UsergroupAddOutlined,
-  UserOutlined
-} from '@ant-design/icons';
+import { AppstoreOutlined, ContainerOutlined, UsergroupAddOutlined } from '@ant-design/icons';
 import { getFieldsValueFromAtributes, getUserName } from '../../Utils/common-methods';
-import { history } from '../../Utils/history';
 
 const LeftSection = (props) => {
   const [collapsed, setcollapsed] = useState(false);
@@ -35,7 +24,6 @@ const LeftSection = (props) => {
   if (props.personalDetailsByUserId[0]) {
     user = getFieldsValueFromAtributes(props.personalDetailsByUserId[0].attributes);
   }
-  console.log('user', user, history);
 
   return (
     <Row style={{ width: '80%', margin: '20px' }}>
@@ -75,27 +63,6 @@ const LeftSection = (props) => {
         mode='inline'
         //  style={{ border: '1px dashed gray' }}
         inlineCollapsed={collapsed}>
-        {/* <div key='1' icon={<PieChartOutlined />} onClick={toggleCollapsed}>
-                    Hide Menu
-                  </div> */}
-
-        {/* <SubMenu key='sub1' icon={<UsergroupAddOutlined />} title='Connections'>
-          <Menu.Item key='5'>
-            <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}/connections`}>
-              Connections
-            </Link>
-          </Menu.Item>
-          <Menu.Item key='6'>
-            <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}/connections`}>
-              Groups
-            </Link>
-          </Menu.Item>
-          <Menu.Item key='7'>
-            <Link style={{ color: '#b4bfc7' }} to={`/user/${userId}/connections`}>
-              Broadcast List
-            </Link>
-          </Menu.Item>
-        </SubMenu> */}
         <Menu.Item key='sub1' icon={<UsergroupAddOutlined />}>
           <Link to={`/user/${userId}/connections`}>Connections</Link>
         </Menu.Item>
