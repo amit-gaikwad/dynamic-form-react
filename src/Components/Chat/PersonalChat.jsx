@@ -21,6 +21,7 @@ var stompClient = null;
 const PersonalChat = (props) => {
   const [broadcastMessage, setbroadcastMessage] = useState([]);
   const [toUserDetails, settoUserDetails] = useState({});
+  const [fromUserDetails, setfromUserDetails] = useState({});
   const [messageText, setmessageText] = useState('');
   const username = props.match.params.id;
   const toUsername = props.match.params.toUserId;
@@ -34,7 +35,7 @@ const PersonalChat = (props) => {
     const arr = [...broadcastMessage];
     if (message.type === 'CHAT') {
       broadcastMessage.push({
-        message: message.text,
+        message: message.content,
         sender: message.from,
         dateTime: message.time
       });
@@ -50,7 +51,8 @@ const PersonalChat = (props) => {
         sendee: toUsername,
         content: messageText,
         uniqueId: sessionId,
-        type: 'CHAT'
+        type: 'CHAT',
+        userId: username
       };
       stompClient.send('/app/secured/room', {}, JSON.stringify(message));
       setmessageText('');
@@ -60,18 +62,31 @@ const PersonalChat = (props) => {
   const onConnected = () => {
     const fromusername = username;
     const tousername = toUsername;
+    let user = {};
 
-    stompClient.subscribe('/secured/user/queue/' + tousername + '/' + sessionId, onMessageReceived);
-    var message = {
-      sender: fromusername,
-      sendee: tousername,
-      content: 'hi',
-      uniqueId: sessionId,
-      type: 'JOIN'
-    };
+    props.fetchPersonalDetailsByUserId(fromusername, true).then((res) => {
+      const response = get(res, 'data[0]');
+      if (response) {
+        user = getFieldsValueFromAtributes(get(res, 'data[0].attributes', []));
+      }
+      console.log('user >>', response, user);
+      setfromUserDetails({ ...user, resourceId: response.resourceId });
+      stompClient.subscribe(
+        '/secured/user/queue/' + tousername + '/' + sessionId,
+        onMessageReceived
+      );
+      var message = {
+        sender: fromusername,
+        sendee: tousername,
+        content: 'hi',
+        uniqueId: response.resourceId,
+        type: 'JOIN',
+        userId: username
+      };
 
-    // Tell your username to the server
-    stompClient.send('/app/secured/room', {}, JSON.stringify(message));
+      // Tell your username to the server
+      stompClient.send('/app/secured/room', {}, JSON.stringify(message));
+    });
 
     //  connectingElement.classList.add('hidden');
   };
