@@ -23,17 +23,11 @@ export const Createeditpostcomponent = (props) => {
   const userId = props.match.params.id;
 
   useEffect(() => {
-    console.log('editPostId >>', editPostId, postId);
     if (isEmpty(postId || editPostId)) {
-      console.log('postId is in if >>');
-
       props.fetchPostTemplate();
     } else {
       setshowLoader(true);
-      console.log('fetchResourcesById >>', editPostId);
-
       props.fetchResourcesById(postId || editPostId).then((response) => {
-        console.log('fetchResourcesById >>', response);
         setpostDetails(response.data);
         setshowLoader(false);
       });
@@ -41,13 +35,6 @@ export const Createeditpostcomponent = (props) => {
   }, []);
 
   const onHandleSubmit = (event, templateResource, currentIndex, form) => {
-    if (editPostId) {
-      console.log('edit flow', event);
-    } else {
-      //  props.createPost({})
-      console.log('create flow ', event);
-    }
-
     const values = form.getFieldsValue();
     const newResource = omit(templateResource, ['resourceId']);
     const istemplateResource = newResource.attributes.find(
@@ -88,9 +75,7 @@ export const Createeditpostcomponent = (props) => {
     } else {
       setshowLoader(true);
 
-      // props
-      //   .createPost(omit(newResource, ['mode']), userId)
-      //   .then(() => setshowLoader(false));
+      //props.createPost(omit(newResource, ['mode']), userId).then(() => setshowLoader(false));
       props.createResource(omit(newResource, ['mode']), userId).then(() => setshowLoader(false));
     }
   };
@@ -112,34 +97,18 @@ export const Createeditpostcomponent = (props) => {
         ) : (
           <Row style={{ width: '100%' }}>
             <Col span={24} style={{ fontSize: '20px', fontWeight: 'bold' }}>
-              Edit your Post
+              {isEmpty(editPostId) ? 'Start a Post' : 'Edit your Post'}
             </Col>
             <Col span={24}>
-              {isEmpty(postId) ? (
-                <DynamicFormContainer
-                  fields={fields}
-                  template={template}
-                  fromPostPage={true}
-                  saveButtonText={isEmpty(editPostId) ? 'Post' : 'Save'}
-                  onHandleSubmit={onHandleSubmit}></DynamicFormContainer>
-              ) : (
-                <PostWrapperComponent></PostWrapperComponent>
-              )}
+              <DynamicFormContainer
+                fields={fields}
+                template={template}
+                fromPostPage={true}
+                saveButtonText={isEmpty(editPostId) ? 'Post' : 'Save'}
+                onHandleSubmit={onHandleSubmit}></DynamicFormContainer>
             </Col>
           </Row>
         )
-        // <Row>
-        //   <Row>
-        //     {
-        //       isEmpty(postId) ? <DynamicFormContainer
-        //         fields={fields}
-        //         template={template}
-        //         onHandleSubmit={onHandleSubmit}
-        //         ></DynamicFormContainer> :
-        //         <PostWrapperComponent></PostWrapperComponent>
-        //     }
-        //   </Row>
-        // </Row>
       }
     />
   );

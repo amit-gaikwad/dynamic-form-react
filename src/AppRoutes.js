@@ -11,6 +11,7 @@ import { HomeContainer } from './Components/HomeComponent/HomeComponent';
 import { EventContainer } from './Components/Event/Event';
 import { PersonalChatContainer } from './Components/Chat/PersonalChat';
 import { CreateeditpostcomponentContainer } from './Components/Posts/CreateEditPostComponent';
+import { PostDetailsContainer } from './Components/Posts/PostDetailsComponent';
 
 export const AppRoutes = (props) => {
   return (
@@ -23,7 +24,7 @@ export const AppRoutes = (props) => {
       <Route exact path='/user/:id/home' component={HomeContainer} />
       <Route exact path='/user/:id/create-event' component={EventContainer} />
       <Route exact path='/user/:id/post' component={CreateeditpostcomponentContainer} />
-      <Route exact path='/user/:id/post/:postId' component={CreateeditpostcomponentContainer} />
+      <Route exact path='/user/:id/post/:postId' component={PostDetailsContainer} />
       <Route
         exact
         path='/user/:id/post/:editPostId/edit'
