@@ -13,7 +13,7 @@ import {
 import { Loader } from '../Loader/Loader';
 import { get, omit } from 'lodash';
 import { PostWrapperComponent } from './PostWrapperComponent';
-import { createPost } from '../../Actions/PostAction';
+import { createPost, editPost } from '../../Actions/PostAction';
 
 export const Createeditpostcomponent = (props) => {
   const [showLoader, setshowLoader] = useState(false);
@@ -79,8 +79,11 @@ export const Createeditpostcomponent = (props) => {
         }
       });
       newResource.resourceId = postDetails.resourceId;
+      // props
+      //   .updateResourceByUserId(omit(newResource, ['mode']), props.match.params.id)
+      //   .then(() => setshowLoader(false));
       props
-        .updateResourceByUserId(omit(newResource, ['mode']), props.match.params.id)
+        .editPost(omit(newResource, ['mode']), props.match.params.id)
         .then(() => setshowLoader(false));
     } else {
       setshowLoader(true);
@@ -153,6 +156,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchPostTemplate: () => dispatch(fetchPostTemplate()),
   fetchResourcesById: (id) => dispatch(fetchResourcesById(id)),
   createPost: (resource) => dispatch(createPost(resource)),
+  editPost: (resource) => dispatch(editPost(resource)),
   createResource: (resource) => dispatch(createResource(resource))
 });
 

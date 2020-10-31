@@ -72,7 +72,7 @@ export function editPostError(error) {
 export const editPost = (postResource) => {
   return (dispatch) => {
     dispatch(editPostLoading());
-    Axios.post(
+    return Axios.post(
       `http://localhost:8111//mentor/resources/operationsOnResourceAttribute`,
       postResource
     )
