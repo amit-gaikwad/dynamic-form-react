@@ -69,7 +69,7 @@ export const DynamicFormContainer = (props) => {
         )}
         <Col span={2} offset={props.fromPostPage ? 22 : 2}>
           <Button type='primary' htmlType='submit' size='large' disabled={false}>
-            {props.fromPostPage ? 'Post' : 'Save'}
+            {props.saveButtonText || 'Save'}
           </Button>
         </Col>
       </Row>

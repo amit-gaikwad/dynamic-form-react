@@ -10,6 +10,7 @@ import { NonEditableUserDetailsContainer } from './Components/UserDetails/NonEdi
 import { HomeContainer } from './Components/HomeComponent/HomeComponent';
 import { EventContainer } from './Components/Event/Event';
 import { PersonalChatContainer } from './Components/Chat/PersonalChat';
+import { CreateeditpostcomponentContainer } from './Components/Posts/CreateEditPostComponent';
 
 export const AppRoutes = (props) => {
   return (
@@ -21,11 +22,19 @@ export const AppRoutes = (props) => {
       <Route exact path='/user/:id/' component={UserDetailsContainer} />
       <Route exact path='/user/:id/home' component={HomeContainer} />
       <Route exact path='/user/:id/create-event' component={EventContainer} />
+      <Route exact path='/user/:id/post' component={CreateeditpostcomponentContainer} />
+      <Route exact path='/user/:id/post/:postId' component={CreateeditpostcomponentContainer} />
+      <Route
+        exact
+        path='/user/:id/post/:editPostId/edit'
+        component={CreateeditpostcomponentContainer}
+      />
       <Route
         exact
         path='/user/fromUserId/:id/toUserId/:toUserId'
         component={NonEditableUserDetailsContainer}
       />
+
       <Route
         exact
         path='/message/fromUserId/:id/toUserId/:toUserId'

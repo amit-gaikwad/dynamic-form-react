@@ -77,6 +77,19 @@ export function sendConnectionRequestError(error) {
   };
 }
 
+export const fetchResourcesById = (id) => {
+  return (dispatch) => {
+    Axios.get(`http://localhost:8105/mentor/resources/5f420797fc99e13c8cf8d145/${id}`).then(
+      (res) => {
+        if (res.error) {
+          throw res.error;
+        }
+        return res;
+      }
+    );
+  };
+};
+
 export const sendConnectionRequest = ({
   namesapceId = '5f420797fc99e13c8cf8d145',
   userIdFrom,

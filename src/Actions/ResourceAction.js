@@ -27,6 +27,7 @@ import {
 } from './types';
 import Axios from 'axios';
 import { getHeaders } from '../Utils/common-methods';
+import { CONFIG } from '../Constants/ResourcesConstant';
 
 export function setSampleTest(value) {
   return {
@@ -270,30 +271,38 @@ export function fetchPostTemplateError(error) {
   };
 }
 
-//http://localhost:8105/mentor/resources/5f420797fc99e13c8cf8d145/5f425826fc99e14d20f20476
-
 export const fetchPostTemplate = () => {
   return (dispatch) => {
     dispatch(fetchPostTemplateLoading());
-    fetchResourcesById('5f425826fc99e14d20f20476')
-      .then((res) => {
-        dispatch(fetchPostTemplateSuccess(res.data));
-      })
-      .catch((error) => {
-        dispatch(fetchPostTemplateError(error));
-      });
+    dispatch(
+      fetchResourcesById(CONFIG.POST_RESOURCE_ID, fetchPostTemplateSuccess, fetchPostTemplateError)
+    );
+    // .then((res) => {
+    //   dispatch(fetchPostTemplateSuccess(res.data));
+    // })
+    // .catch((error) => {
+    //   dispatch(fetchPostTemplateError(error));
+    // });
   };
 };
 
-const fetchResourcesById = (id) => {
-  return Axios.get(`http://localhost:8105/mentor/resources/5f420797fc99e13c8cf8d145/${id}`).then(
-    (res) => {
-      if (res.error) {
-        throw res.error;
+export const fetchResourcesById = (id, successCallBack, errorCallBack) => {
+  return (dispatch) => {
+    return Axios.get(`http://localhost:8105/mentor/resources/5f420797fc99e13c8cf8d145/${id}`).then(
+      (res) => {
+        if (res.error) {
+          if (errorCallBack) {
+            dispatch(errorCallBack(res.error));
+          }
+          throw res.error;
+        }
+        if (successCallBack) {
+          dispatch(successCallBack(res.data));
+        }
+        return res;
       }
-      return res;
-    }
-  );
+    );
+  };
 };
 
 export function fetchSystemTemplatesLoading() {
@@ -315,22 +324,18 @@ export function fetchSystemTemplatesError(error) {
   };
 }
 
-//http://localhost:8105/mentor/resources/5f420797fc99e13c8cf8d145/5f425826fc99e14d20f20476
-
 export const fetchSystemTemplates = () => {
   return (dispatch) => {
     dispatch(fetchSystemTemplatesLoading());
-    fetchResourcesById('5f420a53fc99e14d20f20460')
-      .then((res) => {
-        dispatch(fetchSystemTemplatesSuccess(res.data));
-      })
-      .catch((error) => {
-        dispatch(fetchSystemTemplatesError(error));
-      });
+    dispatch(
+      fetchResourcesById(
+        CONFIG.SYSTEM_TEMPLATE_RESOURCE_ID,
+        fetchSystemTemplatesSuccess,
+        fetchSystemTemplatesError
+      )
+    );
   };
 };
-
-//http://localhost:8105/mentor/resources/user/5f420797fc99e13c8cf8d145/rohan/Personal%20Details
 
 export function fetchPostsByUserIdLoading() {
   return {
@@ -350,9 +355,6 @@ export function fetchPostsByUserIdError(error) {
     error
   };
 }
-
-//http://localhost:8105/mentor/resources/5f420797fc99e13c8cf8d145/5f425826fc99e14d20f20476
-//http://localhost:8105/mentor/resources/user/5f420797fc99e13c8cf8d145/rohan1232/Post%20Details
 
 export const fetchPostsByUserId = (userId) => {
   return (dispatch) => {

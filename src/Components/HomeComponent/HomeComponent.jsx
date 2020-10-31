@@ -162,6 +162,7 @@ const HomeComponent = (props) => {
                   <DynamicFormContainer
                     fromPostPage={true}
                     fields={fields}
+                    saveButtonText={'Post'}
                     template={props.postTemplate}
                     //  currentIndex={currentResourceAttribute.keyValue || 0}
                     onHandleSubmit={onHandleSubmit}></DynamicFormContainer>

@@ -21,5 +21,11 @@
   "workbench.colorCustomizations": {
     "editorWarning.border": "#f19040",
     "editorError.border": "#FF0000"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   }
 }
