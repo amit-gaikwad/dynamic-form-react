@@ -58,12 +58,10 @@ export const PostDetailsComponent = (props) => {
     const userPostAttribute = postDetails.attributes.find(
       (p) => p.attribute.keyName === 'User Post'
     );
-    console.log('userPostAttribute >> ', userPostAttribute, updatedPostDetails);
     const likes = userPostAttribute.metaData.find((m) => m.keyName === 'likes') || {};
     likes.keyValues = updatedPostDetails.likes;
     const dislikes = userPostAttribute.metaData.find((m) => m.keyName === 'dislikes') || {};
     dislikes.keyValues = updatedPostDetails.dislikes;
-    console.log('userPostAttribute >> ', postDetails);
     props
       .editPost(omit(postDetails, ['mode']), props.match.params.id)
       .then(() => setshowLoader(false));
