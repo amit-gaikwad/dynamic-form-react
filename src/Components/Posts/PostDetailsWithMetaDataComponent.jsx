@@ -19,7 +19,7 @@ import {
   getFieldsFromAttributeModels,
   getFieldsValueFromAtributes
 } from '../../Utils/common-methods';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 
 export const IconText = ({ icon, text }) => (
   <Space>
@@ -29,9 +29,6 @@ export const IconText = ({ icon, text }) => (
 );
 
 export const PostDetailsWithMetaDataComponent = (props) => {
-  const [likes, setLikes] = useState(0);
-  const [dislikes, setDislikes] = useState(0);
-  const [action, setAction] = useState(null);
   const [showOptions, setshowOptions] = useState(false);
   const [postDetails, setpostDetails] = useState({});
 
@@ -41,55 +38,44 @@ export const PostDetailsWithMetaDataComponent = (props) => {
     const postData = getFieldsValueFromAtributes(get(props, 'postDetails.attributes', []));
     setpostDetails({ ...post, ...postData });
   }, [props.postDetails]);
-
-  const likePersons = get(postDetails, 'likes', '').split(',');
-  const dislikePersons = get(postDetails, 'dislikes', '').split(',') || [];
+  const likes = get(postDetails, 'likes');
+  const dislikes = get(postDetails, 'dislikes');
+  const likePersons = isEmpty(likes) ? [] : get(postDetails, 'likes').split(',');
+  const dislikePersons = isEmpty(dislikes) ? [] : get(postDetails, 'dislikes').split(',');
 
   const like = () => {
     if (!likePersons.includes(props.currentUserId)) {
       const index = dislikePersons.indexOf(props.currentUserId);
       if (index >= 0) {
-        dislikePersons.split(index, 1);
+        dislikePersons.splice(index, 1);
       }
       likePersons.push(props.currentUserId);
     }
-    setpostDetails({
+    const newPostDetails = {
       ...postDetails,
       likes: likePersons.join(','),
       dislikes: dislikePersons.join(',')
-    });
+    };
+    setpostDetails(newPostDetails);
+    props.onChangePost(newPostDetails);
   };
 
   const dislike = () => {
     if (!dislikePersons.includes(props.currentUserId)) {
       const index = likePersons.indexOf(props.currentUserId);
       if (index >= 0) {
-        likePersons.split(index, 1);
+        likePersons.splice(index, 1);
       }
       dislikePersons.push(props.currentUserId);
     }
-    setpostDetails({
+    const newPostDetails = {
       ...postDetails,
       likes: likePersons.join(','),
       dislikes: dislikePersons.join(',')
-    });
+    };
+    setpostDetails(newPostDetails);
+    props.onChangePost(newPostDetails);
   };
-
-  const actions = [
-    <Tooltip key='comment-basic-like' title='Like'>
-      <span onClick={like}>
-        {createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
-        <span className='comment-action'>{likes}</span>
-      </span>
-    </Tooltip>,
-    <Tooltip key='comment-basic-dislike' title='Dislike'>
-      <span onClick={dislike}>
-        {React.createElement(action === 'disliked' ? DislikeFilled : DislikeOutlined)}
-        <span className='comment-action'>{dislikes}</span>
-      </span>
-    </Tooltip>,
-    <span key='comment-basic-reply-to'> Add Comment</span>
-  ];
 
   const handleOptionsShow = (e) => {
     if (e.nativeEvent && e.nativeEvent.which === 1) {

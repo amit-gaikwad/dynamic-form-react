@@ -15,7 +15,7 @@ import {
   fetchResourcesById
 } from '../../Actions/ResourceAction';
 import { Loader } from '../Loader/Loader';
-import { get } from 'lodash';
+import { get, omit } from 'lodash';
 import { PostDetailsWithMetaDataComponent } from './PostDetailsWithMetaDataComponent';
 import { createPost, editPost } from '../../Actions/PostAction';
 
@@ -29,9 +29,6 @@ export const PostDetailsComponent = (props) => {
 
   const getPostDetails = () => {
     setshowLoader(true);
-    console.log('fields >>');
-
-    setshowLoader(true);
     props.fetchResourcesById(postId).then((response) => {
       const postData = getFieldsValueFromAtributes(get(response, 'data.attributes', []));
       setpostDetails(response.data);
@@ -41,6 +38,35 @@ export const PostDetailsComponent = (props) => {
         setshowLoader(false);
       });
     });
+  };
+
+  const onChangePost = (updatedPostDetails) => {
+    postDetails.attributes = postDetails.attributes.filter(
+      (attr) =>
+        !['template', 'userId', 'currentIndex', 'Instances Allowed'].includes(
+          attr.attribute.keyName
+        )
+    );
+    postDetails.attributes.unshift({
+      attribute: {
+        keyName: 'actionsAllowed',
+        keyValue: 'update'
+      }
+    });
+    postDetails.resourceId = postDetails.resourceId;
+    //add logic to update likes dislike and comment section
+    const userPostAttribute = postDetails.attributes.find(
+      (p) => p.attribute.keyName === 'User Post'
+    );
+    console.log('userPostAttribute >> ', userPostAttribute, updatedPostDetails);
+    const likes = userPostAttribute.metaData.find((m) => m.keyName === 'likes') || {};
+    likes.keyValues = updatedPostDetails.likes;
+    const dislikes = userPostAttribute.metaData.find((m) => m.keyName === 'dislikes') || {};
+    dislikes.keyValues = updatedPostDetails.dislikes;
+    console.log('userPostAttribute >> ', postDetails);
+    props
+      .editPost(omit(postDetails, ['mode']), props.match.params.id)
+      .then(() => setshowLoader(false));
   };
 
   useEffect(() => {
@@ -61,6 +87,7 @@ export const PostDetailsComponent = (props) => {
             <Col span={24}>
               <PostDetailsWithMetaDataComponent
                 postDetails={postDetails || {}}
+                onChangePost={onChangePost}
                 user={postUserDetails}
                 currentUserId={userId}></PostDetailsWithMetaDataComponent>
             </Col>
