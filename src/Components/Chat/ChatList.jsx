@@ -6,149 +6,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getOneToOneChatHistoryByUserId } from '../../Actions/ChatAction';
 import { isEmpty } from 'lodash';
-
-// const data = [
-//   {
-//     title: 'Renegade San Francisco',
-//     description:
-//       'Renegade San Francisco returns with 275+ creatives for a springtime marketplace on August 29 + 30 at Fort Mason Center Festival Pavilion. Renegade Craft is free to attend & all are welcome.'
-//   },
-//   {
-//     title: 'REIMAGINE 2020',
-//     description:
-//       'Get an exclusive inside look at the future of blockchain and crypto in our system. Join the Reimagine "Disrupt The System" Virtual Conference, a 72-hour live event bringing together industry leaders, universities, and enterprises innovating to solve real problems, now.'
-//   },
-//   {
-//     title: 'COMEDY AT ZINQUE',
-//     description:
-//       'Comedy for the classy has a spot at Zinque in Downtown Los Angeles.New comics every Sunday at 830p. Produced by Mitchell Lamar.939 S Broadway.'
-//   }
-// ];
-
-const data = [
-  {
-    title: 'Amit Gaikwad',
-    userId: 'amit',
-    messages: [
-      'How are you',
-      'Renegade San Francisco returns with 275+ creatives for a springtime marketplace on August 29 + 30 at Fort Mason Center Festival Pavilion. Renegade Craft is free to attend & all are welcome.'
-    ]
-  },
-  {
-    title: 'Mrunal Umate',
-    messages: [
-      'I am at Pune Center',
-      'Get an exclusive inside look at the future of blockchain and crypto in our system. Join the Reimagine "Disrupt The System" Virtual Conference, a 72-hour live event bringing together industry leaders, universities, and enterprises innovating to solve real problems, now.'
-    ],
-    userId: 'mrunal'
-  },
-  {
-    title: 'Ashok Patil',
-    messages: [
-      'Is there any alternative for JavaScript',
-      'Comedy for the classy has a spot at Zinque in Downtown Los Angeles.New comics every Sunday at 830p. Produced by Mitchell Lamar.939 S Broadway.'
-    ],
-    userId: 'ashok'
-  },
-  {
-    title: 'Nilesh Mane',
-    messages: [
-      'Something is wrong there, can you please check that?',
-      'Comedy for the classy has a spot at Zinque in Downtown Los Angeles.New comics every Sunday at 830p. Produced by Mitchell Lamar.939 S Broadway.'
-    ],
-    userId: 'nilesh'
-  },
-  {
-    title: 'Suyog Jagtap',
-    messages: [
-      'I am on the way, we can tech a look after I reach there',
-      'Comedy for the classy has a spot at Zinque in Downtown Los Angeles.New comics every Sunday at 830p. Produced by Mitchell Lamar.939 S Broadway.'
-    ],
-    userId: 'suyog'
-  },
-  {
-    title: 'Amit Gaikwad',
-    userId: 'amit',
-    messages: [
-      'How are you',
-      'Renegade San Francisco returns with 275+ creatives for a springtime marketplace on August 29 + 30 at Fort Mason Center Festival Pavilion. Renegade Craft is free to attend & all are welcome.'
-    ]
-  },
-  {
-    title: 'Mrunal Umate',
-    messages: [
-      'I am at Pune Center',
-      'Get an exclusive inside look at the future of blockchain and crypto in our system. Join the Reimagine "Disrupt The System" Virtual Conference, a 72-hour live event bringing together industry leaders, universities, and enterprises innovating to solve real problems, now.'
-    ],
-    userId: 'mrunal'
-  },
-  {
-    title: 'Ashok Patil',
-    messages: [
-      'Is there any alternative for JavaScript',
-      'Comedy for the classy has a spot at Zinque in Downtown Los Angeles.New comics every Sunday at 830p. Produced by Mitchell Lamar.939 S Broadway.'
-    ],
-    userId: 'ashok'
-  },
-  {
-    title: 'Nilesh Mane',
-    messages: [
-      'Something is wrong there, can you please check that?',
-      'Comedy for the classy has a spot at Zinque in Downtown Los Angeles.New comics every Sunday at 830p. Produced by Mitchell Lamar.939 S Broadway.'
-    ],
-    userId: 'nilesh'
-  },
-  {
-    title: 'Suyog Jagtap',
-    messages: [
-      'I am on the way, we can tech a look after I reach there',
-      'Comedy for the classy has a spot at Zinque in Downtown Los Angeles.New comics every Sunday at 830p. Produced by Mitchell Lamar.939 S Broadway.'
-    ],
-    userId: 'suyog'
-  }
-];
-const data2 = [
-  {
-    title: 'Amit Gaikwad',
-    userId: 'amit',
-    messages: [
-      'How are you',
-      'Renegade San Francisco returns with 275+ creatives for a springtime marketplace on August 29 + 30 at Fort Mason Center Festival Pavilion. Renegade Craft is free to attend & all are welcome.'
-    ]
-  },
-  {
-    title: 'Mrunal Umate',
-    messages: [
-      'I am at Pune Center',
-      'Get an exclusive inside look at the future of blockchain and crypto in our system. Join the Reimagine "Disrupt The System" Virtual Conference, a 72-hour live event bringing together industry leaders, universities, and enterprises innovating to solve real problems, now.'
-    ],
-    userId: 'mrunal'
-  },
-  {
-    title: 'Ashok Patil',
-    messages: [
-      'Is there any alternative for JavaScript',
-      'Comedy for the classy has a spot at Zinque in Downtown Los Angeles.New comics every Sunday at 830p. Produced by Mitchell Lamar.939 S Broadway.'
-    ],
-    userId: 'ashok'
-  },
-  {
-    title: 'Nilesh Mane',
-    messages: [
-      'Something is wrong there, can you please check that?',
-      'Comedy for the classy has a spot at Zinque in Downtown Los Angeles.New comics every Sunday at 830p. Produced by Mitchell Lamar.939 S Broadway.'
-    ],
-    userId: 'nilesh'
-  },
-  {
-    title: 'Suyog Jagtap',
-    messages: [
-      'I am on the way, we can tech a look after I reach there',
-      'Comedy for the classy has a spot at Zinque in Downtown Los Angeles.New comics every Sunday at 830p. Produced by Mitchell Lamar.939 S Broadway.'
-    ],
-    userId: 'suyog'
-  }
-];
+import { Chatboxcomponent } from './ChatBoxComponent';
 
 const searchOptions = ['Message', 'User', 'Group'];
 
@@ -239,9 +97,7 @@ export const ChatList = (props) => {
               margin: 20,
               borderRadius: '2px',
               boxShadow: '2px black'
-            }}
-            // extra={<Button type='primary'>Start Chat</Button>}
-          >
+            }}>
             <Row style={{ marginBottom: '6px' }}>
               <Col span={17}>
                 <Input placeholder={`Search ${selectedTypeSearch}`} />
@@ -261,7 +117,7 @@ export const ChatList = (props) => {
               </Col>
             </Row>
             <Collapse defaultActiveKey={['1']} accordion>
-              <Panel header='Mentorlink Chat' key='0'></Panel>
+              <Panel header='Mentorlink Chat' key='0' disabled={true}></Panel>
               <Panel header='Personal Chat' key='1'>
                 <List
                   itemLayout='horizontal'
@@ -308,9 +164,9 @@ export const ChatList = (props) => {
                           </Col>
                           {showHistoryForUserIds.includes(item.toUserId) && (
                             <Col span={24} style={{ padding: 10 }}>
-                              {item.chatMessages.map((msg) => (
-                                <Row>{msg.content}</Row>
-                              ))}
+                              <Chatboxcomponent
+                                messages={item.chatMessages}
+                                username={username}></Chatboxcomponent>
                             </Col>
                           )}
                         </Row>
@@ -319,11 +175,11 @@ export const ChatList = (props) => {
                   }}
                 />
               </Panel>
-              <Panel header='Group Chat' key='2'>
+              <Panel header='Group Chat' key='2' disabled={true}>
                 <List
                   itemLayout='horizontal'
                   id='search-result'
-                  dataSource={data}
+                  dataSource={[]}
                   style={{
                     height: (height * 80) / 100 - 300,
                     overflowY: 'auto',
