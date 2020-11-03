@@ -60,8 +60,6 @@ export const ChatList = (props) => {
     }
   }, [props.oneToOneChatHistoryByUserId]);
 
-  console.log('oneToOneChatHistory >>', oneToOneChatHistory);
-
   const onShowHistoryClick = (item) => {
     console.log('item', item, showHistoryForUserIds, showHistoryForUserIds.includes(item.toUserId));
     // {

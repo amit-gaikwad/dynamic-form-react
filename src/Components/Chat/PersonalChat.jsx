@@ -16,12 +16,16 @@ import './ChatList.css';
 import { fetchPersonalDetailsByUserId } from '../../Actions/ResourceAction';
 import { get } from 'lodash';
 import ShortInfoComponent from '../PersonalDetails/ShortInfo';
+import { getOneToOneChatHistoryBetweenTwoUsers } from '../../Actions/ChatAction';
+import { Chatboxcomponent } from './ChatBoxComponent';
 var stompClient = null;
 
+let broadcastMessageBkup = [];
 const PersonalChat = (props) => {
   const [broadcastMessage, setbroadcastMessage] = useState([]);
   const [toUserDetails, settoUserDetails] = useState({});
   const [fromUserDetails, setfromUserDetails] = useState({});
+  const [, setrefresh] = useState();
   const [messageText, setmessageText] = useState('');
   const username = props.match.params.id;
   const toUsername = props.match.params.toUserId;
@@ -32,16 +36,21 @@ const PersonalChat = (props) => {
 
   const onMessageReceived = (payload) => {
     var message = JSON.parse(payload.body);
-    const arr = [...broadcastMessage];
+    console.log('onMessageReceived  >>', message, broadcastMessageBkup);
+    const arr = [...broadcastMessageBkup];
     if (message.type === 'CHAT') {
-      broadcastMessage.push({
-        message: message.content,
+      arr.push({
+        content: message.content,
         sender: message.from,
-        dateTime: message.time
+        time: message.time
       });
-      setbroadcastMessage([...broadcastMessage]);
+      setbroadcastMessage(arr);
     }
   };
+
+  useEffect(() => {
+    broadcastMessageBkup = [...broadcastMessage];
+  }, [broadcastMessage]);
 
   const sendMessage = () => {
     var messageContent = messageText.trim();
@@ -63,13 +72,11 @@ const PersonalChat = (props) => {
     const fromusername = username;
     const tousername = toUsername;
     let user = {};
-
     props.fetchPersonalDetailsByUserId(fromusername, true).then((res) => {
       const response = get(res, 'data[0]');
       if (response) {
         user = getFieldsValueFromAtributes(get(res, 'data[0].attributes', []));
       }
-      console.log('user >>', response, user);
       setfromUserDetails({ ...user, resourceId: response.resourceId });
       stompClient.subscribe(
         '/secured/user/queue/' + tousername + '/' + sessionId,
@@ -83,12 +90,8 @@ const PersonalChat = (props) => {
         type: 'JOIN',
         userId: username
       };
-
-      // Tell your username to the server
       stompClient.send('/app/secured/room', {}, JSON.stringify(message));
     });
-
-    //  connectingElement.classList.add('hidden');
   };
 
   useEffect(() => {
@@ -97,7 +100,16 @@ const PersonalChat = (props) => {
     var socket = new SockJS('http://localhost:8110/secured/room');
     stompClient = Stomp.over(socket);
 
-    stompClient.connect({}, onConnected);
+    props
+      .getOneToOneChatHistoryBetweenTwoUsers(username, sessionId)
+      .then((res) => {
+        setbroadcastMessage(res.data);
+        stompClient.connect({}, onConnected);
+      })
+      .catch(() => {
+        stompClient.connect({}, onConnected);
+      });
+
     props.fetchPersonalDetailsByUserId(toUsername, true).then((res) => {
       let user = {};
       if (get(res, 'data[0]')) {
@@ -138,37 +150,7 @@ const PersonalChat = (props) => {
             </div>
           </Row>
 
-          <Row style={{ width: '100%', padding: 10 }} className='chat_parent'>
-            <div className='msg_history_container' id='search-result'>
-              {broadcastMessage.map((msg, index) => {
-                return msg.sender !== username ? (
-                  <div className='msg_history_left' key={index}>
-                    <div className='incomming_msg_avatar'>
-                      <Avatar
-                        size='large'
-                        src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
-                      />
-                    </div>
-                    <div className='received_msg'>
-                      <div className='received_msg_text'>
-                        <div className='msg_actual_text'>{msg.message}</div>
-                        <div>12:30pm</div>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className='msg_history_right' key={index}>
-                    <div className='outgoing_msg'>
-                      <div className='outgoing_msg_text'>
-                        <div className='msg_actual_text'>{msg.message}</div>
-                        <div>12:31pm</div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </Row>
+          <Chatboxcomponent messages={broadcastMessage} username={username}></Chatboxcomponent>
           <Row style={{ width: '100%', marginTop: 10 }} className='chat_bottom_section'>
             <Col span={21}>
               <Input.TextArea
@@ -195,7 +177,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   fetchPersonalDetailsByUserId: (user, notDispatch) =>
-    dispatch(fetchPersonalDetailsByUserId(user, notDispatch))
+    dispatch(fetchPersonalDetailsByUserId(user, notDispatch)),
+  getOneToOneChatHistoryBetweenTwoUsers: (userId, uniqueId) =>
+    dispatch(getOneToOneChatHistoryBetweenTwoUsers(userId, uniqueId))
 });
 
 export const PersonalChatContainer = connect(mapStateToProps, mapDispatchToProps)(PersonalChat);
