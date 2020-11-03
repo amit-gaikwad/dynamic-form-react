@@ -8,6 +8,11 @@
   overflow-y: auto;
 }
 
+.msg_history_container.smallBox{
+  min-height: 100px;
+  max-height: 200px;
+}
+
 .msg_history_left {
   display: flex;
   margin-bottom: 10px;

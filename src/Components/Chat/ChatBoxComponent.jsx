@@ -5,7 +5,9 @@ import { Avatar, Row } from 'antd';
 export const Chatboxcomponent = (props) => {
   return (
     <Row style={{ width: '100%', padding: 10 }} className='chat_parent'>
-      <div className='msg_history_container' id='search-result'>
+      <div
+        className={`msg_history_container ${props.isSmallBax ? 'smallBox' : ''}`}
+        id='search-result'>
         {props.messages.map((msg, index) => {
           return msg.sender !== props.username ? (
             <div className='msg_history_left' key={index}>

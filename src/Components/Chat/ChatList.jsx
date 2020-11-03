@@ -163,6 +163,7 @@ export const ChatList = (props) => {
                           {showHistoryForUserIds.includes(item.toUserId) && (
                             <Col span={24} style={{ padding: 10 }}>
                               <Chatboxcomponent
+                                isSmallBax={true}
                                 messages={item.chatMessages}
                                 username={username}></Chatboxcomponent>
                             </Col>
