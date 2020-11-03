@@ -13,7 +13,7 @@ import { get, isEmpty } from 'lodash';
 import { URL_PATH } from '../../Utils/config';
 
 import { useState } from 'react';
-import { ChatList } from '../Chat/ChatList';
+import { ChatListContainer } from '../Chat/ChatList';
 import { Link } from 'react-router-dom';
 import { LeftSectionContainer } from './LeftSection';
 const { SubMenu } = Menu;
@@ -73,7 +73,7 @@ const PageLayoutComponent = (props) => {
         </Layout>
         {/* <Footer style={{ textAlign: 'center' }}>Mentor Link App ©2020</Footer> */}
       </Layout>
-      <ChatList {...props}></ChatList>
+      <ChatListContainer {...props}></ChatListContainer>
     </>
   );
 };

@@ -1,7 +1,11 @@
 import { Card, Row, Input, List, Avatar, Divider, Button, Col, Select } from 'antd';
 import React, { useLayoutEffect } from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Collapse } from 'antd';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { getOneToOneChatHistoryByUserId } from '../../Actions/ChatAction';
+import { isEmpty } from 'lodash';
 
 // const data = [
 //   {
@@ -167,6 +171,7 @@ export const ChatList = (props) => {
   const [showMessaging, setshowMessaging] = useState(true);
   const [showHistoryForUserIds, setshowHistoryForUserIds] = useState([]);
   const [width, height] = useWindowSize();
+  const [oneToOneChatHistory, setoneToOneChatHistory] = useState([]);
   const username = props.match.params.id;
 
   const style = Object.assign({
@@ -184,23 +189,38 @@ export const ChatList = (props) => {
     // });
   };
 
+  useEffect(() => {
+    props.getOneToOneChatHistoryByUserId(username);
+  }, []);
+
+  useEffect(() => {
+    if (!isEmpty(props.oneToOneChatHistoryByUserId)) {
+      const oneToOneChathistoryMsg = props.oneToOneChatHistoryByUserId.map((item) => {
+        return { ...item, toUserId: item.uniqueId.replace(item.userId, '') };
+      });
+      setoneToOneChatHistory(oneToOneChathistoryMsg);
+    }
+  }, [props.oneToOneChatHistoryByUserId]);
+
+  console.log('oneToOneChatHistory >>', oneToOneChatHistory);
+
   const onShowHistoryClick = (item) => {
-    console.log('item', item, showHistoryForUserIds, showHistoryForUserIds.includes(item.userId));
+    console.log('item', item, showHistoryForUserIds, showHistoryForUserIds.includes(item.toUserId));
     // {
     //   title: 'Amit Gaikwad',
-    //   userId: 'amit',
+    //   toUserId: 'amit',
     //   messages: [
     //     'How are you',
     //     'Renegade San Francisco returns with 275+ creatives for a springtime marketplace on August 29 + 30 at Fort Mason Center Festival Pavilion. Renegade Craft is free to attend & all are welcome.'
     //   ]
     // }
-    const index = showHistoryForUserIds.indexOf(item.userId);
+    const index = showHistoryForUserIds.indexOf(item.toUserId);
     if (index != -1) {
       showHistoryForUserIds.splice(index, 1);
       const ids = [...showHistoryForUserIds];
       setshowHistoryForUserIds(ids);
     } else {
-      showHistoryForUserIds.push(item.userId);
+      showHistoryForUserIds.push(item.toUserId);
       const ids = [...showHistoryForUserIds];
       setshowHistoryForUserIds(ids);
     }
@@ -246,7 +266,7 @@ export const ChatList = (props) => {
                 <List
                   itemLayout='horizontal'
                   id='search-result'
-                  dataSource={data}
+                  dataSource={oneToOneChatHistory}
                   style={{
                     height: (height * 80) / 100 - 300,
                     overflowY: 'auto',
@@ -268,27 +288,29 @@ export const ChatList = (props) => {
                             />
                           </Col>
                           <Col span={10}>
-                            <a href={`/message/fromUserId/${username}/toUserId/${item.userId}`}>
-                              {item.title}
+                            <a href={`/message/fromUserId/${username}/toUserId/${item.toUserId}`}>
+                              {item.toUserId}
                             </a>
                           </Col>
                           <Col span={6}>
                             {
                               <a onClick={() => onShowHistoryClick(item)}>
-                                {!showHistoryForUserIds.includes(item.userId)
+                                {!showHistoryForUserIds.includes(item.toUserId)
                                   ? `Show History`
                                   : `Hide History`}
                               </a>
                             }
                           </Col>
                           <Col span={6}>
-                            <a href={`/message/fromUserId/${username}/toUserId/${item.userId}`}>
+                            <a href={`/message/fromUserId/${username}/toUserId/${item.toUserId}`}>
                               Start Chat
                             </a>
                           </Col>
-                          {showHistoryForUserIds.includes(item.userId) && (
+                          {showHistoryForUserIds.includes(item.toUserId) && (
                             <Col span={24} style={{ padding: 10 }}>
-                              {item.messages[0]}
+                              {item.chatMessages.map((msg) => (
+                                <Row>{msg.content}</Row>
+                              ))}
                             </Col>
                           )}
                         </Row>
@@ -341,3 +363,20 @@ export const ChatList = (props) => {
     </div>
   );
 };
+
+ChatList.propTypes = {
+  header: PropTypes.node,
+  content: PropTypes.node.isRequired
+};
+
+const mapStateToProps = (state) => {
+  return {
+    oneToOneChatHistoryByUserId: state.chatReducer.oneToOneChatHistoryByUserId
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  getOneToOneChatHistoryByUserId: (id) => dispatch(getOneToOneChatHistoryByUserId(id))
+});
+
+export const ChatListContainer = connect(mapStateToProps, mapDispatchToProps)(ChatList);

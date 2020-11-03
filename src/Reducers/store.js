@@ -6,6 +6,7 @@ import { search } from './SearchReducer';
 import { userReducer } from './UserReducer';
 import { notificationsReducer } from './NotificationsReducer';
 import { connectionReducer } from './ConnectionsReducer';
+import { chatReducer } from './ChatReducer';
 const reduxDevTool = '__REDUX_DEVTOOLS_EXTENSION_COMPOSE__';
 
 const rootReducer = combineReducers({
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
   search,
   userReducer,
   notificationsReducer,
-  connectionReducer
+  connectionReducer,
+  chatReducer
 });
 
 const isNonProd = process.env.NODE_ENV !== 'production';

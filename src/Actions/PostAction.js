@@ -7,8 +7,6 @@ import {
   EDIT_POST_SUCCESS,
   EDIT_POST_ERROR
 } from './types';
-import { fetchUserIdsConnectionsByUserId } from './ConnectionsAction';
-import { fetchUserIdsNotificationsByUserId } from './NotificationsAction';
 
 export function createPostLoading() {
   return {

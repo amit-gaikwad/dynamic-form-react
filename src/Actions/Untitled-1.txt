@@ -132,3 +132,44 @@
   "namespaceId": "5f420797fc99e13c8cf8d145",
   "resourceName": "Post Details"
 }
+
+
+body of work :
+
+user specific resource -> user post
+
+logged in as amit ->
+
+attributes :[
+{
+attribute: {
+    keyName: "post1", keyValue: "post link", keyValues: ["link1","link2"]}
+    metaData: [
+            0: {keyName: "hidden", keyValue: "true", keyValues: null}
+            1: {keyName: "mandatory", keyValue: "true", keyValues: null}
+            2: {keyName: "editable", keyValue: "false", keyValues: null}
+            1: {attribute: {keyName: "currentIndex", keyValue: "1", keyValues: null}, metaData: null}
+    attribute: {keyName: "currentIndex", keyValue: "1", keyValues: null}
+    keyName: "currentIndex"
+    keyValue: "1"
+    keyValues: null
+    metaData: null
+}
+}
+]
+
+category for bow -> show dropdown
+
+
+new API for getting personal details by multiple user ids
+
+
+
+
+settings :
+
+visiblity, notification, chat privacy options,
+
+settings template -> need to decide values
+
+

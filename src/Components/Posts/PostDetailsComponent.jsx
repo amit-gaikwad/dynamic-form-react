@@ -59,9 +59,9 @@ export const PostDetailsComponent = (props) => {
       (p) => p.attribute.keyName === 'User Post'
     );
     const likes = userPostAttribute.metaData.find((m) => m.keyName === 'likes') || {};
-    likes.keyValues = updatedPostDetails.likes;
+    likes.keyValue = updatedPostDetails.likes;
     const dislikes = userPostAttribute.metaData.find((m) => m.keyName === 'dislikes') || {};
-    dislikes.keyValues = updatedPostDetails.dislikes;
+    dislikes.keyValue = updatedPostDetails.dislikes;
     props
       .editPost(omit(postDetails, ['mode']), props.match.params.id)
       .then(() => setshowLoader(false));
@@ -79,9 +79,6 @@ export const PostDetailsComponent = (props) => {
           <Loader></Loader>
         ) : (
           <Row style={{ width: '100%' }}>
-            {/* <Col span={24} style={{ fontSize: '20px', fontWeight: 'bold' }}>
-                                Amit Gaikwad's Post
-                            </Col> */}
             <Col span={24}>
               <PostDetailsWithMetaDataComponent
                 postDetails={postDetails || {}}
