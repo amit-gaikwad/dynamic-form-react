@@ -7,6 +7,8 @@ import { userReducer } from './UserReducer';
 import { notificationsReducer } from './NotificationsReducer';
 import { connectionReducer } from './ConnectionsReducer';
 import { chatReducer } from './ChatReducer';
+import { postReducer } from './PostReducer';
+
 const reduxDevTool = '__REDUX_DEVTOOLS_EXTENSION_COMPOSE__';
 
 const rootReducer = combineReducers({
@@ -15,7 +17,8 @@ const rootReducer = combineReducers({
   userReducer,
   notificationsReducer,
   connectionReducer,
-  chatReducer
+  chatReducer,
+  postReducer
 });
 
 const isNonProd = process.env.NODE_ENV !== 'production';

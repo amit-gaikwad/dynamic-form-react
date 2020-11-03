@@ -4,13 +4,19 @@ import {
   CREATE_POST_ERROR,
   EDIT_POST_LOADING,
   EDIT_POST_SUCCESS,
-  EDIT_POST_ERROR
+  EDIT_POST_ERROR,
+  ALL_POST_BY_USER_ID_LOADING,
+  ALL_POST_BY_USER_ID_SUCCESS,
+  ALL_POST_BY_USER_ID_ERROR
 } from '../Actions/types';
 
 const initialState = {
   postDetailsLoading: false,
   postDetailsError: null,
   postDetails: {},
+  allPostByUserIdLoading: false,
+  allPostByUserIdError: null,
+  allPostByUserId: [],
   editPostDetailsLoading: false,
   editPostDetailsError: null
 };
@@ -36,6 +42,28 @@ export const postReducer = (state = initialState, action) => {
         ...state,
         postDetailsError: action.error,
         postDetailsLoading: false
+      };
+
+    case ALL_POST_BY_USER_ID_SUCCESS:
+      return {
+        ...state,
+        allPostByUserId: action.payload,
+        allPostByUserIdLoading: false,
+        allPostByUserIdError: null
+      };
+
+    case ALL_POST_BY_USER_ID_LOADING:
+      return {
+        ...state,
+        allPostByUserIdLoading: true,
+        allPostByUserIdError: null
+      };
+
+    case ALL_POST_BY_USER_ID_ERROR:
+      return {
+        ...state,
+        allPostByUserIdError: action.error,
+        allPostByUserIdLoading: false
       };
 
     case EDIT_POST_SUCCESS:

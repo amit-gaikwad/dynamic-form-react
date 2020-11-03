@@ -18,13 +18,16 @@ import { Loader } from '../Loader/Loader';
 import { PostWrapperComponent } from '../Posts/PostWrapperComponent';
 import { Col, Row, Card, Tooltip, Divider, List } from 'antd';
 import ShortInfoComponent from '../PersonalDetails/ShortInfo';
+import { getAllPostByUserId } from '../../Actions/PostAction';
+import { Postlistcomponent } from '../Posts/PostListComponent';
 
 const HomeComponent = (props) => {
   const userId = props.match.params.id;
   useEffect(() => {
     props.fetchPostTemplate();
-    props.fetchPostsByUserId(userId);
+    // props.fetchPostsByUserId(userId);
     props.fetchPersonalDetailsByUserId(userId);
+    props.getAllPostByUserId(userId);
   }, []);
   const onHandleSubmit = (event, templateResource, currentIndex, form) => {
     const values = form.getFieldsValue();
@@ -35,10 +38,7 @@ const HomeComponent = (props) => {
     newResource.attributes = newResource.attributes.filter(
       (attr) => attr.attribute.keyName !== 'template'
     );
-    // const userResource1 = (props.resourcesByUserId || []).find(
-    //   (r) => r.resourceName === templateResource.resourceName
-    // );
-    // const userResource = cloneDeep(userResource1);
+
     for (const item of newResource.attributes) {
       if (item.attribute.keyName === 'userId' && istemplateResource) {
         item.attribute.keyValue = userId;
@@ -68,12 +68,6 @@ const HomeComponent = (props) => {
         metaData
       };
       newResource.attributes.unshift(obj);
-      // newResource.attributes.unshift({
-      //   attribute: {
-      //     keyName: 'date',
-      //     keyValue: new Date()
-      //   }
-      // });
       newResource.resourceId = postsByUserId.resourceId;
       console.log('newResource', newResource);
 
@@ -169,19 +163,10 @@ const HomeComponent = (props) => {
                 </Col>
                 <Divider></Divider>
                 <Row style={{ width: '100%' }} gutter={[16, 16]}>
-                  <List itemLayout='vertical' size='large'>
-                    {postResources.map((item) => {
-                      const postData = getFieldsValueFromAtributes(item);
-                      return (
-                        <Col span={24}>
-                          <PostWrapperComponent
-                            post={postData['User Post']}
-                            date={postData['date']}
-                            user={user}></PostWrapperComponent>
-                        </Col>
-                      );
-                    })}
-                  </List>
+                  <Postlistcomponent
+                    posts={props.allPostByUserId || []}
+                    userId={userId}
+                    user={user}></Postlistcomponent>
                 </Row>
               </Row>
             </>
@@ -196,7 +181,8 @@ const mapStateToProps = (state) => {
     postTemplate: state.resources.postTemplate || {},
     postsByUserId: state.resources.postsByUserId || [],
     postsByUserIdLoading: state.resources.postsByUserIdLoading,
-    personalDetailsByUserId: state.resources.personalDetailsByUserId || []
+    personalDetailsByUserId: state.resources.personalDetailsByUserId || [],
+    allPostByUserId: state.postReducer.allPostByUserId
   };
 };
 
@@ -206,7 +192,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(updateResourceByUserId(resource, userId, 'Home')),
   createResource: (resource, userId) => dispatch(createResource(resource, userId, 'Home')),
   fetchPostsByUserId: (userId) => dispatch(fetchPostsByUserId(userId)),
-  fetchPersonalDetailsByUserId: (userId) => dispatch(fetchPersonalDetailsByUserId(userId))
+  fetchPersonalDetailsByUserId: (userId) => dispatch(fetchPersonalDetailsByUserId(userId)),
+  getAllPostByUserId: (userId) => dispatch(getAllPostByUserId(userId))
 });
 
 export const HomeContainer = connect(mapStateToProps, mapDispatchToProps)(HomeComponent);
