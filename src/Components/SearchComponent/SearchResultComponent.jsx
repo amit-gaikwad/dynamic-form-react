@@ -6,375 +6,30 @@ import {
   getFieldsValueFromAtributes
 } from '../../Utils/common-methods';
 import { get } from 'lodash';
-
-const data = [
-  {
-    resourceId: '5f270aa4e042d5499c5ee765',
-    resourceName: 'Personal Details',
-    namespaceId: '5f1f0c2b91f3775dd4c991a5',
-    attributes: [
-      {
-        attribute: {
-          keyName: 'userId',
-          keyValue: 'amol'
-        },
-        metaData: [
-          {
-            keyName: 'hidden',
-            keyValue: 'true'
-          },
-          {
-            keyName: 'mandatory',
-            keyValue: 'true'
-          },
-          {
-            keyName: 'editable',
-            keyValue: 'false'
-          }
-        ]
-      },
-      {
-        attribute: {
-          keyName: 'currentIndex',
-          keyValue: '1'
-        },
-        metaData: null
-      },
-      {
-        attribute: {
-          keyName: 'Salutation',
-          keyValue: 'MR'
-        },
-        metaData: [
-          {
-            keyName: 'hidden',
-            keyValue: 'false'
-          },
-          {
-            keyName: 'mandatory',
-            keyValue: 'true'
-          },
-          {
-            keyName: 'editable',
-            keyValue: 'false'
-          },
-          {
-            keyName: 'type',
-            keyValue: 'text'
-          },
-          {
-            keyName: 'index',
-            keyValue: '1'
-          }
-        ]
-      },
-      {
-        attribute: {
-          keyName: 'First Name',
-          keyValue: 'Amol B.'
-        },
-        metaData: [
-          {
-            keyName: 'hidden',
-            keyValue: 'false'
-          },
-          {
-            keyName: 'mandatory',
-            keyValue: 'true'
-          },
-          {
-            keyName: 'editable',
-            keyValue: 'true'
-          },
-          {
-            keyName: 'type',
-            keyValue: 'text'
-          },
-          {
-            keyName: 'index',
-            keyValue: '1'
-          }
-        ]
-      },
-      {
-        attribute: {
-          keyName: 'Last Name',
-          keyValue: 'Jadhav'
-        },
-        metaData: [
-          {
-            keyName: 'hidden',
-            keyValue: 'false'
-          },
-          {
-            keyName: 'mandatory',
-            keyValue: 'true'
-          },
-          {
-            keyName: 'editable',
-            keyValue: 'true'
-          },
-          {
-            keyName: 'type',
-            keyValue: 'text'
-          },
-          {
-            keyName: 'index',
-            keyValue: '1'
-          }
-        ]
-      },
-      {
-        attribute: {
-          keyName: 'Preferred Name',
-          keyValue: 'AmolJ'
-        },
-        metaData: [
-          {
-            keyName: 'hidden',
-            keyValue: 'false'
-          },
-          {
-            keyName: 'mandatory',
-            keyValue: 'true'
-          },
-          {
-            keyName: 'editable',
-            keyValue: 'true'
-          },
-          {
-            keyName: 'type',
-            keyValue: 'text'
-          },
-          {
-            keyName: 'index',
-            keyValue: '1'
-          }
-        ]
-      },
-      {
-        attribute: {
-          keyName: 'Photo',
-          keyValue: ''
-        },
-        metaData: [
-          {
-            keyName: 'hidden',
-            keyValue: 'false'
-          },
-          {
-            keyName: 'mandatory',
-            keyValue: 'true'
-          },
-          {
-            keyName: 'editable',
-            keyValue: 'true'
-          },
-          {
-            keyName: 'type',
-            keyValue: 'fileUpload'
-          },
-          {
-            keyName: 'index',
-            keyValue: '1'
-          }
-        ]
-      }
-    ]
-  },
-  {
-    resourceId: '5f293b7f9950957c488a2a88',
-    resourceName: 'Personal Details',
-    namespaceId: '5f1f0c2b91f3775dd4c991a5',
-    attributes: [
-      {
-        attribute: {
-          keyName: 'userId',
-          keyValue: 'ashok'
-        },
-        metaData: [
-          {
-            keyName: 'hidden',
-            keyValue: 'true'
-          },
-          {
-            keyName: 'mandatory',
-            keyValue: 'true'
-          },
-          {
-            keyName: 'editable',
-            keyValue: 'false'
-          }
-        ]
-      },
-      {
-        attribute: {
-          keyName: 'Salutation',
-          keyValue: 'Mr'
-        },
-        metaData: [
-          {
-            keyName: 'hidden',
-            keyValue: 'false'
-          },
-          {
-            keyName: 'mandatory',
-            keyValue: 'true'
-          },
-          {
-            keyName: 'editable',
-            keyValue: 'false'
-          },
-          {
-            keyName: 'type',
-            keyValue: 'text'
-          },
-          {
-            keyName: 'index',
-            keyValue: '1'
-          }
-        ]
-      },
-      {
-        attribute: {
-          keyName: 'First Name',
-          keyValue: 'Ashok'
-        },
-        metaData: [
-          {
-            keyName: 'hidden',
-            keyValue: 'false'
-          },
-          {
-            keyName: 'mandatory',
-            keyValue: 'true'
-          },
-          {
-            keyName: 'editable',
-            keyValue: 'true'
-          },
-          {
-            keyName: 'type',
-            keyValue: 'text'
-          },
-          {
-            keyName: 'index',
-            keyValue: '1'
-          }
-        ]
-      },
-      {
-        attribute: {
-          keyName: 'Last Name',
-          keyValue: 'Mane'
-        },
-        metaData: [
-          {
-            keyName: 'hidden',
-            keyValue: 'false'
-          },
-          {
-            keyName: 'mandatory',
-            keyValue: 'true'
-          },
-          {
-            keyName: 'editable',
-            keyValue: 'true'
-          },
-          {
-            keyName: 'type',
-            keyValue: 'text'
-          },
-          {
-            keyName: 'index',
-            keyValue: '1'
-          }
-        ]
-      },
-      {
-        attribute: {
-          keyName: 'Preferred Name',
-          keyValue: 'AM'
-        },
-        metaData: [
-          {
-            keyName: 'hidden',
-            keyValue: 'false'
-          },
-          {
-            keyName: 'mandatory',
-            keyValue: 'true'
-          },
-          {
-            keyName: 'editable',
-            keyValue: 'true'
-          },
-          {
-            keyName: 'type',
-            keyValue: 'text'
-          },
-          {
-            keyName: 'index',
-            keyValue: '1'
-          }
-        ]
-      },
-      {
-        attribute: {
-          keyName: 'Photo',
-          keyValue: ''
-        },
-        metaData: [
-          {
-            keyName: 'hidden',
-            keyValue: 'false'
-          },
-          {
-            keyName: 'mandatory',
-            keyValue: 'true'
-          },
-          {
-            keyName: 'editable',
-            keyValue: 'true'
-          },
-          {
-            keyName: 'type',
-            keyValue: 'fileUpload'
-          },
-          {
-            keyName: 'index',
-            keyValue: '1'
-          }
-        ]
-      },
-      {
-        attribute: {
-          keyName: 'currentIndex',
-          keyValue: '1'
-        },
-        metaData: null
-      }
-    ]
-  }
-];
+import { history } from '../../Utils/history';
+import { URL_PATH } from '../../Utils/config';
 
 export const SearchResultComponent = (props) => {
-  console.log('props', props);
   const sendConnectedUser = props.sendConnectedUser.attributes || [];
-  debugger;
   const connectedUserIdsAttribute =
     sendConnectedUser.find((attr) => attr.attribute.keyName === 'Connection') || {};
   const connectedUserIds = get(connectedUserIdsAttribute, 'attribute.keyValue', '').split(',');
-  console.log('connectedUserIds', sendConnectedUser, connectedUserIdsAttribute.keyValue);
   return (
-    <Row width={'100%'} className='search-result-component' gutter={[16, 16]}>
-      {(props.users || []).map((p, i) => {
-        console.log('user', getFieldsValueFromAtributes(p.attributes));
+    <Row
+      style={{ height: '100%', overflowY: 'auto', marginTop: '3px' }}
+      id='search-result'
+      className='search-result-component'
+      gutter={[16, 16]}>
+      {props.users.map((p, i) => {
         const user = getFieldsValueFromAtributes(p.attributes);
         return (
           <Col span={11} key={i} offset={1}>
             <Card
-              style={{ width: '90%' }}
+              style={{
+                width: '90%',
+                borderRadius: '2px',
+                boxShadow: '2px 2px 2px 2px rgba(208, 216, 243, 0.6)'
+              }}
               actions={
                 connectedUserIds.includes(user.userId)
                   ? [
@@ -386,27 +41,35 @@ export const SearchResultComponent = (props) => {
                       </div>
                     ]
                   : [
-                      <Button
-                        onClick={() => {
-                          props.onDecline(p);
-                        }}>
-                        Decline
-                      </Button>,
+                      // <Button
+                      //   onClick={() => {
+                      //     props.onDecline(p);
+                      //   }}>
+                      //   Decline
+                      // </Button>
+                      // ,
                       <Button
                         onClick={() => {
                           props.onAccept(p, user);
                         }}>
-                        Accept
+                        Connect
                       </Button>
                     ]
               }>
-              <Meta
-                avatar={
-                  <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
-                }
-                title={`${user['First Name']} ${user['Last Name']}`}
-                //description='This is the description'
-              />
+              <a
+                target='_blank'
+                href={`${URL_PATH}/user/fromUserId/${props.userId}/toUserId/${user.userId}`}
+                // onClick={() => {
+                //   history.push("");
+                //   console.log('history', history); //history
+                // }}
+                style={{ cursor: 'pointer' }}>
+                <Meta
+                  avatar={<Avatar src={user['Photo']} />}
+                  title={`${user['First Name']} ${user['Last Name']}`}
+                  //description='This is the description'
+                />
+              </a>
             </Card>
           </Col>
         );

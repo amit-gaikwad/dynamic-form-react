@@ -1,62 +1,100 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { Layout } from 'antd';
-import { useSelector } from 'react-redux';
-// import { useTranslation } from 'react-i18next';
+import { Layout, Card, Avatar, Button, Menu, Skeleton, List, Row, Input } from 'antd';
+import { connect } from 'react-redux';
 
-import { ErrorBoundary } from '../common/ErrorBoundary';
-import { HeaderContainerComponent } from '../header/container';
-import { isHeaderCollapsed } from '../../selectors/headerSelectors';
-import { isManager } from '../../selectors/userProfileSelector';
+import { HeaderComponent } from '../Header/Header';
+import { useEffect } from 'react';
+import { fetchNotificationsByUserId } from '../../Actions/NotificationsAction';
+import Meta from 'antd/lib/card/Meta';
+import { fetchPersonalDetailsByUserId, fetchSystemTemplates } from '../../Actions/ResourceAction';
+import { getFieldsValueFromAtributes } from '../../Utils/common-methods';
+import { get, isEmpty } from 'lodash';
+import { URL_PATH } from '../../Utils/config';
 
-import { iff } from '../../utils/iff';
-import { MainSider } from './mainSider/mainSider';
+import { useState } from 'react';
+import { ChatListContainer } from '../Chat/ChatList';
+import { Link } from 'react-router-dom';
+import { LeftSectionContainer } from './LeftSection';
+const { SubMenu } = Menu;
 
-/****** Drawer Icons *********/
+const { Header, Content, Footer, Sider } = Layout;
 
-// import cropsMenu from '../../public/crops.svg';
-
-const { Content } = Layout;
-
-const StyledLayout = styled(Layout)`
-  height: 100%;
-  min-height: 100%;
-`;
-
-const StyledContent = styled(Content)`
-  background-color: #e5e5e5;
-  overflow-y: hidden;
-  overflow-x: hidden;
-  padding: 0px;
-`;
-
-export const PageLayout = (props) => {
-  // const { t } = useTranslation();
-  const isCollapsed = useSelector(isHeaderCollapsed);
-  const isRoleManager = useSelector(isManager);
+const PageLayoutComponent = (props) => {
+  const [collapsed, setcollapsed] = useState(false);
+  useEffect(() => {
+    props.fetchNotificationsByUserId(localStorage.getItem('userID'));
+    props.fetchPersonalDetailsByUserId(localStorage.getItem('userID'));
+    props.fetchSystemTemplates();
+  }, []);
+  let user = {};
+  const userId = get(props, 'match.params.id', '');
+  if (props.personalDetailsByUserId[0]) {
+    user = getFieldsValueFromAtributes(props.personalDetailsByUserId[0].attributes);
+  }
+  const toggleCollapsed = () => {
+    setcollapsed(!collapsed);
+  };
   return (
-    <StyledLayout>
-      <MainSider isRoleManager={isRoleManager} />
-      <Layout>
-        <ErrorBoundary fromHeader={true}>
-          <HeaderContainerComponent
-            isCollapsed={isCollapsed}
-            header={props.header}
-            currentPage={props.currentPage}
-          />
-        </ErrorBoundary>
-
-        <StyledContent>
-          <ErrorBoundary fromHeader={false}>{iff(!!props.content, props.content)}</ErrorBoundary>
-        </StyledContent>
+    <>
+      <Layout className='layout'>
+        <HeaderComponent {...props}></HeaderComponent>
+        <Layout style={{ marginTop: 64 }}>
+          <Sider
+            width={'25%'}
+            style={{ background: '#f0f2f5' }}
+            className={props.blurBackground ? 'blurBg' : ''}>
+            {/* <Button type='primary' onClick={toggleCollapsed} style={{ marginBottom: 16 }}>
+              {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
+            </Button> */}
+            <div
+            // style={{
+            //   position: props.blurBackground && 'fixed',
+            //   width: props.blurBackground && '25%'
+            // }}
+            >
+              <LeftSectionContainer {...props}></LeftSectionContainer>
+            </div>
+          </Sider>
+          <Content
+            className={props.blurBackground ? 'blurBg' : ''}
+            style={{
+              marginTop: '20px',
+              boxShadow: '0 0 0 1px rgba(0,0,0,.15), 0 2px 3px rgba(0,0,0,.2)'
+            }}>
+            <div className='site-layout-content'>{props.content}</div>
+          </Content>
+          <Sider
+            width={'30%'}
+            style={{ background: '#f5f5f5' }}
+            className={props.blurBackground ? 'blurBg' : ''}>
+            {/* <ChatList></ChatList> */}
+          </Sider>
+        </Layout>
+        {/* <Footer style={{ textAlign: 'center' }}>Mentor Link App ©2020</Footer> */}
       </Layout>
-    </StyledLayout>
+      <ChatListContainer {...props}></ChatListContainer>
+    </>
   );
 };
 
-PageLayout.propTypes = {
+PageLayoutComponent.propTypes = {
   header: PropTypes.node,
-  content: PropTypes.node.isRequired,
-  currentPage: PropTypes.string
+  content: PropTypes.node.isRequired
 };
+
+const mapStateToProps = (state) => {
+  return {
+    notificationsByUserId: state.notificationsReducer.notificationsByUserId,
+    personalDetailsByUserId: state.resources.personalDetailsByUserId || [],
+    blurBackground: state.userReducer.blurBackground
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchNotificationsByUserId: (id) => dispatch(fetchNotificationsByUserId(id)),
+  fetchPersonalDetailsByUserId: (userId) => dispatch(fetchPersonalDetailsByUserId(userId)),
+  fetchSystemTemplates: () => dispatch(fetchSystemTemplates())
+});
+
+export const PageLayout = connect(mapStateToProps, mapDispatchToProps)(PageLayoutComponent);

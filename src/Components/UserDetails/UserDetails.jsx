@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Divider, Button } from 'antd';
+import { Row, Col, Divider, Button, Card, Avatar } from 'antd';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import moment from 'moment';
-import { getRenderableComponentByType } from '../../Utils/getRenderableComponent';
 import { connect } from 'react-redux';
+import { PlusCircleOutlined, EditOutlined } from '@ant-design/icons';
 import {
   fetchResources,
   createResource,
@@ -12,11 +12,16 @@ import {
   updateResourceByUserId
 } from '../../Actions/ResourceAction';
 import { DynamicFormContainer } from '../../Utils/getDynamicForm';
-import { getFieldsFromAttributeModels } from '../../Utils/common-methods';
+import {
+  getFieldsFromAttributeModels,
+  getFieldsValueFromAtributes
+} from '../../Utils/common-methods';
 import { Loader } from '../Loader/Loader';
 import { omit, cloneDeep } from 'lodash';
 import { CollapsedDetails } from './CollapsedDetails';
 import Modal from 'antd/lib/modal/Modal';
+import { PageLayout } from '../Layout/PageLayout';
+import PersonalDetailsWithCover from '../PersonalDetails/PersonalDetailsWithCover';
 
 const UserDetails = (props) => {
   const [currentResourceAttribute, setcurrentResourceAttribute] = useState({});
@@ -26,8 +31,8 @@ const UserDetails = (props) => {
     props.fetchResourcesByUserId(props.match.params.id);
   }, []);
 
-  const onHandleSubmit = (event, templateResource, currentIndex) => {
-    debugger;
+  const onHandleSubmit = (event, templateResource, currentIndex, form) => {
+    const values = form.getFieldsValue();
     const newResource = omit(templateResource, ['resourceId']);
     const istemplateResource = newResource.attributes.find(
       (attr) => attr.attribute.keyName == 'template'
@@ -43,7 +48,7 @@ const UserDetails = (props) => {
       if (item.attribute.keyName === 'userId' && istemplateResource) {
         item.attribute.keyValue = props.match.params.id;
       } else {
-        item.attribute.keyValue = event[item.attribute.keyName];
+        item.attribute.keyValue = values[item.attribute.keyName];
       }
     }
     if (templateResource.mode === 'add') {
@@ -140,7 +145,6 @@ const UserDetails = (props) => {
         keyValue: currentIndex
       }
     });
-    console.log('templateResource', newResource);
     setvisibleModal(true);
     setcurrentResourceAttribute({ ...newResource, mode: 'add' });
   };
@@ -151,8 +155,11 @@ const UserDetails = (props) => {
   };
   const renderComponents = () => {
     return (
-      <div>
+      <Row style={{ margin: '10px' }} gutter={[26, 26]}>
         {(props.templateResources || []).map((template) => {
+          if (template.resourceName === 'Tags' || 'Post Details' === template.resourceName) {
+            return;
+          }
           let attributes = template.attributes;
           const userResource1 = (props.resourcesByUserId || []).find(
             (r) => r.resourceName === template.resourceName
@@ -177,53 +184,74 @@ const UserDetails = (props) => {
             });
             userResources.push(a);
           }
+          const fieldsValue = getFieldsValueFromAtributes(currentResource.attributes);
+          if (template.resourceName === 'Personal Details') {
+            return (
+              <PersonalDetailsWithCover
+                isItTemplate={isItTemplate}
+                name={`${fieldsValue['First Name']} ${fieldsValue['Last Name']}`}
+                profileImageUrl={fieldsValue['Photo']}
+                onEditClick={(currentResource) => onEditClick(currentResource)}
+                addNewFreshResourceClick={(currentResource) =>
+                  addNewFreshResourceClick(currentResource)
+                }
+                currentResource={currentResource}
+                resourceName={currentResource.resourceName}></PersonalDetailsWithCover>
+            );
+          }
           return (
-            <Row style={{ margin: '10px' }} key={template.resourceId}>
-              <Row style={{ width: '100%' }}>
-                <Row style={{ width: '100%' }}>
-                  <Col span={22} style={{ fontWeight: 1000 }}>
+            <Col span={24} key={template.resourceId}>
+              <Card
+                style={{
+                  borderRadius: '2px',
+                  boxShadow: '2px 2px 2px 2px rgba(208, 216, 243, 0.6)'
+                }}
+                title={
+                  <span style={{ fontWeight: 'bold', fontSize: '20px' }}>
                     {currentResource.resourceName}
-                  </Col>
-                  <Col span={2}>
-                    <Button
+                  </span>
+                }
+                className='profileSection'
+                extra={
+                  !isItTemplate ? (
+                    isItHavingMultiResource && (
+                      <PlusCircleOutlined
+                        style={{ fontSize: '30px' }}
+                        onClick={() => {
+                          if (!isItTemplate && isItHavingMultiResource) {
+                            addNewResourceClick(currentResource);
+                          } else {
+                            addNewFreshResourceClick(currentResource);
+                          }
+                        }}
+                      />
+                    )
+                  ) : (
+                    <PlusCircleOutlined
+                      style={{ fontSize: '30px' }}
                       onClick={() => {
                         if (!isItTemplate && isItHavingMultiResource) {
                           addNewResourceClick(currentResource);
                         } else {
                           addNewFreshResourceClick(currentResource);
                         }
-                      }}>
-                      {!isItTemplate ? (
-                        isItHavingMultiResource && (
-                          <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            viewBox='0 0 24 24'
-                            data-supported-dps='24x24'
-                            fill='currentColor'
-                            width='24'
-                            height='24'
-                            focusable='false'>
-                            <path d='M21 13h-8v8h-2v-8H3v-2h8V3h2v8h8v2z'></path>
-                          </svg>
-                        )
-                      ) : (
-                        <svg
-                          xmlns='http://www.w3.org/2000/svg'
-                          viewBox='0 0 24 24'
-                          data-supported-dps='24x24'
-                          fill='currentColor'
-                          width='16'
-                          height='16'
-                          focusable='false'>
-                          <path d='M21 13h-8v8h-2v-8H3v-2h8V3h2v8h8v2z'></path>
-                        </svg>
-                      )}
-                    </Button>
-                  </Col>
-                </Row>
+                      }}
+                    />
+                  )
+                }
+                hoverable={true}>
                 {userResources.map((attrs, index) => (
                   <Row style={{ width: '100%', marginTop: '15px' }} className='multiResources'>
-                    <Col span={6}>
+                    <Col
+                      span={20}
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => {
+                        if (isItHavingMultiResource) {
+                          editMultiResourceClick(currentResource, attrs, index + 1);
+                        } else {
+                          onEditClick(currentResource);
+                        }
+                      }}>
                       {getFieldsFromAttributeModels(attrs).map((field) => {
                         if (
                           ![
@@ -231,81 +259,82 @@ const UserDetails = (props) => {
                             'userId'.toLowerCase(),
                             'currentIndex'.toLowerCase(),
                             'Instances Allowed'.toLowerCase()
-                          ].includes(field.label.toLowerCase())
+                          ].includes(field.label.toLowerCase()) &&
+                          !isEmpty(field.value)
                         ) {
                           return (
                             <Col key={field.label} span={24}>
-                              {field.label} :
-                              {field.type === 'date'
-                                ? moment(field.value).format('DD/MM/YYYY')
-                                : field.value}
+                              <Row gutter={[5, 5]}>
+                                <Col span={4}> {`${field.label}  :`} </Col>
+                                <Col span={18}>
+                                  {field.type === 'date' ? (
+                                    moment(field.value).format('DD/MM/YYYY')
+                                  ) : field.type === 'fileUpload' ? (
+                                    <Avatar
+                                      src={field.value}
+                                      size={40}
+                                      style={{ marginLeft: '10px' }}
+                                    />
+                                  ) : (
+                                    field.value
+                                  )}
+                                </Col>
+                              </Row>
                             </Col>
                           );
                         }
                       })}
                     </Col>
                     <Col span={2} className='editButton'>
-                      <Button
+                      <EditOutlined
                         onClick={() => {
                           if (isItHavingMultiResource) {
                             editMultiResourceClick(currentResource, attrs, index + 1);
                           } else {
                             onEditClick(currentResource);
                           }
-                        }}>
-                        <svg
-                          xmlns='http://www.w3.org/2000/svg'
-                          viewBox='0 0 24 24'
-                          data-supported-dps='24x24'
-                          fill='currentColor'
-                          width='16'
-                          height='16'
-                          focusable='false'>
-                          <path d='M21.71 5L19 2.29a1 1 0 00-.71-.29 1 1 0 00-.7.29L4 15.85 2 22l6.15-2L21.71 6.45a1 1 0 00.29-.74 1 1 0 00-.29-.71zM6.87 18.64l-1.5-1.5L15.92 6.57l1.5 1.5zM18.09 7.41l-1.5-1.5 1.67-1.67 1.5 1.5z'></path>
-                        </svg>
-                      </Button>
+                        }}
+                      />
                     </Col>
+                    {isItHavingMultiResource && <Divider></Divider>}
                   </Row>
                 ))}
-              </Row>
-              <Divider />
-
-              {/* <CollapsedDetails
-                addNewResourceClick={addNewResourceClick}
-                fields={getFieldsFromAttributeModels(attributes)}
-                template={userResource || template}
-                currentIndex={currentIndexAttr.keyValue || 0}
-                onEditClick={onEditClick}
-              /> */}
-            </Row>
+              </Card>
+            </Col>
           );
         })}
-      </div>
+      </Row>
     );
   };
 
   return (
-    <div>
-      {props.loading || props.createReourceLoading || props.resourcesByUserIdLoading ? (
-        <Loader />
-      ) : (
-        renderComponents()
-      )}
-      {visibleModal && (
-        <Modal
-          title={currentResourceAttribute.resourceName}
-          visible={visibleModal}
-          footer={null}
-          onOk={() => setvisibleModal(false)}
-          onCancel={() => setvisibleModal(false)}>
-          <DynamicFormContainer
-            fields={getFieldsFromAttributeModels(currentResourceAttribute.attributes)}
-            template={currentResourceAttribute}
-            currentIndex={currentResourceAttribute.keyValue || 0}
-            onHandleSubmit={onHandleSubmit}></DynamicFormContainer>
-        </Modal>
-      )}
-    </div>
+    <PageLayout
+      {...props}
+      content={
+        <div>
+          {props.loading || props.createReourceLoading || props.resourcesByUserIdLoading ? (
+            <Loader />
+          ) : (
+            renderComponents()
+          )}
+          {visibleModal && (
+            <Modal
+              title={currentResourceAttribute.resourceName}
+              visible={visibleModal}
+              width={550}
+              footer={null}
+              onOk={() => setvisibleModal(false)}
+              onCancel={() => setvisibleModal(false)}>
+              <DynamicFormContainer
+                setvisibleModal={setvisibleModal}
+                fields={getFieldsFromAttributeModels(currentResourceAttribute.attributes)}
+                template={currentResourceAttribute}
+                currentIndex={currentResourceAttribute.keyValue || 0}
+                onHandleSubmit={onHandleSubmit}></DynamicFormContainer>
+            </Modal>
+          )}
+        </div>
+      }></PageLayout>
   );
 };
 

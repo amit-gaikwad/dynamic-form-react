@@ -1,0 +1,224 @@
+
+{
+  "attributes": [
+    {
+      "attribute": {
+        "keyName": "template",
+        "keyValue": "template"
+      },
+      "comments": [
+        {}
+      ],
+      "metaData": [
+        {
+          "keyName": "hidden",
+          "keyValue": "true"
+        },
+        {
+          "keyName": "mandatory",
+          "keyValue": "true"
+        },
+        {
+          "keyName": "editable",
+          "keyValue": "false"
+        }
+      ]
+    },
+    {
+      "attribute": {
+        "keyName": "userId",
+        "keyValue": ""
+      },
+      "comments": [
+        {}
+      ],
+      "metaData": [
+        {
+          "keyName": "hidden",
+          "keyValue": "true"
+        },
+        {
+          "keyName": "mandatory",
+          "keyValue": "true"
+        },
+        {
+          "keyName": "editable",
+          "keyValue": "false"
+        }
+      ]
+    },
+    {
+      "attribute": {
+        "keyName": "Instances Allowed",
+        "keyValue": ""
+      },
+      "comments": [
+        {}
+      ],
+      "metaData": [
+        {
+          "keyName": "hidden",
+          "keyValue": "true"
+        },
+        {
+          "keyName": "mandatory",
+          "keyValue": "true"
+        },
+        {
+          "keyName": "editable",
+          "keyValue": "false"
+        }
+      ]
+    },
+    {
+      "attribute": {
+        "keyName": "User Post",
+        "keyValue": ""
+      },
+      "comments": [
+        {
+          "attribute": {
+            "keyName": "User Comment",
+            "keyValue": ""
+          },
+          "metaData": [
+            {
+              "keyName": "likes",
+              "keyValue": ""
+            },
+            {
+              "keyName": "dislikes",
+              "keyValue": "false"
+            },
+            {
+              "keyName": "type",
+              "keyValue": "textArea",
+              "keyValues": null
+            }
+          ],
+          "comments": [
+            {}
+          ]
+        }
+      ],
+      "metaData": [
+        {
+          "keyName": "hidden",
+          "keyValue": "false"
+        },
+        {
+          "keyName": "type",
+          "keyValue": "textArea",
+          "keyValues": null
+        },
+        {
+          "keyName": "mandatory",
+          "keyValue": "false"
+        },
+        {
+          "keyName": "editable",
+          "keyValue": "false"
+        },
+        {
+          "keyName": "likes",
+          "keyValue": ""
+        },
+        {
+          "keyName": "dislikes",
+          "keyValue": ""
+        }
+      ]
+    }
+  ],
+  "namespaceId": "5f420797fc99e13c8cf8d145",
+  "resourceName": "Post Details"
+}
+Today's Work :
+
+1. send invite to friend -> create separate page for it
+2. integrate history API
+3. search messages API
+4. post creation new API integration
+5. add upvote and downvote count for post with his userId -
+
+
+MOM : 
+
+1.  integrate chat history API -  
+2.  search functionality for message -  
+4.  send invite | after clicking on show all -> new page ->   show result middle section - 7h
+7.  Create Group page -  
+12. dummy user for bot and show it on the top of the messaging -  
+14. notification symbol for particular user - 
+17. group chat functionality - 
+18. integrate body of work -  
+19. add share with add extra message & search functionality on popup -  
+20. create separate page for post -  
+22. add upvote and downvote count for post with his userId -
+
+
+
+
+Done :
+3. add short info on profile section 
+6. divide section into personal chat and group chat
+8. Add search drop down ->
+    message
+    user
+    group
+9. handle single chat , group chat, search
+10. show start chat and show history
+13. increase width of message
+21. Ask Question redirects to personal chat window
+2. modify object in payload
+15. like and dislike button for feed
+16.  add right click for options
+24. show personal info on tooltip 
+25. handle 3 actions on tooltip
+11. show history below user name 
+5.  add date for post - 
+23. add new section for mentorlink chat(Bot) at the top
+24. remove history accordian
+
+
+
+Not on Priority :
+23. broadcast list Implements (P2)
+
+
+
+
+BE :
+1. create an API which will give us a latest post & events by his connections -> caching 
+2. search functionality depends on the messaging or user or group
+3. bot functionality (need to discuss)
+4. group API for post 
+5. body of work
+6. add upvote and downvote functionality
+7. broadcast list Implements (P2)
+
+
+
+
+
+
+
+
+
+Need Clarification on :
+1. how to create a group
+2. broadcast list (P2)
+3. Inbox 
+4. There will be a search bar at the top
+
+
+invite -> 
+1. friend request (focus)
+2. event request (at the end) 
+3. feedback
+
+Tobe Implements in next sprint :
+1. Settings 
+2. 
+
+

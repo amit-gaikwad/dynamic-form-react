@@ -5,8 +5,11 @@ import {
   FETCH_USERS_BY_SEARCH_STRING_ERROR,
   SEND_CONNECTION_REQUEST_LOADING,
   SEND_CONNECTION_REQUEST_SUCCESS,
-  SEND_CONNECTION_REQUEST_ERROR
+  SEND_CONNECTION_REQUEST_ERROR,
+  SET_BLUR_BACKGROUND
 } from './types';
+import { fetchUserIdsConnectionsByUserId } from './ConnectionsAction';
+import { fetchUserIdsNotificationsByUserId } from './NotificationsAction';
 
 export function fetchUsersBySearchStringLoading() {
   return {
@@ -20,18 +23,27 @@ export function fetchUsersBySearchStringSuccess(value) {
     payload: value
   };
 }
+
+export function setBlurBackground(value) {
+  return {
+    type: SET_BLUR_BACKGROUND,
+    payload: value
+  };
+}
+
 export function fetchUsersBySearchStringError(error) {
   return {
     type: FETCH_USERS_BY_SEARCH_STRING_ERROR,
     error
   };
 }
+//http://localhost:8190/mentor/search/user/n/u/si/ss
 
-export const fetchUsersBySearchString = ({ categories, searchStr }) => {
+export const fetchUsersBySearchString = ({ userId, categories, searchStr }) => {
   return (dispatch) => {
     dispatch(fetchUsersBySearchStringLoading());
     Axios.get(
-      `http://localhost:8190/mentor/search/user/5f1f0c2b91f3775dd4c991a5/${categories}/${searchStr}`
+      `http://localhost:8190/mentor/search/user/5f420797fc99e13c8cf8d145/${userId}/${categories}/${searchStr}`
     )
       .then((res) => {
         if (res.error) {
@@ -65,8 +77,22 @@ export function sendConnectionRequestError(error) {
   };
 }
 
+// export const fetchResourcesById = (id) => {
+//   return (dispatch) => {
+//     Axios.get(`http://localhost:8105/mentor/resources/5f420797fc99e13c8cf8d145/${id}`).then(
+//       (res) => {
+//         if (res.error) {
+//           throw res.error;
+//         }
+//         return res;
+//       }
+//     );
+//   }
+
+// };
+
 export const sendConnectionRequest = ({
-  namesapceId = '5f1f0c2b91f3775dd4c991a5',
+  namesapceId = '5f420797fc99e13c8cf8d145',
   userIdFrom,
   userIdTo,
   notificationAbout
@@ -74,13 +100,15 @@ export const sendConnectionRequest = ({
   return (dispatch) => {
     dispatch(sendConnectionRequestLoading());
     Axios.post(
-      `http://localhost:8107/mentor/notifications/userNotifications/${namesapceId}/${userIdFrom}/${userIdTo}/${notificationAbout}`
+      `http://localhost:8106/mentor/notifications/userNotifications/${namesapceId}/${userIdFrom}/${userIdTo}/${notificationAbout}`
     )
       .then((res) => {
         if (res.error) {
           throw res.error;
         }
         dispatch(sendConnectionRequestSuccess(res.data));
+        dispatch(fetchUserIdsConnectionsByUserId(userIdFrom));
+        dispatch(fetchUserIdsNotificationsByUserId(userIdFrom));
         return res;
       })
       .catch((error) => {
@@ -89,12 +117,10 @@ export const sendConnectionRequest = ({
   };
 };
 
-//GET /mentor/notifications/initiated/{namesapceId}/{userId}
-
-export const getsentConnectionRequest = ({ namesapceId = '5f1f0c2b91f3775dd4c991a5', userId }) => {
+export const getsentConnectionRequest = ({ namesapceId = '5f420797fc99e13c8cf8d145', userId }) => {
   return (dispatch) => {
     dispatch(sendConnectionRequestLoading());
-    Axios.get(`http://localhost:8107/mentor/notifications/initiated/${namesapceId}/${userId}`)
+    Axios.get(`http://localhost:8106/mentor/notifications/initiated/${namesapceId}/${userId}`)
       .then((res) => {
         if (res.error) {
           throw res.error;
@@ -107,7 +133,3 @@ export const getsentConnectionRequest = ({ namesapceId = '5f1f0c2b91f3775dd4c991
       });
   };
 };
-
-//POST /mentor/notifications/userNotifications/{namesapceId}/{userIdFrom}/{userIdTo}/{notificationAbout}
-
-//http://localhost:8107/mentor/notifications/userNotifications/5f1f0c2b91f3775dd4c991a5/amol/amit2/Connection

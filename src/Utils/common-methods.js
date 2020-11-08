@@ -38,3 +38,7 @@ export const getFieldsValueFromAtributes = (attributeArr = []) => {
   });
   return fields;
 };
+
+export const getUserName = (user) => {
+  return `${user['First Name']} ${user['Last Name']}`;
+};

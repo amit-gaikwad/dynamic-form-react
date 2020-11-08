@@ -1,7 +1,6 @@
 import React from 'react';
-import Form from 'antd/lib/form/Form';
-import { getRenderableComponentByType } from './getRenderableComponent';
-import { Button } from 'antd';
+import { RenderableComponentByType } from './getRenderableComponent';
+import { Button, Form, Divider, Col, Row } from 'antd';
 
 /**
  * [
@@ -23,27 +22,57 @@ import { Button } from 'antd';
  *
  * ]
  */
-
+const tailLayout = {
+  wrapperCol: { offset: 11, span: 16 }
+};
 export const DynamicFormContainer = (props) => {
-  console.log('userResource', props.template, props.fields);
-
+  const [form] = Form.useForm();
+  React.useEffect(() => {
+    form.setFieldsValue({
+      username: 'Bamboo'
+    });
+  }, []);
   return (
     <Form
       layout={'horizontal'}
+      labelCol={!props.fromPostPage && { span: 7 }}
       className='dynamic-form'
       style={{ margin: '10px' }}
       initialValues={{ remember: true }}
       onFinish={(event) => {
-        props.onHandleSubmit(event, props.template, props.currentIndex);
-      }}>
+        props.onHandleSubmit(event, props.template, props.currentIndex, form);
+      }}
+      form={form}>
       {props.fields.map((field) => (
         <React.Fragment key={field.label}>
-          {getRenderableComponentByType({ ...field })}
+          <RenderableComponentByType
+            field={{ ...field }}
+            fromPostPage={props.fromPostPage}
+            setFieldsValue={form.setFieldsValue}
+            form={form}
+          />
         </React.Fragment>
       ))}
-      <Button type='primary' htmlType='submit' size='large' disabled={false}>
-        Save
-      </Button>
+      {!props.fromPostPage && <Divider></Divider>}
+      <Row>
+        {!props.fromPostPage && (
+          <Col span={3} offset={15}>
+            <Button
+              size='large'
+              disabled={false}
+              onClick={() => {
+                props.setvisibleModal(false);
+              }}>
+              Cancel
+            </Button>
+          </Col>
+        )}
+        <Col span={2} offset={props.fromPostPage ? 22 : 2}>
+          <Button type='primary' htmlType='submit' size='large' disabled={false}>
+            {props.saveButtonText || 'Save'}
+          </Button>
+        </Col>
+      </Row>
     </Form>
   );
 };

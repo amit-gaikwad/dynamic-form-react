@@ -1,13 +1,15 @@
 import {
   SEND_CONNECTION_REQUEST_LOADING,
   SEND_CONNECTION_REQUEST_SUCCESS,
-  SEND_CONNECTION_REQUEST_ERROR
+  SEND_CONNECTION_REQUEST_ERROR,
+  SET_BLUR_BACKGROUND
 } from '../Actions/types';
 
 const initialState = {
   sendConnectedUserLoading: false,
   sendConnectedUserError: null,
-  sendConnectedUser: []
+  sendConnectedUser: [],
+  blurBackground: false
 };
 export const userReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -17,6 +19,12 @@ export const userReducer = (state = initialState, action) => {
         sendConnectedUser: action.payload,
         sendConnectedUserLoading: false,
         sendConnectedUserError: null
+      };
+
+    case SET_BLUR_BACKGROUND:
+      return {
+        ...state,
+        blurBackground: action.payload
       };
 
     case SEND_CONNECTION_REQUEST_LOADING:

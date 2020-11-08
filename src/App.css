@@ -14,6 +14,10 @@
   }
 }
 
+body {
+ background: #f0f2f5; 
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -38,16 +42,15 @@
   }
 }
 
+
 .site-layout-content {
   background: #fff;
   padding: 24px;
-  min-height: 280px;
+  font-size: large;
 }
 .logo {
-  width: 120px;
+  width: 31px;
   height: 31px;
-  background: rgba(255, 255, 255, 0.2);
-  margin: 16px 24px 16px 0;
   float: left;
 }
 
@@ -57,4 +60,44 @@
 
 .multiResources:hover .editButton{
   display: block;
+}
+
+
+#search-result::-webkit-scrollbar {
+  width: 6px;
+  height: 8px;
+  border-radius: 3px;
+}
+#search-result::-webkit-scrollbar-thumb {
+  border-radius: 4.5px;
+  height: 78px;
+  background-color: #425a707d;
+}
+#search-result::-webkit-scrollbar-track {
+  width: 6px;
+  opacity: 0.3;
+  border-radius: 4.5px;
+  background-color: #0000001c;
+}
+
+.profileSection  .ant-card-head{
+  background :#f3f6f8 !important;
+}
+
+.personalDetailsCover .ant-card-body{
+  padding: 8px;
+}
+
+.blurBg {
+  -webkit-filter: blur(2px);
+  -moz-filter: blur(2px);
+  -o-filter: blur(2px);
+  -ms-filter: blur(2px);
+  filter: blur(2px);
+  background-color: #ccc;
+}
+
+.chatList .ant-card-head{
+    background: var(--cool-gray-80,#283e4a);
+    color: white;
 }
