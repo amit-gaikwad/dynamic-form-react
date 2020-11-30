@@ -14,6 +14,8 @@ export const Postlistcomponent = (props) => {
       {props.posts.map((post) => (
         <Col span={24}>
           <PostDetailsWithMetaDataComponent
+            bodyOfWorkTemplate={props.bodyOfWorkTemplate}
+            bodyOfWorkUserResource={props.bodyOfWorkUserResource}
             postDetails={post || {}}
             onChangePost={onChangePost}
             user={props.user}

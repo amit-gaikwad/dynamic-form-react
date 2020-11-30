@@ -18,11 +18,15 @@ import { Loader } from '../Loader/Loader';
 import { get, omit } from 'lodash';
 import { PostDetailsWithMetaDataComponent } from './PostDetailsWithMetaDataComponent';
 import { createPost, editPost } from '../../Actions/PostAction';
+import { CONFIG } from '../../Constants/ResourcesConstant';
 
 export const PostDetailsComponent = (props) => {
   const [showLoader, setshowLoader] = useState(false);
   const [postDetails, setpostDetails] = useState({});
   const [postUserDetails, setpostUserDetails] = useState({});
+  const [bodyOfWorkTemplate, setbodyOfWorkTemplate] = useState({});
+  const [bodyOfWorkUserResource, setbodyOfWorkUserResource] = useState({});
+  const [loading, setloading] = useState(false);
 
   const postId = props.match.params.postId;
   const userId = props.match.params.id;
@@ -69,18 +73,37 @@ export const PostDetailsComponent = (props) => {
 
   useEffect(() => {
     getPostDetails();
+    setloading(true);
+    props
+      .fetchBodyOfWorkByUserId(userId)
+      .then((res) => {
+        if (isEmpty(res.data)) {
+          props.fetchResourcesById(CONFIG.BODY_OF_WORK_TEMPLATE_RESOURCE_ID).then((response) => {
+            setbodyOfWorkTemplate(response.data);
+            setloading(false);
+          });
+        } else {
+          setbodyOfWorkUserResource(res.data[0]);
+          setloading(false);
+        }
+      })
+      .catch((err) => {
+        setloading(false);
+      });
   }, []);
 
   return (
     <PageLayout
       {...props}
       content={
-        showLoader ? (
+        showLoader || loading ? (
           <Loader></Loader>
         ) : (
           <Row style={{ width: '100%' }}>
             <Col span={24}>
               <PostDetailsWithMetaDataComponent
+                bodyOfWorkTemplate={bodyOfWorkTemplate}
+                bodyOfWorkUserResource={bodyOfWorkUserResource}
                 postDetails={postDetails || {}}
                 onChangePost={onChangePost}
                 user={postUserDetails}

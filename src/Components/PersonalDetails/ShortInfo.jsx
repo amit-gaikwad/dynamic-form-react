@@ -5,7 +5,6 @@ import { getUserName } from '../../Utils/common-methods';
 
 const ShortInfoComponent = (props) => {
   const user = props.user || {};
-  console.log('user on short ', user, getUserName(user));
   return (
     <Row
       style={{

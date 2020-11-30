@@ -10,6 +10,7 @@ import {
 } from './types';
 import { fetchUserIdsConnectionsByUserId } from './ConnectionsAction';
 import { fetchUserIdsNotificationsByUserId } from './NotificationsAction';
+import { CONFIG } from '../Constants/ResourcesConstant';
 
 export function fetchUsersBySearchStringLoading() {
   return {
@@ -91,16 +92,11 @@ export function sendConnectionRequestError(error) {
 
 // };
 
-export const sendConnectionRequest = ({
-  namesapceId = '5f420797fc99e13c8cf8d145',
-  userIdFrom,
-  userIdTo,
-  notificationAbout
-}) => {
+export const sendConnectionRequest = ({ userIdFrom, userIdTo, notificationAbout }) => {
   return (dispatch) => {
     dispatch(sendConnectionRequestLoading());
     Axios.post(
-      `http://localhost:8106/mentor/notifications/userNotifications/${namesapceId}/${userIdFrom}/${userIdTo}/${notificationAbout}`
+      `http://localhost:8106/mentor/notifications/userNotifications/${CONFIG.NAMESPACE_ID}/${userIdFrom}/${userIdTo}/${notificationAbout}`
     )
       .then((res) => {
         if (res.error) {

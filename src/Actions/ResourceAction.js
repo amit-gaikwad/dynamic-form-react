@@ -58,7 +58,7 @@ export function fetchResourcesByNamespaceError(error) {
 export const fetchResources = () => {
   return (dispatch) => {
     dispatch(fetchResourcesByNamespaceLoading());
-    Axios.get(`http://localhost:8105/mentor/resources/template/5f420797fc99e13c8cf8d145`)
+    Axios.get(`http://localhost:8105/mentor/resources/template/${CONFIG.NAMESPACE_ID}`)
       .then((res) => {
         if (res.error) {
           throw res.error;
@@ -94,7 +94,7 @@ export function fetchResourcesByUserIdError(error) {
 export const fetchResourcesByUserId = (userId) => {
   return (dispatch) => {
     dispatch(fetchResourcesByUserIdLoading());
-    Axios.get(`http://localhost:8105/mentor/resources/user/5f420797fc99e13c8cf8d145/` + userId)
+    Axios.get(`http://localhost:8105/mentor/resources/user/${CONFIG.NAMESPACE_ID}/` + userId)
       .then((res) => {
         if (res.error) {
           throw res.error;
@@ -232,7 +232,7 @@ export const fetchPersonalDetailsByUserId = (userId, notDispatch = false) => {
       dispatch(fetchPersonalDetailsByUserIdLoading());
     }
     return Axios.get(
-      `http://localhost:8105/mentor/resources/user/5f420797fc99e13c8cf8d145/` +
+      `http://localhost:8105/mentor/resources/user/${CONFIG.NAMESPACE_ID}/` +
         userId +
         '/Personal Details'
     )
@@ -286,9 +286,18 @@ export const fetchPostTemplate = () => {
   };
 };
 
+// export const fetchBodyOfWorkByuserId = (userId) => {
+//   return (dispatch) => {
+//     dispatch(fetchPostTemplateLoading());
+//     dispatch(
+//       fetchResourcesById(CONFIG.POST_RESOURCE_ID, fetchPostTemplateSuccess, fetchPostTemplateError)
+//     );
+//   };
+// };
+
 export const fetchResourcesById = (id, successCallBack, errorCallBack) => {
   return (dispatch) => {
-    return Axios.get(`http://localhost:8105/mentor/resources/5f420797fc99e13c8cf8d145/${id}`).then(
+    return Axios.get(`http://localhost:8105/mentor/resources/${CONFIG.NAMESPACE_ID}/${id}`).then(
       (res) => {
         if (res.error) {
           if (errorCallBack) {
@@ -360,7 +369,7 @@ export const fetchPostsByUserId = (userId) => {
   return (dispatch) => {
     dispatch(fetchPostsByUserIdLoading());
     Axios.get(
-      `http://localhost:8105/mentor/resources/user/5f420797fc99e13c8cf8d145/${userId}/Post Details`
+      `http://localhost:8105/mentor/resources/user/${CONFIG.NAMESPACE_ID}/${userId}/Post Details`
     )
       .then((res) => {
         if (res.error) {
@@ -371,6 +380,25 @@ export const fetchPostsByUserId = (userId) => {
       })
       .catch((error) => {
         dispatch(fetchPostsByUserIdError(error));
+      });
+  };
+};
+
+export const fetchBodyOfWorkByUserId = (userId) => {
+  return (dispatch) => {
+    // dispatch(fetchPostsByUserIdLoading());
+    return Axios.get(
+      `http://localhost:8105/mentor/resources/user/${CONFIG.NAMESPACE_ID}/${userId}/${CONFIG.BODY_OF_WORK_RESOURCE_NAME}`
+    )
+      .then((res) => {
+        if (res.error) {
+          throw res.error;
+        }
+        //  dispatch(fetchPostsByUserIdSuccess(res.data));
+        return res;
+      })
+      .catch((error) => {
+        //   dispatch(fetchPostsByUserIdError(error));
       });
   };
 };

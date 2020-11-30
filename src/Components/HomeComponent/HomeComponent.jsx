@@ -7,7 +7,9 @@ import {
   updateResourceByUserId,
   createResource,
   fetchPostsByUserId,
-  fetchPersonalDetailsByUserId
+  fetchPersonalDetailsByUserId,
+  fetchResourcesById,
+  fetchBodyOfWorkByUserId
 } from '../../Actions/ResourceAction';
 import {
   getFieldsFromAttributeModels,
@@ -20,15 +22,40 @@ import { Col, Row, Card, Tooltip, Divider, List } from 'antd';
 import ShortInfoComponent from '../PersonalDetails/ShortInfo';
 import { getAllPostByUserId } from '../../Actions/PostAction';
 import { Postlistcomponent } from '../Posts/PostListComponent';
+import { CONFIG } from '../../Constants/ResourcesConstant';
+import { useState } from 'react';
 
 const HomeComponent = (props) => {
   const userId = props.match.params.id;
+  const [bodyOfWorkTemplate, setbodyOfWorkTemplate] = useState({});
+  const [bodyOfWorkUserResource, setbodyOfWorkUserResource] = useState({});
+  const [loading, setloading] = useState(false);
+
   useEffect(() => {
     props.fetchPostTemplate();
     // props.fetchPostsByUserId(userId);
     props.fetchPersonalDetailsByUserId(userId);
     props.getAllPostByUserId(userId);
+    setloading(true);
+
+    props
+      .fetchBodyOfWorkByUserId(userId)
+      .then((res) => {
+        if (isEmpty(res.data)) {
+          props.fetchResourcesById(CONFIG.BODY_OF_WORK_TEMPLATE_RESOURCE_ID).then((response) => {
+            setbodyOfWorkTemplate(response.data);
+            setloading(false);
+          });
+        } else {
+          setbodyOfWorkUserResource(res.data[0]);
+          setloading(false);
+        }
+      })
+      .catch((err) => {
+        setloading(false);
+      });
   }, []);
+
   const onHandleSubmit = (event, templateResource, currentIndex, form) => {
     const values = form.getFieldsValue();
     const newResource = omit(templateResource, ['resourceId']);
@@ -144,7 +171,7 @@ const HomeComponent = (props) => {
       {...props}
       content={
         <div>
-          {props.postsByUserIdLoading ? (
+          {props.postsByUserIdLoading || loading ? (
             <Loader></Loader>
           ) : (
             <>
@@ -164,6 +191,8 @@ const HomeComponent = (props) => {
                 <Divider></Divider>
                 <Row style={{ width: '100%' }} gutter={[16, 16]}>
                   <Postlistcomponent
+                    bodyOfWorkTemplate={bodyOfWorkTemplate}
+                    bodyOfWorkUserResource={bodyOfWorkUserResource}
                     posts={props.allPostByUserId || []}
                     userId={userId}
                     user={user}></Postlistcomponent>
@@ -193,7 +222,9 @@ const mapDispatchToProps = (dispatch) => ({
   createResource: (resource, userId) => dispatch(createResource(resource, userId, 'Home')),
   fetchPostsByUserId: (userId) => dispatch(fetchPostsByUserId(userId)),
   fetchPersonalDetailsByUserId: (userId) => dispatch(fetchPersonalDetailsByUserId(userId)),
-  getAllPostByUserId: (userId) => dispatch(getAllPostByUserId(userId))
+  getAllPostByUserId: (userId) => dispatch(getAllPostByUserId(userId)),
+  fetchResourcesById: (id) => dispatch(fetchResourcesById(id)),
+  fetchBodyOfWorkByUserId: (id) => dispatch(fetchBodyOfWorkByUserId(id))
 });
 
 export const HomeContainer = connect(mapStateToProps, mapDispatchToProps)(HomeComponent);

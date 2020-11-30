@@ -42,3 +42,79 @@ export const getFieldsValueFromAtributes = (attributeArr = []) => {
 export const getUserName = (user) => {
   return `${user['First Name']} ${user['Last Name']}`;
 };
+
+export const createBodyOfWorkObject = (data) => {
+  const bow = {
+    resourceId: '5f9cff07087b160340411293',
+    resourceName: 'Post Details',
+    namespaceId: '5f420797fc99e13c8cf8d145',
+    attributes: [
+      {
+        attribute: {
+          keyName: 'userId',
+          keyValue: 'amit'
+        },
+        metaData: [
+          {
+            keyName: 'hidden',
+            keyValue: 'true'
+          },
+          {
+            keyName: 'mandatory',
+            keyValue: 'true'
+          },
+          {
+            keyName: 'editable',
+            keyValue: 'false'
+          }
+        ],
+        comments: null
+      },
+      {
+        attribute: {
+          keyName: 'currentIndex',
+          keyValue: '1'
+        },
+        metaData: null,
+        comments: null
+      },
+      {
+        attribute: {
+          keyName: 'User Post',
+          keyValue: 'This is post by Amit Gaikwad, this is edited this is also new added'
+        },
+        metaData: [
+          {
+            keyName: 'hidden',
+            keyValue: 'false'
+          },
+          {
+            keyName: 'type',
+            keyValue: 'textArea'
+          },
+          {
+            keyName: 'mandatory',
+            keyValue: 'false'
+          },
+          {
+            keyName: 'editable',
+            keyValue: 'false'
+          },
+          {
+            keyName: 'likes',
+            keyValue: 'amit,rohan,ashok,amit21'
+          },
+          {
+            keyName: 'dislikes',
+            keyValue: ''
+          },
+          {
+            keyName: 'index',
+            keyValue: '1'
+          }
+        ],
+        comments: null
+      }
+    ]
+  };
+};
