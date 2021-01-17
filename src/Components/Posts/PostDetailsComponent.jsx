@@ -10,6 +10,7 @@ import {
 import { DynamicFormContainer } from '../../Utils/getDynamicForm';
 import {
   createResource,
+  fetchBodyOfWorkByUserId,
   fetchPersonalDetailsByUserId,
   fetchPostTemplate,
   fetchResourcesById
@@ -129,7 +130,8 @@ const mapDispatchToProps = (dispatch) => ({
   editPost: (resource) => dispatch(editPost(resource)),
   createResource: (resource) => dispatch(createResource(resource)),
   fetchPersonalDetailsByUserId: (userId, notTodispatch) =>
-    dispatch(fetchPersonalDetailsByUserId(userId, notTodispatch))
+    dispatch(fetchPersonalDetailsByUserId(userId, notTodispatch)),
+  fetchBodyOfWorkByUserId: (userId) => dispatch(fetchBodyOfWorkByUserId(userId))
 });
 
 export const PostDetailsContainer = connect(

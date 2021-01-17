@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import { get, includes } from 'lodash';
 
 export const isAccessTokenAvailable = () => !!localStorage.getItem('tokens');
 export const setAccessToken = (token) => localStorage.setItem('tokens', token);
@@ -25,15 +25,13 @@ export const getFieldsFromAttributeModels = (attributeArr = []) => {
   return fields;
 };
 
-export const getFieldsValueFromAtributes = (attributeArr = []) => {
+export const getFieldsValueFromAtributes = (attributeArr = [], keyValues = []) => {
   var fields = {};
   attributeArr.forEach((element) => {
-    // const field = {};
     const label = get(element, 'attribute.keyName');
-    const value = get(element, 'attribute.keyValue');
-    // (element.metaData || []).forEach((meta) => {
-    //   field[meta.keyName] = meta.keyValue;
-    // });
+    const value = includes(keyValues, label)
+      ? get(element, 'attribute.keyValues')
+      : get(element, 'attribute.keyValue');
     fields[label] = value;
   });
   return fields;
