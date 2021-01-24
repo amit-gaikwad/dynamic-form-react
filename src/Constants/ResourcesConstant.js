@@ -6,6 +6,7 @@ export const CONFIG = {
   PERSONAL_DETAILS_RESOURCE_NAME: 'Personal Details',
   BODY_OF_WORK_TEMPLATE_RESOURCE_ID: '5fc3bee383705d420c7f4c2d',
   BODY_OF_WORK_RESOURCE_NAME: 'Body Of Work',
-  SAVED_POST_LINKS_CONSTANT: 'Saved Post Links'
+  SAVED_POST_LINKS_CONSTANT: 'Saved Post Links',
+  SAVED_POST_NOTES_CONSTANT: 'Saved Post Notes'
 };
 // create service specific url using port and all

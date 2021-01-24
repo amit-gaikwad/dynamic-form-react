@@ -1,5 +1,5 @@
 import { Button, Col, Collapse, List, Row } from 'antd';
-import { cloneDeep, get, isEmpty, omit } from 'lodash';
+import { cloneDeep, findIndex, get, isEmpty, omit } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { fetchBodyOfWorkByUserId, updateResourceByUserId } from '../../Actions/ResourceAction';
@@ -95,11 +95,73 @@ const BodyOfWorkComponent = (props) => {
     );
   };
 
+  const onDeleteSavedNotesClick = (item) => {
+    const bow = cloneDeep(bowResourceToUpdate);
+    bow.attributes = bow.attributes.filter(
+      (attr) =>
+        !['template', 'userId', 'currentIndex', 'Instances Allowed'].includes(
+          attr.attribute.keyName
+        )
+    );
+    bow.attributes.unshift({
+      attribute: {
+        keyName: 'actionsAllowed',
+        keyValue: 'update'
+      }
+    });
+    bow.resourceId = bow.resourceId;
+
+    const userPostAttribute = bow.attributes.find(
+      (p) => p.attribute.keyName === CONFIG.SAVED_POST_NOTES_CONSTANT
+    );
+    const index = findIndex(get(userPostAttribute, 'attribute.keyValues'), { postId: item.postId });
+    if (index > -1) {
+      get(userPostAttribute, 'attribute.keyValues', []).splice(index, 1);
+    }
+    setloading(true);
+    props.updateResourceByUserId(omit(bow, ['mode']), userId).then((res) => {
+      const data = res.data || {};
+      const fields = getFieldsValueFromAtributes(data.attributes || [], [
+        CONFIG.SAVED_POST_LINKS_CONSTANT
+      ]);
+      setbowResourceToUpdate(data);
+      setbodyOfWorkUserResource(fields);
+      setloading(false);
+    });
+  };
+
+  const renderSavedPostNotes = () => {
+    return (
+      <Panel header='Saved Notes' key='2'>
+        <List
+          renderItem={(item, index) => {
+            return (
+              <List.Item
+                actions={[
+                  <Button
+                    type='danger'
+                    onClick={() => {
+                      onDeleteSavedNotesClick(item);
+                    }}>
+                    Delete
+                  </Button>
+                ]}>
+                <Link to={item}>{item.note}</Link>
+              </List.Item>
+            );
+          }}
+          dataSource={bodyOfWorkUserResource[CONFIG.SAVED_POST_NOTES_CONSTANT]}></List>
+      </Panel>
+    );
+  };
+
   const renderBOW = () => {
     return (
       <Collapse defaultActiveKey={['1']} accordion>
         {!isEmpty(bodyOfWorkUserResource[CONFIG.SAVED_POST_LINKS_CONSTANT]) &&
           renderSavedPostLinks()}
+        {!isEmpty(bodyOfWorkUserResource[CONFIG.SAVED_POST_NOTES_CONSTANT]) &&
+          renderSavedPostNotes()}
       </Collapse>
     );
   };
