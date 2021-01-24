@@ -20,7 +20,7 @@ import {
   getFieldsFromAttributeModels,
   getFieldsValueFromAtributes
 } from '../../Utils/common-methods';
-import { get, isEmpty, omit } from 'lodash';
+import { find, get, isEmpty, omit } from 'lodash';
 import TextArea from 'antd/lib/input/TextArea';
 import { createResource, updateResourceByUserId } from '../../Actions/ResourceAction';
 
@@ -30,18 +30,6 @@ export const IconText = ({ icon, text }) => (
     {text}
   </Space>
 );
-
-/**
- * 
- * @param {
- * 
- * 
- 
- const [bodyOfWorkTemplate, setbodyOfWorkTemplate] = useState({});
-  const [bodyOfWorkUserResource, setbodyOfWorkUserResource] = useState({});
- 
- * } 
- */
 
 const PostDetailsWithMetaData = (props) => {
   const [showOptions, setshowOptions] = useState(false);
@@ -111,8 +99,102 @@ const PostDetailsWithMetaData = (props) => {
   };
 
   const onTakeNotesSubmit = () => {
-    console.log('submitted values', props, currentNotes);
-    setcurrentNotes('');
+    const { bodyOfWorkTemplate, bodyOfWorkUserResource } = props;
+    let bow = bodyOfWorkUserResource;
+    const linkUrl = `/user/${props.currentUserId}/post/${props.postDetails.resourceId}`;
+
+    const obj = {
+      notes: currentNotes,
+      postId: props.postDetails.resourceId,
+      postLink: linkUrl
+    };
+    if (isEmpty(bodyOfWorkUserResource)) {
+      bow = bodyOfWorkTemplate;
+      bow.attributes = bow.attributes.filter((attr) => {
+        if (attr.attribute.keyName === 'userId') {
+          attr.attribute.keyValue = props.currentUserId;
+        }
+        return attr.attribute.keyName !== 'template';
+      });
+
+      bow.attributes.unshift({
+        attribute: {
+          keyName: 'Saved Notes',
+          keyValue: undefined,
+          keyValues: [obj]
+        },
+        metaData: [
+          {
+            keyName: 'hidden',
+            keyValue: 'true',
+            keyValues: null
+          },
+          {
+            keyName: 'mandatory',
+            keyValue: 'false',
+            keyValues: null
+          }
+        ]
+      });
+      //    }
+      console.log('bow ', bow, props);
+      props
+        .createResource(omit(bow, ['mode', 'resourceId']), props.currentUserId)
+        .then(() => console.log('Successfully created resoure'));
+    } else {
+      bow.attributes = bow.attributes.filter(
+        (attr) =>
+          !['template', 'userId', 'currentIndex', 'Instances Allowed'].includes(
+            attr.attribute.keyName
+          )
+      );
+      bow.attributes.unshift({
+        attribute: {
+          keyName: 'actionsAllowed',
+          keyValue: 'update'
+        }
+      });
+      bow.resourceId = bow.resourceId;
+      //add logic to update likes dislike and comment section
+      const userPostAttribute = bow.attributes.find((p) => p.attribute.keyName === 'Saved Notes');
+
+      if (isEmpty(userPostAttribute)) {
+        bow.attributes.unshift({
+          attribute: {
+            keyName: 'Saved Notes',
+            keyValue: undefined,
+            keyValues: [obj]
+          },
+          metaData: [
+            {
+              keyName: 'hidden',
+              keyValue: 'true',
+              keyValues: null
+            },
+            {
+              keyName: 'mandatory',
+              keyValue: 'false',
+              keyValues: null
+            }
+          ]
+        });
+      } else {
+        if (isEmpty(userPostAttribute.attribute.keyValues)) {
+          userPostAttribute.attribute.keyValues = [];
+        }
+        const foundPostNotes =
+          find(userPostAttribute.attribute.keyValues, { postId: props.postDetails.resourceId }) ||
+          {};
+        if (!isEmpty(foundPostNotes)) {
+          foundPostNotes.notes = currentNotes;
+        } else {
+          userPostAttribute.attribute.keyValues.push(obj);
+        }
+      }
+      props
+        .updateResourceByUserId(omit(bow, ['mode']), props.currentUserId)
+        .then(() => console.log('successfully updated'));
+    }
   };
 
   const onSavePostClick = () => {
@@ -159,7 +241,6 @@ const PostDetailsWithMetaData = (props) => {
         .createResource(omit(bow, ['mode', 'resourceId']), props.currentUserId)
         .then(() => console.log('Successfully created resoure'));
     } else {
-      debugger;
       bow.attributes = bow.attributes.filter(
         (attr) =>
           !['template', 'userId', 'currentIndex', 'Instances Allowed'].includes(
